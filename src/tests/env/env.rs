@@ -2,6 +2,7 @@
 mod tests {
     use crate::env::config::PathOptions;
     use dirs::home_dir;
+    use lazy_static::lazy_static;
     use std::fs;
 
     #[test]
@@ -11,8 +12,7 @@ mod tests {
 
     #[test]
     fn test_get_or_create_home_dir() {
-        let test_dir = ".test_dir";
-
+        let test_dir = &TEST_FOLDER.to_string();
         let dir_option = PathOptions::new();
 
         let home_dir = &dir_option
@@ -24,14 +24,34 @@ mod tests {
             assert!(dir.contains(&String::from(test_dir)));
 
             // Deleting it again
-            fs::remove_dir(dir).expect("Could not delete test dir again");
+            fs::remove_dir(dir).expect("Could not delete test dir in home again");
         } else {
             panic!("Could not create test dir in home path");
         }
     }
 
     #[test]
-    fn test_read_home_dir_and_create_empty_config() {
+    fn test_get_or_create_project_dir() {
+        let test_dir = &TEST_FOLDER.to_string();
+        let dir_option = PathOptions::new();
+
+        let current_dir = &dir_option
+            .with_option(String::from(test_dir))
+            .get_or_create_project_dir();
+
+        if let Ok(dir) = current_dir.as_ref() {
+            // Checking if the freshly created test dir is inside the fully dir
+            assert!(dir.contains(&String::from(test_dir)));
+
+            // Deleting it again
+            fs::remove_dir(dir).expect("Could not delete test dir in project again");
+        } else {
+            panic!("Could not create test dir in project path");
+        }
+    }
+
+    #[test]
+    fn test_create_empty_config() {
         unimplemented!();
         if let Some(mut home) = home_dir() {
             // Append your tool's configuration directory to the home directory
@@ -63,5 +83,9 @@ mod tests {
     #[test]
     fn test_parse_config() {
         unimplemented!()
+    }
+
+    lazy_static! {
+        pub static ref TEST_FOLDER: String = String::from(".test_folder");
     }
 }
