@@ -4,13 +4,12 @@ use std::process::{Command as SysCommand, Stdio};
 pub trait Command {
     fn execute(&self) -> Result<(), CommandError>;
     fn name(&self) -> String;
-    fn description(&self) -> String;
 }
 
 fn run_command_unix_sh(cmd: &str) -> Result<(), CommandError> {
     let _ = SysCommand::new("sh")
         .arg("-c")
-        .arg(&cmd)
+        .arg(cmd)
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
         .spawn()?

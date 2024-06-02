@@ -5,6 +5,11 @@ use crate::commands::execs::stop::Stop;
 use crate::error::command_error::CommandError;
 use std::collections::HashMap;
 
+/**
+ * CommandRegistry
+ *
+ * A registry for all commands. Commands are the
+ */
 pub struct CommandRegistry {
     commands: HashMap<String, Box<dyn Command>>,
 }
@@ -15,7 +20,6 @@ impl CommandRegistry {
             commands: HashMap::new(),
         };
 
-        // Todo: auto register commands
         registry.register(Box::new(Start));
         registry.register(Box::new(Stop));
         registry.register(Box::new(Shell));
@@ -32,5 +36,9 @@ impl CommandRegistry {
         self.commands
             .get(command_name)
             .ok_or(CommandError::CommandNotFound(command_name.to_string()))
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = &Box<dyn Command>> {
+        self.commands.values()
     }
 }
