@@ -1,0 +1,36 @@
+use crate::commands::command::Command;
+use crate::commands::execs::shell::Shell;
+use crate::commands::execs::start::Start;
+use crate::commands::execs::stop::Stop;
+use crate::error::command_error::CommandError;
+use std::collections::HashMap;
+
+pub struct CommandRegistry {
+    commands: HashMap<String, Box<dyn Command>>,
+}
+
+impl CommandRegistry {
+    pub fn new() -> Self {
+        let mut registry = CommandRegistry {
+            commands: HashMap::new(),
+        };
+
+        // Todo: auto register commands
+        registry.register(Box::new(Start));
+        registry.register(Box::new(Stop));
+        registry.register(Box::new(Shell));
+
+        // Todo: register config commands (and override default commands)
+        registry
+    }
+
+    fn register(&mut self, command: Box<dyn Command>) {
+        self.commands.insert(command.name(), command);
+    }
+
+    pub fn get(&self, command_name: &str) -> Result<&Box<dyn Command>, CommandError> {
+        self.commands
+            .get(command_name)
+            .ok_or(CommandError::CommandNotFound(command_name.to_string()))
+    }
+}
