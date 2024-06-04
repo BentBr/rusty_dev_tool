@@ -3,6 +3,7 @@ mod commands;
 mod env;
 mod error;
 
+use std::process::exit;
 use crate::clap_args::get_clap_matches;
 use crate::commands::registry::CommandRegistry;
 use crate::env::init::init;
@@ -43,6 +44,6 @@ fn main() {
                 }
             }
         }
-        _ => unreachable!("Subcommand is required"),
+        _ => exit(0)
     }
 }

@@ -51,6 +51,8 @@ fn create_new_home_config(config_file_path: &Path) -> Result<HomeConfig, Box<dyn
         backup_home_config(config_file_path)?;
     }
 
+    println!();
+
     println!(
         "Creating new home config file at: {}",
         config_file_path.to_string_lossy().blue()
@@ -66,13 +68,16 @@ fn create_new_home_config(config_file_path: &Path) -> Result<HomeConfig, Box<dyn
 }
 
 fn backup_home_config(config_file_path: &Path) -> Result<(), Box<dyn Error>> {
-    println!(
-        "Backing up home config file at: {} to ",
-        config_file_path.to_string_lossy().blue()
-    );
-
     let backup_file_path = config_file_path.with_extension("bak");
-    fs::copy(config_file_path, backup_file_path)?;
+    fs::copy(config_file_path, backup_file_path.clone())?;
+
+    println!();
+
+    println!(
+        "Backing up home config file at: {} to {}",
+        config_file_path.to_string_lossy().blue(),
+        backup_file_path.to_string_lossy().blue()
+    );
 
     Ok(())
 }
