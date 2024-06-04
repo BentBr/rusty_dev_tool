@@ -37,8 +37,4 @@ impl CommandRegistry {
             .get(command_name)
             .ok_or(CommandError::CommandNotFound(command_name.to_string()))
     }
-
-    pub fn iter(&self) -> impl Iterator<Item = &Box<dyn Command>> {
-        self.commands.values()
-    }
 }

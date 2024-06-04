@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::env::config::{DEFAULT_ENV_FILE, PathOptions, read_config};
+    use crate::env::config::{DEFAULT_CONFIG_FILE, PathOptions, read_config};
     use dirs::home_dir;
     use lazy_static::lazy_static;
     use std::fs::{File, remove_dir, remove_file};
@@ -56,7 +56,7 @@ mod tests {
 
         if let Ok(dir) = current_dir {
             // Getting the project env
-            let mut env_file_path = PathBuf::from(dir).join(DEFAULT_ENV_FILE.as_str());
+            let mut env_file_path = PathBuf::from(dir).join(DEFAULT_CONFIG_FILE.as_str());
 
             // Creating the project env for later testing
             println!("test file: {:?}", env_file_path);

@@ -1,13 +1,15 @@
+use colored::Colorize;
 use crate::commands::command::run_command;
 use crate::commands::command::Command;
 use crate::commands::execs::command_list::COMMAND_LIST;
+use crate::env::config::Config;
 use crate::error::command_error::CommandError;
 
 pub struct Stop;
 
 impl Command for Stop {
-    fn execute(&self) -> Result<(), CommandError> {
-        println!("Executing stop command");
+    fn execute(&self, _config: &Config) -> Result<(), CommandError> {
+        println!("{}", "Executing stop command".blue());
 
         run_command("docker-compose down")
     }

@@ -1,13 +1,14 @@
 use crate::commands::command::run_command;
 use crate::commands::command::Command;
 use crate::commands::execs::command_list::COMMAND_LIST;
+use crate::env::config::Config;
 use crate::error::command_error::CommandError;
 
 pub struct Start;
 
 impl Command for Start {
-    fn execute(&self) -> Result<(), CommandError> {
-        let command = "docker-compose pull && docker-compose up -d --build";
+    fn execute(&self, _config: &Config) -> Result<(), CommandError> {
+        let command = "docker-compose pull && docker-compose up -d --build && docker-compose exec -T php composer install";
         // Todo: get distinguished commands between php (composer install, node (yarn /npm install etc.)
 
         run_command(command)

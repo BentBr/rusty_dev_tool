@@ -1,19 +1,26 @@
 use crate::commands::execs::command_list::COMMAND_LIST;
-use clap::{Arg, ArgMatches, Command as ClapCommand};
+use clap::{Arg, ArgAction, ArgMatches, Command as ClapCommand};
 use clap_complete::{generate, Shell};
 use std::io;
+use clap_complete::generator::utils::possible_values;
 
 pub fn get_clap_matches() -> ArgMatches {
-    let mut app = ClapCommand::new("abc")
+    let mut app = ClapCommand::new("Rusty Dev Tool")
         .version("1.0")
         .author("Bent Brüggemann <mail@bent-brueggemann.de>")
         .about("Docker helper command line tool for developers with docker-compose setups.")
-        .subcommand_required(true)
         .arg(
             Arg::new("generate-completions")
                 .long("generate-completions")
                 .value_name("SHELL")
-                .help("Generate shell completions"),
+                .help("Generate shell completions")
+                .action(ArgAction::SetFalse),
+        )
+        .arg(
+            Arg::new("config-restore")
+                .long("config-restore")
+                .help("Restores the home config environment")
+                .action(ArgAction::SetTrue),
         );
     // Todo: fix the shell completion
     //.possible_values(["bash", "zsh", "fish", "powershell", "elvish"])

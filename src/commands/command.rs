@@ -1,8 +1,9 @@
+use crate::env::config::Config;
 use crate::error::command_error::CommandError;
 use std::process::{Command as SysCommand, Stdio};
 
 pub trait Command {
-    fn execute(&self) -> Result<(), CommandError>;
+    fn execute(&self, config: &Config) -> Result<(), CommandError>;
     fn name(&self) -> String;
 }
 

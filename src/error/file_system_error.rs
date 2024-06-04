@@ -5,7 +5,7 @@ use std::fmt;
 pub enum FileSystemError {
     FileNotFound(String),
     FolderNotFound(String),
-    AccessNotAllowed(String),
+    FileWriteFailed(String),
 }
 
 impl Error for FileSystemError {}
@@ -15,8 +15,8 @@ impl fmt::Display for FileSystemError {
         match self {
             FileSystemError::FileNotFound(string) => write!(f, "File not found: {}", string),
             FileSystemError::FolderNotFound(string) => write!(f, "Folder not found: {}", string),
-            FileSystemError::AccessNotAllowed(string) => {
-                write!(f, "Not allowed to access: {}", string)
+            FileSystemError::FileWriteFailed(string) => {
+                write!(f, "Failed to write to file: {}", string)
             }
         }
     }
