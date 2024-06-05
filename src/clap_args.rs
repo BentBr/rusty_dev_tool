@@ -2,7 +2,6 @@ use crate::commands::execs::command_list::COMMAND_LIST;
 use clap::{Arg, ArgAction, ArgMatches, Command as ClapCommand};
 use clap_complete::{generate, Shell};
 use std::io;
-use clap_complete::generator::utils::possible_values;
 
 pub fn get_clap_matches() -> ArgMatches {
     let mut app = ClapCommand::new("Rusty Dev Tool")
