@@ -1,0 +1,26 @@
+# This project config must be located in: %project_root%/.rusty_dev_tool/config.toml
+
+# Mandatory field
+local_key="abc"
+
+# Mandatory node
+[commands]
+    # All commands must have a command and an alias but are optional in general
+    [first]
+        command = "command1"
+        alias = "alias1"
+
+    [second]
+        command = "command2"
+        alias = "alias2"
+
+# Mandatory node
+[environments]
+    # All environments must have a name and a uri but are optional in general
+    [dev]
+        name = "environment1"
+        uri = "uri1"
+
+    [prod]
+        name = "environment2"
+        uri = "uri2"
