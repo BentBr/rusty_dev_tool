@@ -11,6 +11,7 @@ lazy_static! {
         list.insert("start".to_string(), "Docker compose start command".to_string());
         list.insert("stop".to_string(), "Docker compose stop command".to_string());
         list.insert("shell".to_string(), "Exec'ing into the node container".to_string());
+        list.insert("chown".to_string(), "Chowning project inside the main container".to_string());
 
         list
     };

@@ -17,7 +17,7 @@ fn main() {
     let config = match init(restore) {
         Ok(config) => config,
         Err(error) => {
-            eprintln!("{} {}", "Error initializing environment: {}".red(), error);
+            eprintln!("{} {}", "Error initializing environment:".red(), error);
             return;
         }
     };
@@ -27,7 +27,8 @@ fn main() {
     // If any flag is not present, require a subcommand
     if !matches.get_flag("generate-completions") && !restore && matches.subcommand().is_none() {
         eprintln!("{}", "A subcommand is required".red());
-        std::process::exit(1);
+
+        exit(1);
     }
 
     match matches.subcommand() {
@@ -37,15 +38,13 @@ fn main() {
                     // todo: Add args to command execution
                     command.execute(&config).unwrap_or_else(|err| {
                         eprintln!(
-                            "{} {} {}",
-                            "Error executing {} command: {}".red(),
-                            command_name,
-                            err
+                            "{}",
+                            format!("Error executing {} command: {}", command_name, err).red(),
                         );
                     });
                 }
                 Err(err) => {
-                    eprintln!("{} {}", "Error: {}".red(), err);
+                    eprintln!("{} {}", "Error:".red(), err);
                 }
             }
         }

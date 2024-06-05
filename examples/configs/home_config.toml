@@ -1,0 +1,21 @@
+# This home config must be located in: %home_dir%/.rusty_dev_tool/config.toml
+
+# Mandatory
+rdt_name = "rdt"
+
+# Mandatory
+update_path = "path-to-githup"
+
+# Mandatory node
+[commands]
+    # Each command it optional
+    [commands.alpha]
+        # Command to be executed is mandatory
+        command = "ls -lah"
+        # As is it's alias
+        alias = "lisa"
+
+    # Each command it optional
+    [another_name]
+        command = "chown -R www-data:www-data /path/to/folder"
+        alias = "porn"

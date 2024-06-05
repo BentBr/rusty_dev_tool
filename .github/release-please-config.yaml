@@ -1,0 +1,3 @@
+branches:
+    branch: main
+    release-type: rust

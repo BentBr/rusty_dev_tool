@@ -1,3 +1,4 @@
+use colored::Colorize;
 use crate::commands::command::run_command;
 use crate::commands::command::Command;
 use crate::commands::execs::command_list::COMMAND_LIST;
@@ -9,10 +10,16 @@ pub struct Start;
 impl Command for Start {
     fn execute(&self, config: &Config) -> Result<(), CommandError> {
         let compose_str = config.compose.to_string();
-        let binding = format!("{} pull && {} up -d --build && {} exec -T php composer install", compose_str, compose_str, compose_str).to_string();
+        let binding = format!(
+            "{} pull && {} up -d --build && {} exec -T php composer install",
+            compose_str, compose_str, compose_str
+        )
+        .to_string();
         let command = binding.as_str();
 
         // Todo: get distinguished commands between php (composer install, node (yarn /npm install etc.)
+
+        println!("{}", "Executing start command".blue());
 
         run_command(command)
     }
