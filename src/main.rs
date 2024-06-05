@@ -3,12 +3,12 @@ mod commands;
 mod env;
 mod error;
 
-use std::process::exit;
 use crate::clap_args::get_clap_matches;
 use crate::commands::registry::CommandRegistry;
 use crate::env::init::init;
 use clap::ArgMatches;
 use colored::Colorize;
+use std::process::exit;
 
 fn main() {
     let matches: ArgMatches = get_clap_matches();
@@ -25,7 +25,7 @@ fn main() {
     let registry = CommandRegistry::new();
 
     // If any flag is not present, require a subcommand
-    if ! matches.get_flag("generate-completions") && ! restore && matches.subcommand().is_none() {
+    if !matches.get_flag("generate-completions") && !restore && matches.subcommand().is_none() {
         eprintln!("{}", "A subcommand is required".red());
         std::process::exit(1);
     }
@@ -36,7 +36,12 @@ fn main() {
                 Ok(command) => {
                     // todo: Add args to command execution
                     command.execute(&config).unwrap_or_else(|err| {
-                        eprintln!("{} {} {}", "Error executing {} command: {}".red(), command_name, err);
+                        eprintln!(
+                            "{} {} {}",
+                            "Error executing {} command: {}".red(),
+                            command_name,
+                            err
+                        );
                     });
                 }
                 Err(err) => {
@@ -44,6 +49,6 @@ fn main() {
                 }
             }
         }
-        _ => exit(0)
+        _ => exit(0),
     }
 }

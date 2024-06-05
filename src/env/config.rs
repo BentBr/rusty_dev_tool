@@ -86,7 +86,7 @@ fn find_or_create_default_dir_in(mut path: PathBuf) -> Result<PathBuf, FileSyste
         return Ok(path);
     }
 
-    if ! path.ends_with(DEFAULT_FOLDER.as_str()) {
+    if !path.ends_with(DEFAULT_FOLDER.as_str()) {
         path = path.join(DEFAULT_FOLDER.as_str());
     }
 

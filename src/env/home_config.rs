@@ -1,12 +1,12 @@
 use crate::env::config::{Command, PathOptions, DEFAULT_CONFIG_FILE};
 use crate::error::config_error::ConfigError::TomlNotReadable;
 use crate::error::file_system_error::FileSystemError;
+use colored::Colorize;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::error::Error;
 use std::fs;
 use std::path::Path;
-use colored::Colorize;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct HomeConfig {
@@ -38,9 +38,13 @@ pub fn get_or_create_home_config(restore: bool) -> Result<HomeConfig, Box<dyn Er
     let config_file = home_config_dir.join(DEFAULT_CONFIG_FILE.as_str());
 
     if !restore && config_file.exists() {
-        return Ok(HomeConfig::from_file(config_file.to_string_lossy().to_string().as_str()).map_err(
-            |error| TomlNotReadable(config_file.to_string_lossy().to_string(), error.to_string()),
-        )?);
+        return Ok(
+            HomeConfig::from_file(config_file.to_string_lossy().to_string().as_str()).map_err(
+                |error| {
+                    TomlNotReadable(config_file.to_string_lossy().to_string(), error.to_string())
+                },
+            )?,
+        );
     }
 
     create_new_home_config(config_file.as_path())
