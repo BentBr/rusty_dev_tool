@@ -17,7 +17,7 @@ fn main() {
     let config = match init(restore) {
         Ok(config) => config,
         Err(error) => {
-            eprintln!("{} {}", "Error initializing environment: {}".red(), error);
+            eprintln!("{} {}", "Error initializing environment:".red(), error);
             return;
         }
     };
@@ -37,15 +37,13 @@ fn main() {
                     // todo: Add args to command execution
                     command.execute(&config).unwrap_or_else(|err| {
                         eprintln!(
-                            "{} {} {}",
-                            "Error executing {} command: {}".red(),
-                            command_name,
-                            err
+                            "{}",
+                            format!("Error executing {} command: {}", command_name, err).red(),
                         );
                     });
                 }
                 Err(err) => {
-                    eprintln!("{} {}", "Error: {}".red(), err);
+                    eprintln!("{} {}", "Error:".red(), err);
                 }
             }
         }

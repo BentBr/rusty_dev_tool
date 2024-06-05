@@ -3,13 +3,13 @@ use lazy_static::lazy_static;
 use std::collections::HashMap;
 use std::env;
 
+use crate::env::compose::compose_enum::Compose;
 use crate::env::home_config::HomeConfig;
 use crate::env::local_config::{Environment, LocalConfig};
 use dirs::home_dir;
 use serde::{Deserialize, Serialize};
 use std::fs::create_dir_all;
 use std::path::PathBuf;
-use crate::env::compose::compose_enum::Compose;
 
 lazy_static! {
     pub static ref DEFAULT_FOLDER: String = String::from(".rusty_dev_tool");
@@ -25,7 +25,7 @@ pub struct Config {
     pub update_path: String,
     pub commands: HashMap<String, Command>,
     pub environments: HashMap<String, Environment>,
-    pub compose: Compose
+    pub compose: Compose,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -97,7 +97,11 @@ fn find_or_create_default_dir_in(mut path: PathBuf) -> Result<PathBuf, FileSyste
     Ok(path.to_owned())
 }
 
-pub fn merge_configs(home_config: HomeConfig, local_config: Option<LocalConfig>, compose: Compose) -> Config {
+pub fn merge_configs(
+    home_config: HomeConfig,
+    local_config: Option<LocalConfig>,
+    compose: Compose,
+) -> Config {
     match local_config {
         Some(local_config) => merge_configs_with_local(home_config, local_config, compose),
         None => Config {
@@ -105,18 +109,22 @@ pub fn merge_configs(home_config: HomeConfig, local_config: Option<LocalConfig>,
             update_path: home_config.update_path,
             commands: home_config.commands,
             environments: HashMap::new(),
-            compose
+            compose,
         },
     }
 }
 
-fn merge_configs_with_local(home_config: HomeConfig, local_config: LocalConfig, compose: Compose) -> Config {
+fn merge_configs_with_local(
+    home_config: HomeConfig,
+    local_config: LocalConfig,
+    compose: Compose,
+) -> Config {
     Config {
         rdt_name: home_config.rdt_name,
         update_path: home_config.update_path,
         commands: merge_commands(home_config.commands, local_config.commands),
         environments: local_config.environments,
-        compose
+        compose,
     }
 }
 
