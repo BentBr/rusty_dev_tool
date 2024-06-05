@@ -103,7 +103,7 @@ jobs:
                 uses: actions/upload-artifact@v2
                 with:
                     name: rdt-windows-${{ github.event.release.tag_name }}.exe
-                    path: "D:\a\rusty_dev_tool\rusty_dev_tool.exe"
+                    path: "D:\\a\\rusty_dev_tool\\rusty_dev_tool"
 
     release:
         needs: [ build-linux, build-macos-amd64, build-macos-arm64, build-windows ]
