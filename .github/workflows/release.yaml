@@ -6,93 +6,178 @@ on:
             - main
 
 jobs:
-    build:
-        runs-on: ${{ matrix.os }}
-        strategy:
-            matrix:
-                # Windows is not yet tested and supported (actually we know it cannot work atm)
-                os: [ubuntu-latest, macos-latest, windows-latest]
-                target: [x86_64-unknown-linux-gnu, x86_64-apple-darwin, x86_64-pc-windows-msvc]
-
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-
-            - name: Set up Rust
-              uses: actions-rs/toolchain@v1
-              with:
-                  toolchain: stable
-                  target: ${{ matrix.target }}
-
-            - name: Install dependencies
-              run: rustup target add ${{ matrix.target }}
-
-            - name: Build
-              run: cargo build --release --target ${{ matrix.target }}
-
-            - name: Archive binary
-              uses: actions/upload-artifact@v2
-              with:
-                  name: ${{ runner.os }}-binary
-                  path: target/${{ matrix.target }}/release/your_tool_name
-
-    release:
-        needs: build
+    build-linux:
         runs-on: ubuntu-latest
         steps:
-            - name: Download Linux binary
-              uses: actions/download-artifact@v2
-              with:
-                  name: ubuntu-latest-binary
-                  path: ./binaries/ubuntu
-            - name: Download macOS binary
-              uses: actions/download-artifact@v2
-              with:
-                  name: macos-latest-binary
-                  path: ./binaries/macos
-            - name: Download Windows binary
-              uses: actions/download-artifact@v2
-              with:
-                  name: windows-latest-binary
-                  path: ./binaries/windows
+            -   name: Checkout code
+                uses: actions/checkout@v2
 
-            - name: Create Release
-              id: create_release
-              uses: actions/create-release@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  tag_name: ${{ github.ref }}
-                  release_name: Release ${{ github.ref }}
-                  draft: false
-                  prerelease: false
+            -   name: Set up Rust
+                uses: actions-rs/toolchain@v1
+                with:
+                    toolchain: stable
+                    target: x86_64-unknown-linux-gnu
 
-            - name: Upload Linux binary
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: ./binaries/ubuntu/your_tool_name
-                  asset_name: your_tool_name-linux
-                  asset_content_type: application/octet-stream
+            -   name: Install dependencies
+                run: rustup target add x86_64-unknown-linux-gnu
 
-            - name: Upload macOS binary
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: ./binaries/macos/your_tool_name
-                  asset_name: your_tool_name-macos
-                  asset_content_type: application/octet-stream
+            -   name: Build
+                run: cargo build --release --target x86_64-unknown-linux-gnu
 
-            - name: Upload Windows binary
-              uses: actions/upload-release-asset@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                  upload_url: ${{ steps.create_release.outputs.upload_url }}
-                  asset_path: ./binaries/windows/your_tool_name.exe
-                  asset_name: your_tool_name-windows.exe
-                  asset_content_type: application/octet-stream
+            -   name: Archive binary
+                uses: actions/upload-artifact@v2
+                with:
+                    name: linux-binary
+                    path: target/x86_64-unknown-linux-gnu/release/your_tool_name
+
+    build-macos-amd64:
+        runs-on: macos-latest
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v2
+
+            -   name: Set up Rust
+                uses: actions-rs/toolchain@v1
+                with:
+                    toolchain: stable
+                    target: x86_64-apple-darwin
+
+            -   name: Install dependencies
+                run: rustup target add x86_64-apple-darwin
+
+            -   name: Build
+                run: cargo build --release --target x86_64-apple-darwin
+
+            -   name: Archive binary
+                uses: actions/upload-artifact@v2
+                with:
+                    name: macos-amd64-binary
+                    path: target/x86_64-apple-darwin/release/your_tool_name
+
+    build-macos-arm64:
+        runs-on: macos-latest
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v2
+
+            -   name: Set up Rust
+                uses: actions-rs/toolchain@v1
+                with:
+                    toolchain: stable
+                    target: aarch64-apple-darwin
+
+            -   name: Install dependencies
+                run: rustup target add aarch64-apple-darwin
+
+            -   name: Build
+                run: cargo build --release --target aarch64-apple-darwin
+
+            -   name: Archive binary
+                uses: actions/upload-artifact@v2
+                with:
+                    name: macos-arm64-binary
+                    path: target/aarch64-apple-darwin/release/your_tool_name
+
+    # Windows is not yet tested and supported (actually we know it cannot work atm)
+    build-windows:
+        runs-on: windows-latest
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v2
+
+            -   name: Set up Rust
+                uses: actions-rs/toolchain@v1
+                with:
+                    toolchain: stable
+                    target: x86_64-pc-windows-msvc
+
+            -   name: Install dependencies
+                run: rustup target add x86_64-pc-windows-msvc
+
+            -   name: Build
+                run: cargo build --release --target x86_64-pc-windows-msvc
+
+            -   name: Archive binary
+                uses: actions/upload-artifact@v2
+                with:
+                    name: windows-binary
+                    path: target/x86_64-pc-windows-msvc/release/your_tool_name
+
+    release:
+        needs: [ build-linux, build-macos-amd64, build-macos-arm64, build-windows ]
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Download Linux binary
+                uses: actions/download-artifact@v2
+                with:
+                    name: linux-binary
+                    path: ./binaries/linux
+
+            -   name: Download macOS AMD64 binary
+                uses: actions/download-artifact@v2
+                with:
+                    name: macos-amd64-binary
+                    path: ./binaries/macos/amd64
+
+            -   name: Download macOS ARM64 binary
+                uses: actions/download-artifact@v2
+                with:
+                    name: macos-arm64-binary
+                    path: ./binaries/macos/arm64
+
+            -   name: Download Windows binary
+                uses: actions/download-artifact@v2
+                with:
+                    name: windows-binary
+                    path: ./binaries/windows
+
+            -   name: Create Release
+                id: create_release
+                uses: actions/create-release@v1
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                with:
+                    tag_name: ${{ github.ref }}
+                    release_name: Release ${{ github.ref }}
+                    draft: false
+                    prerelease: false
+
+            -   name: Upload Linux binary
+                uses: actions/upload-release-asset@v1
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                with:
+                    upload_url: ${{ steps.create_release.outputs.upload_url }}
+                    asset_path: ./binaries/linux/your_tool_name
+                    asset_name: your_tool_name-linux
+                    asset_content_type: application/octet-stream
+
+            -   name: Upload macOS AMD64 binary
+                uses: actions/upload-release-asset@v1
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                with:
+                    upload_url: ${{ steps.create_release.outputs.upload_url }}
+                    asset_path: ./binaries/macos/amd64/your_tool_name
+                    asset_name: your_tool_name-macos-amd64
+                    asset_content_type: application/octet-stream
+
+            -   name: Upload macOS ARM64 binary
+                uses: actions/upload-release-asset@v1
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                with:
+                    upload_url: ${{ steps.create_release.outputs.upload_url }}
+                    asset_path: ./binaries/macos/arm64/your_tool_name
+                    asset_name: your_tool_name-macos-arm64
+                    asset_content_type: application/octet-stream
+
+            -   name: Upload Windows binary
+                uses: actions/upload-release-asset@v1
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                with:
+                    upload_url: ${{ steps.create_release.outputs.upload_url }}
+                    asset_path: ./binaries/windows/your_tool_name.exe
+                    asset_name: your_tool_name-windows.exe
+                    asset_content_type: application/octet-stream
