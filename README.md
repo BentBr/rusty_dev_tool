@@ -30,6 +30,10 @@ In your current project RDT will check for a local config in `%project-root%/.ru
 
 ## Available Commands
 
+## OS
+Currently Linux and MacOS for amd64 / arm64 are supported.
+Windows is not supported at the moment. The build is just included for future use.
+
 ## Contribution
 ❤️ If you want to contribute to this project, feel free to open a pull request. ❤️
 
