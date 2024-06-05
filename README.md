@@ -30,6 +30,19 @@ In your current project RDT will check for a local config in `%project-root%/.ru
 
 ## Available Commands
 
+## Contribution
+❤️ If you want to contribute to this project, feel free to open a pull request. ❤️
+
+All commits to this repository must follow the [conventional commits](https://www.conventionalcommits.org/) standard. Version numbers for this tool are generated automatically based on the commit types used.
+Please use the following commit types:
+- `feat`: for new features
+- `fix`: for bug fixes
+- `chore`: for code refactoring
+- `docs`: for documentation changes
+
+Furthermore, please make sure to add a proper description to your commit message. PRs must successfully past tests + clippy checks. Make sure to cover your accordingly.
+
+
 
 ############################# not yet implemented #############################
 ## Environments
