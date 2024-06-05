@@ -1,3 +1,4 @@
+mod compose;
 pub mod config;
 mod home_config;
 pub mod init;
