@@ -27,7 +27,8 @@ fn main() {
     // If any flag is not present, require a subcommand
     if !matches.get_flag("generate-completions") && !restore && matches.subcommand().is_none() {
         eprintln!("{}", "A subcommand is required".red());
-        std::process::exit(1);
+
+        exit(1);
     }
 
     match matches.subcommand() {
