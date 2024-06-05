@@ -30,7 +30,7 @@ jobs:
                 uses: actions/upload-artifact@v2
                 with:
                     name: rdt-linux-${{ github.event.release.tag_name }}
-                    path: target/x86_64-unknown-linux-gnu/release/rdt
+                    path: "/home/runner/work/rusty_dev_tool/rusty_dev_tool"
 
     build-macos-amd64:
         runs-on: macos-latest
@@ -54,7 +54,7 @@ jobs:
                 uses: actions/upload-artifact@v2
                 with:
                     name: rdt-macos-amd64-${{ github.event.release.tag_name }}
-                    path: target/x86_64-apple-darwin/release/rdt
+                    path: "/Users/runner/work/rusty_dev_tool/rusty_dev_tool"
 
     build-macos-arm64:
         runs-on: macos-latest
@@ -78,7 +78,7 @@ jobs:
                 uses: actions/upload-artifact@v2
                 with:
                     name: rdt-macos-arm64-${{ github.event.release.tag_name }}
-                    path: target/aarch64-apple-darwin/release/rdt
+                    path: "/Users/runner/work/rusty_dev_tool/rusty_dev_tool"
 
     # Windows is not yet tested and supported (actually we know it cannot work atm)
     build-windows:
@@ -103,7 +103,7 @@ jobs:
                 uses: actions/upload-artifact@v2
                 with:
                     name: rdt-windows-${{ github.event.release.tag_name }}.exe
-                    path: target/x86_64-pc-windows-msvc/release/rdt.exe
+                    path: "D:\a\rusty_dev_tool\rusty_dev_tool"
 
     release:
         needs: [ build-linux, build-macos-amd64, build-macos-arm64, build-windows ]
