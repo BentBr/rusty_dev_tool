@@ -4,13 +4,15 @@ on:
     push:
         branches:
             - main
+    release:
+        types: [ published ]
 
 jobs:
     build-linux:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout code
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -   name: Set up Rust
                 uses: actions-rs/toolchain@v1
@@ -27,14 +29,14 @@ jobs:
             -   name: Archive binary
                 uses: actions/upload-artifact@v2
                 with:
-                    name: linux-binary
-                    path: target/x86_64-unknown-linux-gnu/release/your_tool_name
+                    name: rdt-linux-${{ github.event.release.tag_name }}
+                    path: target/x86_64-unknown-linux-gnu/release/rdt
 
     build-macos-amd64:
         runs-on: macos-latest
         steps:
             -   name: Checkout code
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -   name: Set up Rust
                 uses: actions-rs/toolchain@v1
@@ -51,14 +53,14 @@ jobs:
             -   name: Archive binary
                 uses: actions/upload-artifact@v2
                 with:
-                    name: macos-amd64-binary
-                    path: target/x86_64-apple-darwin/release/your_tool_name
+                    name: rdt-macos-amd64-${{ github.event.release.tag_name }}
+                    path: target/x86_64-apple-darwin/release/rdt
 
     build-macos-arm64:
         runs-on: macos-latest
         steps:
             -   name: Checkout code
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -   name: Set up Rust
                 uses: actions-rs/toolchain@v1
@@ -75,15 +77,15 @@ jobs:
             -   name: Archive binary
                 uses: actions/upload-artifact@v2
                 with:
-                    name: macos-arm64-binary
-                    path: target/aarch64-apple-darwin/release/your_tool_name
+                    name: rdt-macos-arm64-${{ github.event.release.tag_name }}
+                    path: target/aarch64-apple-darwin/release/rdt
 
     # Windows is not yet tested and supported (actually we know it cannot work atm)
     build-windows:
         runs-on: windows-latest
         steps:
             -   name: Checkout code
-                uses: actions/checkout@v2
+                uses: actions/checkout@v3
 
             -   name: Set up Rust
                 uses: actions-rs/toolchain@v1
@@ -100,35 +102,38 @@ jobs:
             -   name: Archive binary
                 uses: actions/upload-artifact@v2
                 with:
-                    name: windows-binary
-                    path: target/x86_64-pc-windows-msvc/release/your_tool_name
+                    name: rdt-windows-${{ github.event.release.tag_name }}.exe
+                    path: target/x86_64-pc-windows-msvc/release/rdt.exe
 
     release:
         needs: [ build-linux, build-macos-amd64, build-macos-arm64, build-windows ]
         runs-on: ubuntu-latest
         steps:
+            -   name: Checkout code
+                uses: actions/checkout@v3
+
             -   name: Download Linux binary
                 uses: actions/download-artifact@v2
                 with:
-                    name: linux-binary
+                    name: rdt-linux-${{ github.event.release.tag_name }}
                     path: ./binaries/linux
 
             -   name: Download macOS AMD64 binary
                 uses: actions/download-artifact@v2
                 with:
-                    name: macos-amd64-binary
+                    name: rdt-macos-amd64-${{ github.event.release.tag_name }}
                     path: ./binaries/macos/amd64
 
             -   name: Download macOS ARM64 binary
                 uses: actions/download-artifact@v2
                 with:
-                    name: macos-arm64-binary
+                    name: rdt-macos-arm64-${{ github.event.release.tag_name }}
                     path: ./binaries/macos/arm64
 
             -   name: Download Windows binary
                 uses: actions/download-artifact@v2
                 with:
-                    name: windows-binary
+                    name: rdt-windows-${{ github.event.release.tag_name }}.exe
                     path: ./binaries/windows
 
             -   name: Create Release
@@ -137,8 +142,8 @@ jobs:
                 env:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 with:
-                    tag_name: ${{ github.ref }}
-                    release_name: Release ${{ github.ref }}
+                    tag_name: ${{ github.event.release.tag_name }}
+                    release_name: Release ${{ github.event.release.tag_name }}
                     draft: false
                     prerelease: false
 
@@ -148,8 +153,8 @@ jobs:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 with:
                     upload_url: ${{ steps.create_release.outputs.upload_url }}
-                    asset_path: ./binaries/linux/your_tool_name
-                    asset_name: your_tool_name-linux
+                    asset_path: ./binaries/linux/rdt
+                    asset_name: rdt-linux-${{ github.event.release.tag_name }}
                     asset_content_type: application/octet-stream
 
             -   name: Upload macOS AMD64 binary
@@ -158,8 +163,8 @@ jobs:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 with:
                     upload_url: ${{ steps.create_release.outputs.upload_url }}
-                    asset_path: ./binaries/macos/amd64/your_tool_name
-                    asset_name: your_tool_name-macos-amd64
+                    asset_path: ./binaries/macos/amd64/rdt
+                    asset_name: rdt-macos-amd64-${{ github.event.release.tag_name }}
                     asset_content_type: application/octet-stream
 
             -   name: Upload macOS ARM64 binary
@@ -168,8 +173,8 @@ jobs:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 with:
                     upload_url: ${{ steps.create_release.outputs.upload_url }}
-                    asset_path: ./binaries/macos/arm64/your_tool_name
-                    asset_name: your_tool_name-macos-arm64
+                    asset_path: ./binaries/macos/arm64/rdt
+                    asset_name: rdt-macos-arm64-${{ github.event.release.tag_name }}
                     asset_content_type: application/octet-stream
 
             -   name: Upload Windows binary
@@ -178,6 +183,6 @@ jobs:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 with:
                     upload_url: ${{ steps.create_release.outputs.upload_url }}
-                    asset_path: ./binaries/windows/your_tool_name.exe
-                    asset_name: your_tool_name-windows.exe
+                    asset_path: ./binaries/windows/rdt.exe
+                    asset_name: rdt-windows-${{ github.event.release.tag_name }}.exe
                     asset_content_type: application/octet-stream
