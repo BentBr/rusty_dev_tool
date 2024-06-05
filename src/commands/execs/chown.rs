@@ -9,7 +9,8 @@ pub struct Chown;
 
 impl Command for Chown {
     fn execute(&self, config: &Config) -> Result<(), CommandError> {
-        let binding = format!("{} exec -T --user=root php chown www-data:www-data .", config.compose).to_string();
+        //Todo: Bringing in an option for the user group
+        let binding = format!("{} exec --user=root -T php chown -R www-data:www-data .", config.compose).to_string();
         let command = binding.as_str();
 
         println!("{}", "Executing Chown command".blue());
