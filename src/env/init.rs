@@ -10,11 +10,11 @@ use std::io::BufRead;
 use std::path::Path;
 
 pub fn init(restore: bool) -> Result<Config, Box<dyn Error>> {
-    check_docker_compose_setup()?;
+    let compose = check_docker_compose_setup()?;
 
     let home_config: HomeConfig = get_or_create_home_config(restore)?;
     let project_config: Option<LocalConfig> = get_local_config()?;
-    let config: Config = merge_configs(home_config, project_config);
+    let config: Config = merge_configs(home_config, project_config, compose);
 
     Ok(config)
 }
@@ -44,16 +44,14 @@ fn check_docker_compose_setup() -> Result<Compose, EnvironmentError> {
 }
 
 fn get_compose_enum(file_path: String) -> Result<Compose, EnvironmentError> {
-    let file = File::open(&Path::new(&file_path))
+    let file = File::open(Path::new(&file_path))
         .map_err(|_| EnvironmentError::ComposeFileNotReadable(file_path.clone()))?;
 
-    for line in io::BufReader::new(file).lines() {
-        if let Ok(line) = line {
-            if line.eq("x-mutagen:") {
-                return Ok(Compose::MutagenCompose);
-            }
+    for line in io::BufReader::new(file).lines().map_while(Result::ok) {
+        if line.eq("x-mutagen:") {
+            return Ok(Compose::MutagenCompose);
         }
     }
 
-    Ok(Compose::MutagenCompose)
+    Ok(Compose::DockerCompose)
 }

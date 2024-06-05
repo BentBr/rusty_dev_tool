@@ -8,10 +8,13 @@ use colored::Colorize;
 pub struct Stop;
 
 impl Command for Stop {
-    fn execute(&self, _config: &Config) -> Result<(), CommandError> {
+    fn execute(&self, config: &Config) -> Result<(), CommandError> {
+        let binding = format!("{} down", config.compose).to_string();
+        let command = binding.as_str();
+
         println!("{}", "Executing stop command".blue());
 
-        run_command("docker-compose down")
+        run_command(command)
     }
 
     fn name(&self) -> String {

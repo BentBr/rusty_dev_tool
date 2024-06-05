@@ -1,13 +1,17 @@
+use std::fmt;
+use std::fmt::Formatter;
+
+#[derive(Debug)]
 pub enum Compose {
     DockerCompose,
     MutagenCompose,
 }
 
-impl Compose {
-    pub fn to_string(&self) -> String {
+impl fmt::Display for Compose {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
-            Compose::DockerCompose => "docker-compose".to_string(),
-            Compose::MutagenCompose => "mutagen-compose".to_string(),
+            Compose::DockerCompose => write!(f, "docker-compose",),
+            Compose::MutagenCompose => write!(f, "mutagen-compose",),
         }
     }
 }
