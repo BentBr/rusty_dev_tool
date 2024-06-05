@@ -1,3 +1,4 @@
+use colored::Colorize;
 use crate::commands::command::run_command;
 use crate::commands::command::Command;
 use crate::commands::execs::command_list::COMMAND_LIST;
@@ -17,6 +18,8 @@ impl Command for Start {
         let command = binding.as_str();
 
         // Todo: get distinguished commands between php (composer install, node (yarn /npm install etc.)
+
+        println!("{}", "Executing start command".blue());
 
         run_command(command)
     }

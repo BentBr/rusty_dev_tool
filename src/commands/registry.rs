@@ -2,6 +2,7 @@ use crate::commands::command::Command;
 use crate::commands::execs::shell::Shell;
 use crate::commands::execs::start::Start;
 use crate::commands::execs::stop::Stop;
+use crate::commands::execs::chown::Chown;
 use crate::error::command_error::CommandError;
 use std::collections::HashMap;
 
@@ -23,6 +24,7 @@ impl CommandRegistry {
         registry.register(Box::new(Start));
         registry.register(Box::new(Stop));
         registry.register(Box::new(Shell));
+        registry.register(Box::new(Chown));
 
         // Todo: register config commands (and override default commands)
         registry
