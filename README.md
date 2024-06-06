@@ -43,6 +43,7 @@ Please use the following commit types:
 - `fix`: for bug fixes
 - `chore`: for code refactoring
 - `docs`: for documentation changes
+- `test`: for adding and enhancing tests
 
 Furthermore, please make sure to add a proper description to your commit message. PRs must successfully past tests + clippy checks. Make sure to cover your accordingly.
 
