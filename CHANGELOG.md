@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.15](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.14...v0.1.15) (2024-06-06)
+
+
+### Bug Fixes
+
+* Finally found proper release pathes ([bdfbb53](https://github.com/BentBr/rusty_dev_tool/commit/bdfbb53cb4c72b406722b3be935f7016cdd7aad0))
+
 ## [0.1.14](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.13...v0.1.14) (2024-06-06)
 
 
