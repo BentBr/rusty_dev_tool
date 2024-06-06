@@ -14,7 +14,7 @@ jobs:
 
             -   name: Run release-please
                 id: release
-                uses: GoogleCloudPlatform/release-please-action@v2
+                uses: google-github-actions/release-please-action@v4
                 with:
                     token: ${{ secrets.GITHUB_TOKEN }}
                     release-type: rust
