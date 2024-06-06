@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.12](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.11...v0.1.12) (2024-06-06)
+
+
+### Bug Fixes
+
+* updating ls command for insights ([d637290](https://github.com/BentBr/rusty_dev_tool/commit/d6372907a0ca8ef5ebc8609649b3d6ff51128493))
+
 ## [0.1.11](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.10...v0.1.11) (2024-06-06)
 
 
