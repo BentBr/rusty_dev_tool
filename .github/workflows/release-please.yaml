@@ -19,15 +19,10 @@ jobs:
                     token: ${{ secrets.GITHUB_TOKEN }}
                     release-type: rust
 
-            -   name: Dump release-please outputs
-                env:
-                    OUTPUTS: ${{ toJson(steps.release.outputs) }}
-                run: echo "$OUTPUTS"
-
             -   name: Trigger release workflow
                 if: ${{ steps.release.outputs.release_created }}
                 uses: benc-uk/workflow-dispatch@v1
                 with:
                     workflow: release
                     token: ${{ secrets.GITHUB_TOKEN }}
-                    inputs: '{"tag_name": "${{ steps.release.outputs.release_tag }}"}'
+                    inputs: '{"tag_name": "${{ steps.release.outputs.tag_name }}"}'
