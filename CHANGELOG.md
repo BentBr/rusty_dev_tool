@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.9](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.8...v0.1.9) (2024-06-06)
+
+
+### Bug Fixes
+
+* fixing upload namings ([#25](https://github.com/BentBr/rusty_dev_tool/issues/25)) ([d0af515](https://github.com/BentBr/rusty_dev_tool/commit/d0af5155097275d1dff842b348702e07a756bf8e))
+
 ## [0.1.8](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.7...v0.1.8) (2024-06-06)
 
 
