@@ -136,9 +136,6 @@ jobs:
                     name: rdt-windows-${{ github.event.inputs.tag_name }}.exe
                     path: ./binaries/windows
 
-            -   name: Check content
-                run: ls -lah ./binaries/macos/amd64/target/x86_64-apple-darwin/release/ && ls -lah ./binaries/macos/arm64/target/aarch64-apple-darwin/release && ls -lah ./binaries/windows/target/x86_64-pc-windows-msvc/release && ls -lah ./binaries/linux/target/x86_64-unknown-linux-gnu/release
-
             -   name: Upload Linux binary
                 env:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -187,7 +184,7 @@ jobs:
                       --data-binary @./binaries/windows/target/x86_64-pc-windows-msvc/release/rusty_dev_tool.exe \
                       "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-windows-x86_64-${{ github.event.inputs.tag_name }}.exe"
                     
-                    # We don't want those zips in our releases - only the binaries
+                # We don't want those zips in our releases - only the binaries
             -   name: Delete source code archives
                 env:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -204,3 +201,18 @@ jobs:
                       curl -X DELETE -H "Authorization: token $GITHUB_TOKEN" \
                         https://api.github.com/repos/${{ github.repository }}/releases/assets/$asset_id
                     done
+
+            -   name: Debug asset IDs
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                run: |
+                    release_id=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                      https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ github.event.inputs.tag_name }} \
+                      | jq -r .id)
+
+                    asset_ids=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+                      https://api.github.com/repos/${{ github.repository }}/releases/$release_id/assets \
+                      | jq -r '.[] | select(.name | endswith(".zip") or endswith(".tar.gz")) | .id')
+
+                    echo "Asset IDs: $asset_ids"
+                    echo "Release ID: $release_id"
