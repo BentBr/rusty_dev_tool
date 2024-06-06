@@ -122,13 +122,13 @@ jobs:
                 uses: actions/download-artifact@v2
                 with:
                     name: rdt-macos-amd64-${{ github.event.inputs.tag_name }}
-                    path: ./binaries/macos
+                    path: ./binaries/macos/amd64
 
             -   name: Download macOS ARM64 binary
                 uses: actions/download-artifact@v2
                 with:
                     name: rdt-macos-arm64-${{ github.event.inputs.tag_name }}
-                    path: ./binaries/macos
+                    path: ./binaries/macos/arm64
 
             -   name: Download Windows binary
                 uses: actions/download-artifact@v2
@@ -137,7 +137,7 @@ jobs:
                     path: ./binaries/windows
 
             -   name: Check content
-                run: ls -la ./binaries && ls -la ./binaries/linux && ls -la ./binaries/macos && ls -la ./binaries/windows && ls -lah
+                run: ls -la ./binaries && ls -la ./binaries/linux && ls -la ./binaries/macos && ls -la ./binaries/windows && ls -lah && ls -la ./binaries/linux/target && ls -la ./binaries/linux/target/release
 
             -   name: Upload Linux binary
                 env:
@@ -160,7 +160,7 @@ jobs:
                       | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                       -H "Content-Type: application/octet-stream" \
-                      --data-binary @./binaries/macos/rdt-macos-amd64-${{ github.event.inputs.tag_name }} \
+                      --data-binary @./binaries/macos/amd64/rdt-macos-amd64-${{ github.event.inputs.tag_name }} \
                       "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-macos-amd64-${{ github.event.inputs.tag_name }}"
 
             -   name: Upload macOS ARM64 binary
@@ -172,7 +172,7 @@ jobs:
                       | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                       -H "Content-Type: application/octet-stream" \
-                      --data-binary @./binaries/macos/rdt-macos-arm64-${{ github.event.inputs.tag_name }} \
+                      --data-binary @./binaries/macos/arm64/rdt-macos-arm64-${{ github.event.inputs.tag_name }} \
                       "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-macos-arm64-${{ github.event.inputs.tag_name }}"
 
             -   name: Upload Windows binary
