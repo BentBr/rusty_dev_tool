@@ -4,8 +4,10 @@ use clap_complete::{generate, Shell};
 use std::io;
 
 pub fn get_clap_matches() -> ArgMatches {
+    let version = env!("CARGO_PKG_VERSION");
+
     let mut app = ClapCommand::new("Rusty Dev Tool")
-        .version("1.0")
+        .version(version)
         .author("Bent Brüggemann <mail@bent-brueggemann.de>")
         .about("Docker helper command line tool for developers with docker-compose setups.")
         .arg(
