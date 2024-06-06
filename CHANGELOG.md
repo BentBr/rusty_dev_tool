@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.13](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.12...v0.1.13) (2024-06-06)
+
+
+### Bug Fixes
+
+* deeper ls ([efdb16f](https://github.com/BentBr/rusty_dev_tool/commit/efdb16ff7f791653118edd07abedc39538b5c1c9))
+
 ## [0.1.12](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.11...v0.1.12) (2024-06-06)
 
 
