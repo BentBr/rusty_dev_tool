@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.16](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.15...v0.1.16) (2024-06-06)
+
+
+### Bug Fixes
+
+* new debug for asset ids (I want to delete) ([5b5ebd3](https://github.com/BentBr/rusty_dev_tool/commit/5b5ebd35fd59c8fb94a30491fbf13c567df2e8be))
+
 ## [0.1.15](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.14...v0.1.15) (2024-06-06)
 
 
