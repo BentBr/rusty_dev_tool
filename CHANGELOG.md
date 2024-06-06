@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.10](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.9...v0.1.10) (2024-06-06)
+
+
+### Bug Fixes
+
+* getting info of files to upload ([9e20299](https://github.com/BentBr/rusty_dev_tool/commit/9e202997f71b5a284f677c9c5e2a9e57fa48db52))
+
 ## [0.1.9](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.8...v0.1.9) (2024-06-06)
 
 
