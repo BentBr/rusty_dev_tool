@@ -8,8 +8,16 @@ jobs:
     release:
         runs-on: ubuntu-latest
         steps:
-            -   uses: GoogleCloudPlatform/release-please-action@v2
+            -   id: release
+                uses: GoogleCloudPlatform/release-please-action@v2
                 with:
                     token: ${{ secrets.GITHUB_TOKEN }}
                     release-type: rust
                     package-name: "rusty_dev_tool"
+
+            -   name: Trigger release workflow
+                if: steps.release.outputs.release-created == 'true'
+                uses: benc-uk/workflow-dispatch@v1
+                with:
+                    workflow: Release
+                    token: ${{ secrets.GITHUB_TOKEN }}
