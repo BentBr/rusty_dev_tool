@@ -20,11 +20,12 @@ jobs:
                     release-type: rust
                     package-name: "rusty_dev_tool"
 
-            - name: Debug release-please outputs
-              run: |
-                  echo "Release created: ${{ steps.release.outputs.release_created }}"
-                  echo "Release tag: ${{ steps.release.outputs.release_tag }}"
-                  echo "Release tag: Somethihg else"
+            -   name: Debug release-please outputs
+                run: |
+                    echo "Release created: ${{ steps.release.outputs.release_created }}"
+                    echo "Release tag: ${{ steps.release.outputs.release_tag }}"
+                    echo "All outputs:"
+                    echo "${{ toJSON(steps.release.outputs) }}"
                   
             -   name: Trigger release workflow
                 if: ${{ steps.release.outputs.release_created }}
