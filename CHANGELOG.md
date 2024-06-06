@@ -1,5 +1,12 @@
 # Changelog
 
+### [0.1.4](https://www.github.com/BentBr/rusty_dev_tool/compare/v0.1.3...v0.1.4) (2024-06-06)
+
+
+### Bug Fixes
+
+* adding something ([#15](https://www.github.com/BentBr/rusty_dev_tool/issues/15)) ([38d7be9](https://www.github.com/BentBr/rusty_dev_tool/commit/38d7be96a72f4c8a0b2ee2399d49d33a45d93230))
+
 ### [0.1.3](https://www.github.com/BentBr/rusty_dev_tool/compare/v0.1.2...v0.1.3) (2024-06-06)
 
 
