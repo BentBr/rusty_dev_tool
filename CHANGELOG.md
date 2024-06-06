@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.4...v0.1.5) (2024-06-06)
+
+
+### Bug Fixes
+
+* updated the r-p action to v4 ([#17](https://github.com/BentBr/rusty_dev_tool/issues/17)) ([1abc336](https://github.com/BentBr/rusty_dev_tool/commit/1abc3365783116ea5f681763e20749944226f7e0))
+
 ### [0.1.4](https://www.github.com/BentBr/rusty_dev_tool/compare/v0.1.3...v0.1.4) (2024-06-06)
 
 
