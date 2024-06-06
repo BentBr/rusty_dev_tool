@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.17](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.16...v0.1.17) (2024-06-06)
+
+
+### Bug Fixes
+
+* trying to debug the asset ids... by exporting ([6dc2aa8](https://github.com/BentBr/rusty_dev_tool/commit/6dc2aa86bcbeea99b5a82344b7d2501d43a24ef6))
+
 ## [0.1.16](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.15...v0.1.16) (2024-06-06)
 
 
