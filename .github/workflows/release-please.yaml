@@ -26,3 +26,5 @@ jobs:
                 with:
                     workflow: release
                     token: ${{ secrets.GITHUB_TOKEN }}
+                    inputs:
+                        tag_name: ${{ steps.release.outputs.release_tag }}
