@@ -259,7 +259,7 @@ dependencies = [
 
 [[package]]
 name = "rusty_dev_tool"
-version = "0.1.14"
+version = "0.1.15"
 dependencies = [
  "clap",
  "clap_complete",
