@@ -23,12 +23,29 @@ If by accident you delete this file, you can recreate it by running `rdt init-co
 
 In your current project RDT will check for a local config in `%project-root%/.rusty-dev-tool/config.toml`. Those entries will override the ones in the global config.
 
-### Mac
+### Mac + Linux
 
-### Linux
 
 
 ## Available Commands
+All commands which are running _docker-compose_ do check before if x-mutagen is configured and will run _mutagen-compose_ if so.
+
+### start
+Starting the setup for local development. This will start the docker-compose setup and the mutagen sync.
+
+Under the hood it will run the following commands: \
+`docker-compose pull && docker-compose up -d --build && docker-compose exec -T php composer install`
+
+### stop
+Stopping the setup for local development. \
+`docker-compose down`
+
+### shell
+For shelling into a container locally. \
+`docker-compose exec php bash`
+
+### self-update
+not yet implemented
 
 ## OS
 Currently Linux and MacOS for amd64 / arm64 are supported.
