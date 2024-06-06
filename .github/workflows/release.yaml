@@ -137,7 +137,7 @@ jobs:
                     path: ./binaries/windows
 
             -   name: Check content
-                run: ls -la ./binaries && ls -la ./binaries/linux && ls -la ./binaries/macos && ls -la ./binaries/windows && ls -lah && ls -la ./binaries/linux/target && ls -la ./binaries/linux/target/release
+                run: ls -la . && ls -lah ./binaries/macos/amd64/target && ls -lah ./binaries/macos/arm64/target && ls -lah ./binaries/windows/target && ls -lah && ls -lah ./binaries/linux/target && ls -lah ./binaries/linux/target/release && ls -lah ./binaries/linux/target/release/build
 
             -   name: Upload Linux binary
                 env:
