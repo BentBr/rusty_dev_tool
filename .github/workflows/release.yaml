@@ -145,7 +145,7 @@ jobs:
                      | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                      -H "Content-Type: application/octet-stream" \
-                     --data-binary @./binaries/linux/rdt \
+                     --data-binary @./binaries/linux/rdt-linux-${{ github.event.inputs.tag_name }} \
                      "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-linux-${{ github.event.inputs.tag_name }}"
 
             -   name: Upload macOS AMD64 binary
@@ -157,7 +157,7 @@ jobs:
                       | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                       -H "Content-Type: application/octet-stream" \
-                      --data-binary @./binaries/macos/amd64/rdt \
+                      --data-binary @./binaries/macos/amd64/rdt-macos-amd64-${{ github.event.inputs.tag_name }} \
                       "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-macos-amd64-${{ github.event.inputs.tag_name }}"
 
             -   name: Upload macOS ARM64 binary
@@ -169,7 +169,7 @@ jobs:
                       | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                       -H "Content-Type: application/octet-stream" \
-                      --data-binary @./binaries/macos/arm64/rdt \
+                      --data-binary @./binaries/macos/arm64/rdt-macos-arm64-${{ github.event.inputs.tag_name }} \
                       "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-macos-arm64-${{ github.event.inputs.tag_name }}"
 
             -   name: Upload Windows binary
@@ -181,7 +181,7 @@ jobs:
                       | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                       -H "Content-Type: application/octet-stream" \
-                      --data-binary @./binaries/windows/rdt.exe \
+                      --data-binary @./binaries/windows/rdt-windows-${{ github.event.inputs.tag_name }}.exe \
                       "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-windows-${{ github.event.inputs.tag_name }}.exe"
                     
                     # We don't want those zips in our releases - only the binaries
