@@ -137,7 +137,7 @@ jobs:
                     path: ./binaries/windows
 
             -   name: Check content
-                run: ls -lah ./binaries/macos/amd64/target/x86_64-apple-darwin/release && ls -lah ./binaries/macos/arm64/target/aarch64-apple-darwin/release && ls -lah ./binaries/windows/target/x86_64-pc-windows-msvc/release && ls -lah ./binaries/linux/target/x86_64-unknown-linux-gnu/release
+                run: ls -lah ./binaries/macos/amd64/target/x86_64-apple-darwin/release/ && ls -lah ./binaries/macos/arm64/target/aarch64-apple-darwin/release && ls -lah ./binaries/windows/target/x86_64-pc-windows-msvc/release && ls -lah ./binaries/linux/target/x86_64-unknown-linux-gnu/release
 
             -   name: Upload Linux binary
                 env:
@@ -148,8 +148,8 @@ jobs:
                      | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                      -H "Content-Type: application/octet-stream" \
-                     --data-binary @./binaries/linux/rdt-linux-${{ github.event.inputs.tag_name }} \
-                     "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-linux-${{ github.event.inputs.tag_name }}"
+                     --data-binary @./binaries/linux/target/x86_64-unknown-linux-gnu/release/rusty_dev_tool \
+                     "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-linux-x86_64-${{ github.event.inputs.tag_name }}"
 
             -   name: Upload macOS AMD64 binary
                 env:
@@ -160,8 +160,8 @@ jobs:
                       | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                       -H "Content-Type: application/octet-stream" \
-                      --data-binary @./binaries/macos/amd64/rdt-macos-amd64-${{ github.event.inputs.tag_name }} \
-                      "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-macos-amd64-${{ github.event.inputs.tag_name }}"
+                      --data-binary @./binaries/macos/amd64/target/x86_64-apple-darwin/release/rusty_dev_tool \
+                      "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-macos-x86_64-${{ github.event.inputs.tag_name }}"
 
             -   name: Upload macOS ARM64 binary
                 env:
@@ -172,8 +172,8 @@ jobs:
                       | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                       -H "Content-Type: application/octet-stream" \
-                      --data-binary @./binaries/macos/arm64/rdt-macos-arm64-${{ github.event.inputs.tag_name }} \
-                      "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-macos-arm64-${{ github.event.inputs.tag_name }}"
+                      --data-binary @./binaries/macos/arm64/target/aarch64-apple-darwin/release/rusty_dev_tool \
+                      "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-macos-aarch64-${{ github.event.inputs.tag_name }}"
 
             -   name: Upload Windows binary
                 env:
@@ -184,8 +184,8 @@ jobs:
                       | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                       -H "Content-Type: application/octet-stream" \
-                      --data-binary @./binaries/windows/rdt-windows-${{ github.event.inputs.tag_name }}.exe \
-                      "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-windows-${{ github.event.inputs.tag_name }}.exe"
+                      --data-binary @./binaries/windows/target/x86_64-pc-windows-msvc/release/rusty_dev_tool.exe \
+                      "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-windows-x86_64-${{ github.event.inputs.tag_name }}.exe"
                     
                     # We don't want those zips in our releases - only the binaries
             -   name: Delete source code archives
