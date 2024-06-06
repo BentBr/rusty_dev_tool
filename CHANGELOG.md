@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.8](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.7...v0.1.8) (2024-06-06)
+
+
+### Bug Fixes
+
+* Fixed proper tag naming ([#23](https://github.com/BentBr/rusty_dev_tool/issues/23)) ([8acfccc](https://github.com/BentBr/rusty_dev_tool/commit/8acfccc97095eaff3d851f24e295a479054b74db))
+
 ## [0.1.7](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.6...v0.1.7) (2024-06-06)
 
 
