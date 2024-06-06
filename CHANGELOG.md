@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.14](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.13...v0.1.14) (2024-06-06)
+
+
+### Bug Fixes
+
+* more and deeper verbosity ([b42b552](https://github.com/BentBr/rusty_dev_tool/commit/b42b55299ff5295a012cb62f3d996ef010b7fa93))
+
 ## [0.1.13](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.12...v0.1.13) (2024-06-06)
 
 
