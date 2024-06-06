@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.17...v0.2.0) (2024-06-06)
+
+
+### Features
+
+* added correct version to clap ([9dda7b0](https://github.com/BentBr/rusty_dev_tool/commit/9dda7b0b331bc0cca5ad6c7b6dbb778a11d20bfe))
+
+
+### Bug Fixes
+
+* fixing the repo deletion asset job ([047f996](https://github.com/BentBr/rusty_dev_tool/commit/047f996cb4c5cd93f5ea6e864206e4d3b32a32a4))
+
 ## [0.1.17](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.16...v0.1.17) (2024-06-06)
 
 
