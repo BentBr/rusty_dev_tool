@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.7](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.6...v0.1.7) (2024-06-06)
+
+
+### Bug Fixes
+
+* all outputs verbosity ([#21](https://github.com/BentBr/rusty_dev_tool/issues/21)) ([0d68867](https://github.com/BentBr/rusty_dev_tool/commit/0d688676ebca6b3ef0a119faa6cce7cac88e3e4a))
+* next try verbosity ([7c0071b](https://github.com/BentBr/rusty_dev_tool/commit/7c0071b0e17683a19b04e561ea534464cf6d0e4c))
+* next try verbosity 2 ([058a93e](https://github.com/BentBr/rusty_dev_tool/commit/058a93ed53761ea0608c363dd6ce9a20aa053aa0))
+
 ## [0.1.6](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.5...v0.1.6) (2024-06-06)
 
 
