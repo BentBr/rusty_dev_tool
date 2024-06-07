@@ -53,6 +53,8 @@ services:
             - PIMCORE_SYMFONY_CACHE_DIRECTORY=/tmp/private-var/cache
             - PIMCORE_CACHE_DIRECTORY=/tmp/private-var/cache/pimcore
             - PIMCORE_SYSTEM_TEMP_DIRECTORY=/tmp/private-var/tmp
+            # Set this one for detection of the main container service
+            - MAIN_SERVICE=php
 
     mail:
         image: schickling/mailcatcher

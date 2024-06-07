@@ -10,7 +10,11 @@ pub struct Chown;
 impl Command for Chown {
     fn execute(&self, config: &Config) -> Result<(), CommandError> {
         //Todo: Bringing in an option for the user group
-        let binding = format!("{} exec --user=root -T php chown -R www-data:www-data .", config.compose).to_string();
+        let binding = format!(
+            "{} exec --user=root -T php chown -R www-data:www-data .",
+            config.compose
+        )
+        .to_string();
         let command = binding.as_str();
 
         println!("{}", "Executing Chown command".blue());

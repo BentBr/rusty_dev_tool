@@ -5,6 +5,7 @@ use std::env;
 
 use crate::env::compose::compose_enum::Compose;
 use crate::env::home_config::HomeConfig;
+use crate::env::language::language_framework_enum::LanguageFramework;
 use crate::env::local_config::{Environment, LocalConfig};
 use dirs::home_dir;
 use serde::{Deserialize, Serialize};
@@ -26,6 +27,7 @@ pub struct Config {
     pub commands: HashMap<String, Command>,
     pub environments: HashMap<String, Environment>,
     pub compose: Compose,
+    pub language_framework: LanguageFramework,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -101,15 +103,19 @@ pub fn merge_configs(
     home_config: HomeConfig,
     local_config: Option<LocalConfig>,
     compose: Compose,
+    language_framework: LanguageFramework,
 ) -> Config {
     match local_config {
-        Some(local_config) => merge_configs_with_local(home_config, local_config, compose),
+        Some(local_config) => {
+            merge_configs_with_local(home_config, local_config, compose, language_framework)
+        }
         None => Config {
             rdt_name: home_config.rdt_name,
             update_path: home_config.update_path,
             commands: home_config.commands,
             environments: HashMap::new(),
             compose,
+            language_framework,
         },
     }
 }
@@ -118,6 +124,7 @@ fn merge_configs_with_local(
     home_config: HomeConfig,
     local_config: LocalConfig,
     compose: Compose,
+    language_framework: LanguageFramework,
 ) -> Config {
     Config {
         rdt_name: home_config.rdt_name,
@@ -125,6 +132,7 @@ fn merge_configs_with_local(
         commands: merge_commands(home_config.commands, local_config.commands),
         environments: local_config.environments,
         compose,
+        language_framework,
     }
 }
 

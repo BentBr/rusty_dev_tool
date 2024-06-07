@@ -7,6 +7,8 @@ services:
         command: tail -f /dev/null
         environment:
             - TERM
+            # Set this one for detection of the main container service
+            - MAIN_SERVICE=rust
         working_dir: /cargo-cache
 
     node:
