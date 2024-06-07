@@ -21,8 +21,6 @@ impl Command for Start {
         .to_string();
         let command = binding.as_str();
 
-        // Todo: get distinguished commands between php (composer install, node (yarn /npm install etc.)
-
         println!("{}", format!("Executing start command with '{}'", config.language_framework).blue());
 
         run_command(command)
