@@ -1,0 +1,53 @@
+services:
+    # if your main folder has a cargo.toml we assume you want to use rust as main tool.
+    rust:
+        image: rust:1.78-alpine
+        volumes:
+            - .:/cargo-cache:/rust/cargo
+        command: tail -f /dev/null
+        environment:
+            - TERM
+        working_dir: /cargo-cache
+
+    node:
+        image: node:20-alpine
+        command: sh -c "cd /var/www/html/ && npm run dev && tail -f /dev/null" # preventing it from stopping again
+        volumes:
+            - ./fe:/var/www/html # in subfolder fe due to complete install of vue app
+        working_dir: /var/www/html/
+        ports:
+            - '80'
+        networks:
+            default:
+                aliases:
+                    - rusty-project-key.docker
+        environment:
+            - VIRTUAL_HOST=.rusty-project-key.docker
+
+    postgres:
+        image: 'postgres:11.2'
+        ports:
+            - '5432:5432'
+        environment:
+            - 'POSTGRES_USER=username'
+            - 'POSTGRES_DB=pg-db'
+            - 'POSTGRES_PASSWORD=password'
+            - VIRTUAL_HOST=.pg.rusty-project-key.docker
+        networks:
+            default:
+                aliases:
+                    - pg.rusty-project-key.docker
+
+    redis:
+        image: 'redis:5.0.5'
+        ports:
+            - '6379:6379'
+        networks:
+            default:
+                aliases:
+                    - redis.rusty-project-key.docker
+        environment:
+            - VIRTUAL_HOST=.redis.rusty-project-key.docker
+
+volumes:
+    cargo-cache:

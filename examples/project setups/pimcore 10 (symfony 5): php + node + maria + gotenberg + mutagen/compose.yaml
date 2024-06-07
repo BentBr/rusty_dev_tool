@@ -1,0 +1,131 @@
+services:
+    redis:
+        image: redis:alpine
+
+    db:
+        image: mysql:8.0-oracle
+        working_dir: /application
+        command: [ mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_0900_ai_ci ]
+        volumes:
+            - database:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=ROOT
+            - MYSQL_DATABASE=database
+            - MYSQL_USER=user
+            - MYSQL_PASSWORD=pass
+        ports:
+            - "3306:3306"
+
+    web:
+        image: nginx:1.21
+        volumes:
+            - code:/var/www/html
+            - ./.local/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+        ports:
+            - "80"
+        networks:
+            default:
+               aliases:
+                  - project-key.docker
+        depends_on:
+            - php
+        environment:
+            - VIRTUAL_HOST=.project-key.docker
+
+    # if your main folder has a composer.json we assume you want to use php as main tool.
+    php:
+        image: pimcore/pimcore:php8.2-debug-latest
+        volumes:
+            - code:/var/www/html
+        ports:
+            - "80"
+        depends_on:
+            - db
+            - gotenberg
+        environment:
+            - APP_ENV=docker
+            - COMPOSER_HOME=/tmp/composer
+            - COMPOSER_MEMORY_LIMIT=-1
+            - MYSQL_USER=user
+            - MYSQL_PASS=pass
+            - MYSQL_DATABASE=database
+            - MYSQL_HOST=db
+            - PIMCORE_SYMFONY_CACHE_DIRECTORY=/tmp/private-var/cache
+            - PIMCORE_CACHE_DIRECTORY=/tmp/private-var/cache/pimcore
+            - PIMCORE_SYSTEM_TEMP_DIRECTORY=/tmp/private-var/tmp
+
+    mail:
+        image: schickling/mailcatcher
+        ports:
+            - '1080'
+        environment:
+            - VIRTUAL_HOST=mail.project-key.docker
+            - VIRTUAL_PORT=1080
+
+    gotenberg:
+        networks:
+            default:
+                aliases:
+                    - gotenberg.project-key.docker
+        image: gotenberg/gotenberg:7
+        command:
+            - "gotenberg"
+        environment:
+            - VIRTUAL_HOST=gotenberg.project-key.docker
+            - VIRTUAL_PORT=3000
+
+    node:
+        image: node:20-alpine
+        depends_on:
+            - php
+        command: sh -c "cd /var/www/html && yarn install && yarn dev-server && tail -f /dev/null" # preventing it from stopping again
+        volumes:
+            - code-node:/var/www/html:cached
+        working_dir: /var/www/html
+        networks:
+            default:
+                aliases:
+                    - node.project-key.docker
+        environment:
+            - VIRTUAL_HOST=node.project-key.docker
+
+volumes:
+    database:
+    code:
+    code-node:
+
+# Set up Mutagen synchronization and forwarding.
+x-mutagen:
+    sync:
+        code:
+            alpha: "."
+            beta: "volume://code"
+            mode: "two-way-resolved"
+            configurationBeta:
+                permissions:
+                    ## Mac user group
+                    defaultOwner: "id:33"
+                    defaultGroup: "id:33"
+                    defaultFileMode: 0644
+                    defaultDirectoryMode: 0755
+            ignore:
+                paths:
+                    - "/.idea/*"
+                    - "/node_modules/*"
+                    - "/public/var/tmp/*"
+        code-node:
+            alpha: "."
+            beta: "volume://code-node"
+            mode: "two-way-resolved"
+            configurationBeta:
+                permissions:
+                    ## Mac user group
+                    defaultOwner: "id:33"
+                    defaultGroup: "id:33"
+                    defaultFileMode: 0644
+                    defaultDirectoryMode: 0755
+            ignore:
+                paths:
+                    - "/.idea/*"
+                    - "/vendor/*"
+                    - "/public/var/tmp/*"
