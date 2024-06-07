@@ -11,8 +11,8 @@ impl Command for Chown {
     fn execute(&self, config: &Config) -> Result<(), CommandError> {
         //Todo: Bringing in an option for the user group
         let binding = format!(
-            "{} exec --user=root -T php chown -R www-data:www-data .",
-            config.compose
+            "{} exec --user=root -T {} chown -R www-data:www-data .",
+            config.compose, config.language_framework
         )
         .to_string();
         let command = binding.as_str();
