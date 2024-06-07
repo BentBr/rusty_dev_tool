@@ -21,7 +21,14 @@ impl Command for Start {
         .to_string();
         let command = binding.as_str();
 
-        println!("{}", format!("Executing start command with '{}'", config.language_framework).blue());
+        println!(
+            "{}",
+            format!(
+                "Executing start command with '{}'",
+                config.language_framework
+            )
+            .blue()
+        );
 
         run_command(command)
     }
