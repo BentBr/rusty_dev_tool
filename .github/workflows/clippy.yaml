@@ -2,30 +2,14 @@ name: clippy
 
 on: [push, pull_request]
 
+# Make sure CI fails on all warnings, including Clippy lints
+env:
+    RUSTFLAGS: "-Dwarnings"
+
 jobs:
     clippy:
         runs-on: ubuntu-latest
-
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
-
-            - name: Set up Rust
-              uses: actions-rs/toolchain@v1
-              with:
-                  toolchain: stable
-
-            - name: Print Rust toolchain version
-              run: rustup show
-
-            - name: Print Clippy version
-              run: cargo clippy --version
-
-            - name: Print Cargo metadata
-              run: cargo metadata --format-version=1 | jq '.packages[].features'
-
-            - name: Install Clippy
-              run: rustup component add clippy
-
+            - uses: actions/checkout@v4
             - name: Run Clippy
-              run: cargo clippy --all-targets --all-features -- -D warnings
+              run: cargo clippy --all-targets --all-features
