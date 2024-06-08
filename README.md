@@ -42,6 +42,9 @@ Starting the setup for local development. This will start the _docker-compose_ s
 Under the hood it will run the following commands: \
 `docker-compose pull && docker-compose up -d --build && docker-compose exec -T php composer install`
 
+It is checking for the environment in compose.yaml: `MAIN_SERVICE=php|node|rust` \
+(The list gets extended as needed)
+
 ### stop
 Stopping the setup for local development. \
 `docker-compose down`
@@ -50,8 +53,16 @@ Stopping the setup for local development. \
 For shelling into a container locally. \
 `docker-compose exec php bash`
 
-### self-update
-not yet implemented
+## Arguments
+### --self-update
+Updates the tool to the latest version.
+
+### --help
+Same as the help subcommand.
+
+### --generate-completions
+NOT YET IN
+Generates shell completions for the tool. Available shells are: bash, zsh, fish, powershell... TBD
 
 ## OS
 Currently, Linux and MacOS for amd64 / arm64 are supported.
