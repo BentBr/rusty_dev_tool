@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.3](https://github.com/BentBr/rusty_dev_tool/compare/v0.3.2...v0.3.3) (2024-06-08)
+
+
+### Bug Fixes
+
+* checking if download of new version works and failing accordingly ([2e34c8b](https://github.com/BentBr/rusty_dev_tool/commit/2e34c8b32b8f95c9e43da31f819ef62918c84189))
+
 ## [0.3.2](https://github.com/BentBr/rusty_dev_tool/compare/v0.3.1...v0.3.2) (2024-06-08)
 
 
