@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.3.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.2.0...v0.3.0) (2024-06-08)
+
+
+### Features
+
+* added self-updating command with config ([d81c145](https://github.com/BentBr/rusty_dev_tool/commit/d81c145978dec8223dc351a7257ca2562f3a6aee))
+* adding clippy to workflows ([c0e93d4](https://github.com/BentBr/rusty_dev_tool/commit/c0e93d451cfc4a3c58c8cf4116c3c049462cc684))
+* adding differentiation to run different main containers (with install during start). ([60b821c](https://github.com/BentBr/rusty_dev_tool/commit/60b821cb538ced8b61a2480438b0dd7dc7a81238))
+
+
+### Bug Fixes
+
+* adding language_framework retrieval to chown as well ([43c2087](https://github.com/BentBr/rusty_dev_tool/commit/43c2087f703079b7d35afacbd45529ace2d6b8ec))
+* removing the idea of removing assets from the realeases ([34323a9](https://github.com/BentBr/rusty_dev_tool/commit/34323a97ed7c2543d3058d997d8e93c84b539a10))
+* updating shell command to always shell into the main one ([7d2aa71](https://github.com/BentBr/rusty_dev_tool/commit/7d2aa718c6fe8b54441d6a28ee14c15de463269f))
+
 ## [0.2.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.1.17...v0.2.0) (2024-06-06)
 
 
