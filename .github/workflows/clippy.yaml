@@ -1,24 +1,13 @@
 name: Clippy
 
-on:
-    push:
-        branches: [ main ]
-    pull_request:
-        branches: [ main ]
+on: [ push, pull_request ]
 
 jobs:
     clippy:
         runs-on: ubuntu-latest
         steps:
-            -   name: Checkout code
-                uses: actions/checkout@v4
-
-            -   name: Install stable toolchain
-                uses: actions-rs/toolchain@v1
-                with:
-                    toolchain: stable
-                    override: true
-                    components: clippy
+            -   name: Checkout repository
+                uses: actions/checkout@v3
 
             -   name: Run Clippy
                 uses: actions-rs/clippy-check@v1
