@@ -1,6 +1,5 @@
 use crate::commands::command::Command;
 use crate::commands::execs::chown::Chown;
-use crate::commands::execs::self_update::SelfUpdate;
 use crate::commands::execs::shell::Shell;
 use crate::commands::execs::start::Start;
 use crate::commands::execs::stop::Stop;
@@ -26,7 +25,6 @@ impl CommandRegistry {
         registry.register(Box::new(Stop));
         registry.register(Box::new(Shell));
         registry.register(Box::new(Chown));
-        registry.register(Box::new(SelfUpdate));
 
         // Todo: register config commands (and override default commands)
         registry

@@ -123,6 +123,20 @@ pub fn merge_configs(
     }
 }
 
+pub fn get_config_without_local(
+    home_config: HomeConfig,
+) -> Config {
+    Config {
+        rdt_name: home_config.rdt_name,
+        download_path: home_config.download_path,
+        meta_path: home_config.meta_path,
+        commands: home_config.commands,
+        environments: HashMap::new(),
+        compose: Compose::DockerCompose,
+        language_framework: LanguageFramework::Rust,
+    }
+}
+
 fn merge_configs_with_local(
     home_config: HomeConfig,
     local_config: LocalConfig,

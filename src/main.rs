@@ -3,18 +3,22 @@ mod commands;
 mod env;
 mod error;
 
-use crate::clap_args::get_clap_matches;
+use crate::clap_args::{get_clap_matches, CONFIG_RESTORE, SELF_UPDATE, GENERATE_COMPLETIONS};
 use crate::commands::registry::CommandRegistry;
 use crate::env::init::init;
 use clap::ArgMatches;
 use colored::Colorize;
 use std::process::exit;
+use crate::commands::command::Command;
+use crate::commands::execs::self_update::SelfUpdate;
 
 fn main() {
     let matches: ArgMatches = get_clap_matches();
-    let restore: bool = matches.get_flag("config-restore");
+    let restore: bool = matches.get_flag(CONFIG_RESTORE);
+    let update: bool = matches.get_flag(SELF_UPDATE);
+    let generate_completions: bool = matches.get_flag(GENERATE_COMPLETIONS);
 
-    let config = match init(restore) {
+    let config = match init(restore, update) {
         Ok(config) => config,
         Err(error) => {
             eprintln!("{} {}", "Error initializing environment:".red(), error);
@@ -22,10 +26,22 @@ fn main() {
         }
     };
 
+    if update {
+        match SelfUpdate.execute(&config) {
+            Ok(_) => exit(0),
+            Err(err) => {
+                eprintln!("{} {}", "Error updating:".red(), err);
+                exit(1);
+            }
+        }
+    }
+
     let registry = CommandRegistry::new();
 
     // If any flag is not present, require a subcommand
-    if !matches.get_flag("generate-completions") && !restore && matches.subcommand().is_none() {
+    if !(generate_completions || restore || update)
+        && matches.subcommand().is_none()
+    {
         eprintln!("{}", "A subcommand is required".red());
 
         exit(1);

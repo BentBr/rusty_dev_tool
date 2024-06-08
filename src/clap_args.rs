@@ -3,6 +3,10 @@ use clap::{Arg, ArgAction, ArgMatches, Command as ClapCommand};
 use clap_complete::{generate, Shell};
 use std::io;
 
+pub const CONFIG_RESTORE: &str = "config-restore";
+pub const SELF_UPDATE: &str = "self-update";
+pub const GENERATE_COMPLETIONS: &str = "generate-completions";
+
 pub fn get_clap_matches() -> ArgMatches {
     let version = env!("CARGO_PKG_VERSION");
 
@@ -11,16 +15,22 @@ pub fn get_clap_matches() -> ArgMatches {
         .author("Bent Brüggemann <mail@bent-brueggemann.de>")
         .about("Docker helper command line tool for developers with docker-compose setups.")
         .arg(
-            Arg::new("generate-completions")
-                .long("generate-completions")
+            Arg::new(GENERATE_COMPLETIONS)
+                .long(GENERATE_COMPLETIONS)
                 .value_name("SHELL")
                 .help("Generate shell completions")
                 .action(ArgAction::SetFalse),
         )
         .arg(
-            Arg::new("config-restore")
-                .long("config-restore")
+            Arg::new(CONFIG_RESTORE)
+                .long(CONFIG_RESTORE)
                 .help("Restores the home config environment")
+                .action(ArgAction::SetTrue),
+        )
+        .arg(
+            Arg::new(SELF_UPDATE)
+                .long(SELF_UPDATE)
+                .help("Updates this very tool to the latest version")
                 .action(ArgAction::SetTrue),
         );
     // Todo: fix the shell completion
