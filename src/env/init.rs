@@ -1,5 +1,5 @@
 use crate::env::compose::compose_enum::Compose;
-use crate::env::config::{merge_configs, Config, PathOptions, get_config_without_local};
+use crate::env::config::{get_config_without_local, merge_configs, Config, PathOptions};
 use crate::env::home_config::{get_or_create_home_config, HomeConfig};
 use crate::env::language::language_framework_enum::LanguageFramework;
 use crate::env::local_config::{get_local_config, LocalConfig};

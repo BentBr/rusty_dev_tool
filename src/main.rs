@@ -3,14 +3,14 @@ mod commands;
 mod env;
 mod error;
 
-use crate::clap_args::{get_clap_matches, CONFIG_RESTORE, SELF_UPDATE, GENERATE_COMPLETIONS};
+use crate::clap_args::{get_clap_matches, CONFIG_RESTORE, GENERATE_COMPLETIONS, SELF_UPDATE};
+use crate::commands::command::Command;
+use crate::commands::execs::self_update::SelfUpdate;
 use crate::commands::registry::CommandRegistry;
 use crate::env::init::init;
 use clap::ArgMatches;
 use colored::Colorize;
 use std::process::exit;
-use crate::commands::command::Command;
-use crate::commands::execs::self_update::SelfUpdate;
 
 fn main() {
     let matches: ArgMatches = get_clap_matches();
@@ -39,9 +39,7 @@ fn main() {
     let registry = CommandRegistry::new();
 
     // If any flag is not present, require a subcommand
-    if !(generate_completions || restore || update)
-        && matches.subcommand().is_none()
-    {
+    if !(generate_completions || restore || update) && matches.subcommand().is_none() {
         eprintln!("{}", "A subcommand is required".red());
 
         exit(1);

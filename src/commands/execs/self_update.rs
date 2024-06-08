@@ -110,7 +110,7 @@ fn fetch_update(config: &Config, tag_name: String) -> Result<(), UpdateError> {
         config.download_path, tag_name, binary_name, tag_name
     );
 
-    let mut response = get(download_url)?;
+    let mut response = get(download_url.clone())?;
     let mut dest = {
         let bin_path = get_current_bin_path()?;
         println!("Downloading update to {}", bin_path.to_string_lossy());
@@ -118,7 +118,11 @@ fn fetch_update(config: &Config, tag_name: String) -> Result<(), UpdateError> {
         fs::File::create(bin_path)?
     };
 
-    copy(&mut response, &mut dest)?;
+    if response.status().is_success() {
+        copy(&mut response, &mut dest)?;
+    } else {
+        return Err(UpdateError::UpdateDownloadError(download_url));
+    }
 
     Ok(())
 }

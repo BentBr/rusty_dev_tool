@@ -123,9 +123,7 @@ pub fn merge_configs(
     }
 }
 
-pub fn get_config_without_local(
-    home_config: HomeConfig,
-) -> Config {
+pub fn get_config_without_local(home_config: HomeConfig) -> Config {
     Config {
         rdt_name: home_config.rdt_name,
         download_path: home_config.download_path,

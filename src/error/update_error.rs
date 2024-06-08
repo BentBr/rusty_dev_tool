@@ -7,6 +7,7 @@ pub enum UpdateError {
     FailedToReadVersion(String),
     UpdateGeneric(Box<dyn Error>),
     UpdateCheckFailed(String),
+    UpdateDownloadError(String),
 }
 
 impl Error for UpdateError {}
@@ -27,6 +28,9 @@ impl fmt::Display for UpdateError {
             }
             UpdateError::UpdateCheckFailed(string) => {
                 write!(f, "Failed to check for updates: '{}'.", string)
+            }
+            UpdateError::UpdateDownloadError(string) => {
+                write!(f, "Failed to download update: '{}'.", string)
             }
         }
     }
