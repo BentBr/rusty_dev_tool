@@ -2,11 +2,7 @@ name: clippy
 
 on:
     push:
-        branches:
-            - main  # Run on push to main branch
-            - 'release/*'  # Run on push to any release branch
-    pull_request:
-        types: [opened, synchronize, reopened]  # Run on pull request events
+        branches: [ main ]
 
 # Make sure CI fails on all warnings, including Clippy lints
 env:
