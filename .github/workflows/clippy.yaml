@@ -3,6 +3,8 @@ name: clippy
 on:
     push:
         branches: [ main ]
+    pull_request:
+        branches: [ main ]
 
 # Make sure CI fails on all warnings, including Clippy lints
 env:
