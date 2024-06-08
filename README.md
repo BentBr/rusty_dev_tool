@@ -1,7 +1,10 @@
 # Rusty Dev Tool
-This is a little helper for developers using docker-compose (or mutagen-compose) for local development and kubectl for remote development.
+This is a little helper for developers using docker-compose (or mutagen-compose) for local development and kubectl for remote interaction.
 The idea is to have common and repetitive tasks simplified.
 Furthermore, it should reduce the complexity for new developers or developers that are not familiar with the setup (or are no backend developers / devops).
+
+The general expected (and suggested) tech stack is something locally with docker-compose (so no language or framework installation locally - everything via docker images) and a remote k8s cluster. \
+The crucial idea is to **NO PROJECT SPECIFIC CONFIG DONE LOCALLY**. Everything should be done via the project's docker-compose file and must be run-able after a _git checkout_.
 
 ## TL;DR
 
@@ -9,6 +12,9 @@ Run the following commands to interact with your docker-compose setup or shell i
 - `rdt start`
 - `rdt stop`
 - `rdt shell`
+
+After starting, you can simply run your local web project via a proper domain: `http://my-project.docker` \
+This tool is not only for web projects but can be used for any kind of project which is using docker-compose.
 
 ## Installation and Setup
 ### Pre-Requirements for installation
@@ -18,20 +24,32 @@ In the most basic setup you need to have the following tools installed:
 - [local routing](docs/local-routing-setup.md) setup (to install a local domain to be used for your projects) \
 Strictly spoken not needed but highly recommended as web projects are often using domains and it's very convenient for developrs.
 
-
 The following tools are optional but recommended for further functionality:
 - [mutagen](https://mutagen.io/documentation/introduction/installation) + [mutagen-compose](https://mutagen.io/documentation/orchestration/compose) (for faster file sync on older macOS versions)
 - [kubectl](https://kubernetes.io/docs/reference/kubectl/) (for remote development)
 - ~~SequelAce for database access within your containers~~ Todo: Find a better solution for all OS available ?!
 
-
 ### General Configuration of RDT
 When you first run RDT it will add the default configuration into your home directory.
 This configuration file is located at `~/.rusty-dev-tool/config.toml`.
-If by accident you delete this file, you can recreate it by running `rdt init-config`.
+If by accident you delete this file, you can recreate it by running `rdt --config-restore`.
 
 In your current project RDT will check for a local config in `%project-root%/.rusty-dev-tool/config.toml`. Those entries will override the ones in the global config.
 
+#### Naming
+It's not needed to have RDT named as `rdt`. You can rename the binary to whatever you like. \
+Just make sure to update the home config: `rdt_name="mfc"` if you work in _my fancy company_ and decided to have your internal tool used as such. \
+On Unix systems you only need to rename the file in respective binary folder.
+
+#### Updating
+If you don't want to use the official repository for updates, you can set the following in your config: \
+`download_path="https://my-own-repo.com/rdt/releases/download"` \
+and \
+`meta_path="https://api.my-own-repo.com/repos/rdt/releases/latest"`
+
+The download path builds the key like: https://github.com/BentBr/rusty_dev_tool/releases/download/v0.2.0/rdt-macos-aarch64-v0.2.0 \
+And the meta path checks for the `tag_name` in the json response. \
+You can check the [release workflow](.github/workflows/release.yaml) for it.
 
 ## Available Commands
 All commands which are running _docker-compose_ do check before if x-mutagen is configured and will run _mutagen-compose_ if so.
@@ -47,11 +65,14 @@ It is checking for the environment in compose.yaml: `MAIN_SERVICE=php|node|rust`
 
 ### stop
 Stopping the setup for local development. \
-`docker-compose down`
+Directly runs `docker-compose down`
 
 ### shell
 For shelling into a container locally. \
-`docker-compose exec php bash`
+Mostly runs `docker-compose exec php|rust|node bash`
+
+### help
+Find out what commands exist and what you can do with this tool.
 
 ## Arguments
 ### --self-update
@@ -84,6 +105,16 @@ Please use the following commit types:
 - `test`: for adding and enhancing tests
 
 Furthermore, please make sure to add a proper description to your commit message. PRs must successfully past tests + clippy checks. Make sure to cover your accordingly.
+
+## Official todos on the roadmap (the next ones)
+- ~~Adding basic commands: start, stop, shell~~ ✅
+- ~~Adding update functionality~~ ✅
+- Adding support for environments (shelling into remote k8s setups)
+- Adding support for custom commands
+- Adding support for completions on terminals
+- Adding some generic db connection option(s)
+- Adding support for windows... (maybe). Dunno what works atm and what not ;)
+- Adding docker build alias for local Dockerfile (to only build the image)
 
 ##
 ##
