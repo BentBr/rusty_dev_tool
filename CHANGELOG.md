@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.2](https://github.com/BentBr/rusty_dev_tool/compare/v0.3.1...v0.3.2) (2024-06-08)
+
+
+### Bug Fixes
+
+* changing when clippy runs ([6f26809](https://github.com/BentBr/rusty_dev_tool/commit/6f26809a24a6a4f5b3d27dd89c183170fd7aca62))
+* trying official clippy documentation ([#41](https://github.com/BentBr/rusty_dev_tool/issues/41)) ([47640ff](https://github.com/BentBr/rusty_dev_tool/commit/47640ffce1f59ca411ecd1b1ca82f04884599d3c))
+
 ## [0.3.1](https://github.com/BentBr/rusty_dev_tool/compare/v0.3.0...v0.3.1) (2024-06-08)
 
 
