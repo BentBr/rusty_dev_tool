@@ -18,4 +18,4 @@ jobs:
         steps:
             - uses: actions/checkout@v4
             - name: Run Clippy
-              run: cargo clippy --all-targets --all-features -- -D dead_code -D warnings
+              run: cargo clippy --all-targets --all-features

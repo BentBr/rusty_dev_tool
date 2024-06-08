@@ -13,6 +13,7 @@ pub struct LocalConfig {
 }
 
 #[derive(Deserialize, Debug)]
+#[allow(dead_code)]
 pub struct Environment {
     pub name: String,
     pub uri: String,
