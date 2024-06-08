@@ -1,16 +1,31 @@
-name: Clippy
+name: clippy
 
-on: [ push, pull_request ]
+on: [push, pull_request]
 
 jobs:
     clippy:
         runs-on: ubuntu-latest
-        steps:
-            -   name: Checkout repository
-                uses: actions/checkout@v3
 
-            -   name: Run Clippy
-                uses: actions-rs/clippy-check@v1
-                with:
-                    token: ${{ secrets.GITHUB_TOKEN }}
-                    args: --all-targets -- -D warnings
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Set up Rust
+              uses: actions-rs/toolchain@v1
+              with:
+                  toolchain: stable
+
+            - name: Print Rust toolchain version
+              run: rustup show
+
+            - name: Print Clippy version
+              run: cargo clippy --version
+
+            - name: Print Cargo metadata
+              run: cargo metadata --format-version=1 | jq '.packages[].features'
+
+            - name: Install Clippy
+              run: rustup component add clippy
+
+            - name: Run Clippy
+              run: cargo clippy --all-targets --all-features -- -D warnings
