@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.3.1](https://github.com/BentBr/rusty_dev_tool/compare/v0.3.0...v0.3.1) (2024-06-08)
+
+
+### Bug Fixes
+
+* fixing pipeline by renaming folders without colon : ([df161d5](https://github.com/BentBr/rusty_dev_tool/commit/df161d52322b7c1f8cbf724e15ddc9881a591b80))
+* updated clippy run ([6c1ab13](https://github.com/BentBr/rusty_dev_tool/commit/6c1ab13c7f03952e6ecf6fba94a1a9f1ae5295f1))
+
 ## [0.3.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.2.0...v0.3.0) (2024-06-08)
 
 
