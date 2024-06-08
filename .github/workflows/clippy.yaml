@@ -10,18 +10,18 @@ jobs:
     clippy_check:
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+            -   name: Checkout code
+                uses: actions/checkout@v4
 
-            - name: Install stable toolchain
-              uses: actions-rs/toolchain@v1
-              with:
-                  toolchain: stable
-                  override: true
-                  components: clippy
+            -   name: Install stable toolchain
+                uses: actions-rs/toolchain@v1
+                with:
+                    toolchain: stable
+                    override: true
+                    components: clippy
 
-            - name: Run Clippy
-              uses: actions-rs/clippy-check@v1
-              with:
-                  token: ${{ secrets.GITHUB_TOKEN }}
-                  args: --all-targets -- -D warnings
+            -   name: Run Clippy
+                uses: actions-rs/clippy-check@v1
+                with:
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    args: --all-targets -- -D warnings
