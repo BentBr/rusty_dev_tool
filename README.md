@@ -109,6 +109,8 @@ Furthermore, please make sure to add a proper description to your commit message
 ## Official todos on the roadmap (the next ones)
 - ~~Adding basic commands: start, stop, shell~~ ✅
 - ~~Adding update functionality~~ ✅
+- Adding more and basic tests (WIP)
+- Testing during CI and have those being a blocking factor
 - Adding support for environments (shelling into remote k8s setups)
 - Adding support for custom commands
 - Adding support for completions on terminals
