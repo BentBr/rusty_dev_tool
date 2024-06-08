@@ -5,6 +5,7 @@ use std::error::Error;
 use std::fs;
 
 #[derive(Deserialize, Debug)]
+#[allow(dead_code)]
 pub struct LocalConfig {
     pub commands: HashMap<String, Command>,
     pub local_key: String,
@@ -12,6 +13,7 @@ pub struct LocalConfig {
 }
 
 #[derive(Deserialize, Debug)]
+#[allow(dead_code)]
 pub struct Environment {
     pub name: String,
     pub uri: String,

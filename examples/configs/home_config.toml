@@ -4,7 +4,8 @@
 rdt_name = "rdt"
 
 # Mandatory but can be changed to pull custom forked or private hosted versions.
-update_path = "https://github.com/BentBr/rusty_dev_tool/releases/latest"
+download_path = "https://github.com/BentBr/rusty_dev_tool/releases/download"
+meta_path = "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
 
 # Mandatory node
 [commands]

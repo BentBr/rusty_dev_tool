@@ -11,7 +11,8 @@ use std::path::Path;
 #[derive(Deserialize, Serialize, Debug)]
 pub struct HomeConfig {
     pub rdt_name: String,
-    pub update_path: String,
+    pub download_path: String,
+    pub meta_path: String,
     pub commands: HashMap<String, Command>,
 }
 
@@ -20,7 +21,12 @@ impl HomeConfig {
     fn default() -> Self {
         Self {
             rdt_name: String::from("rdt"),
-            update_path: String::from("https://github.com/BentBr/rusty_dev_tool/releases/latest"),
+            download_path: String::from(
+                "https://github.com/BentBr/rusty_dev_tool/releases/download",
+            ),
+            meta_path: String::from(
+                "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest",
+            ),
             commands: HashMap::new(),
         }
     }

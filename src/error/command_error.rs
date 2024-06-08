@@ -1,3 +1,4 @@
+use crate::error::update_error::UpdateError;
 use std::error::Error;
 use std::fmt;
 
@@ -26,6 +27,12 @@ impl fmt::Display for CommandError {
 
 impl From<std::io::Error> for CommandError {
     fn from(error: std::io::Error) -> Self {
+        CommandError::ExecutionFailedGeneric(Box::new(error))
+    }
+}
+
+impl From<UpdateError> for CommandError {
+    fn from(error: UpdateError) -> Self {
         CommandError::ExecutionFailedGeneric(Box::new(error))
     }
 }

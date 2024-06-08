@@ -34,6 +34,7 @@ pub fn get_clap_matches() -> ArgMatches {
     app.get_matches()
 }
 
+#[allow(dead_code)]
 fn generate_completions(shell: &Shell) {
     let mut cmd = ClapCommand::new("abc")
         .version("1.0")

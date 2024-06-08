@@ -21,9 +21,11 @@ lazy_static! {
 * Config struct that is the result of merged home and local project config
 */
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct Config {
     pub rdt_name: String,
-    pub update_path: String,
+    pub download_path: String,
+    pub meta_path: String,
     pub commands: HashMap<String, Command>,
     pub environments: HashMap<String, Environment>,
     pub compose: Compose,
@@ -111,7 +113,8 @@ pub fn merge_configs(
         }
         None => Config {
             rdt_name: home_config.rdt_name,
-            update_path: home_config.update_path,
+            download_path: home_config.download_path,
+            meta_path: home_config.meta_path,
             commands: home_config.commands,
             environments: HashMap::new(),
             compose,
@@ -128,7 +131,8 @@ fn merge_configs_with_local(
 ) -> Config {
     Config {
         rdt_name: home_config.rdt_name,
-        update_path: home_config.update_path,
+        download_path: home_config.download_path,
+        meta_path: home_config.meta_path,
         commands: merge_commands(home_config.commands, local_config.commands),
         environments: local_config.environments,
         compose,
