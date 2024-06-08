@@ -34,10 +34,10 @@ impl CommandRegistry {
         self.commands.insert(command.name(), command);
     }
 
-    pub fn get(&self, command_name: &str) -> Result<&dyn Command, CommandError> {
+    pub fn get(&self, command_name: &str) -> Result<&Box<dyn Command>, CommandError> {
         self.commands
             .get(command_name)
-            .map(|command| &**command)
+            //.map(|command| &**command)
             .ok_or(CommandError::CommandNotFound(command_name.to_string()))
     }
 }
