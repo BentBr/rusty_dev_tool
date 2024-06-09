@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.4.0...v0.5.0) (2024-06-09)
+
+
+### Features
+
+* added the possibility to use arguments (single ones) for all commands. Has to be added to the command implemantation ([a92f576](https://github.com/BentBr/rusty_dev_tool/commit/a92f576834b03d3a10286f24fe5d4bf2df3570e3))
+
 ## [0.4.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.3.3...v0.4.0) (2024-06-09)
 
 
