@@ -8,8 +8,8 @@ lazy_static! {
         // Command's name and description
         // Those are being used for auto-registering of commands as well as auto-generating
         // completion
-        list.insert("start".to_string(), "Docker compose start command".to_string());
-        list.insert("stop".to_string(), "Docker compose stop command".to_string());
+        list.insert("start".to_string(), "Generic setup start command".to_string());
+        list.insert("stop".to_string(), "Generic setup stop command".to_string());
         list.insert("shell".to_string(), "Exec'ing into the node container".to_string());
         list.insert("chown".to_string(), "Chowning project inside the main container".to_string());
 

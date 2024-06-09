@@ -53,7 +53,10 @@ fn register_subcommands(
     match &config {
         Ok(config) => {
             for (_, command) in config.commands.clone() {
-                commands_map.insert(command.alias.clone(), command.command.clone());
+                commands_map.insert(
+                    command.alias.clone(),
+                    format!("Custom command: {}", command.command.clone()),
+                );
             }
         }
         Err(_) => {
