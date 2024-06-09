@@ -4,6 +4,7 @@ mod env;
 mod error;
 
 use crate::clap_args::{get_clap_matches, CONFIG_RESTORE, GENERATE_COMPLETIONS, SELF_UPDATE};
+use clap::{Command as ClapCommand};
 use crate::commands::command::Command;
 use crate::commands::execs::self_update::SelfUpdate;
 use crate::commands::registry::CommandRegistry;
@@ -15,7 +16,9 @@ use std::process::exit;
 fn main() {
     let config = init_custom_commands();
 
-    let matches: ArgMatches = get_clap_matches(config);
+    let mut clap_command: ClapCommand = get_clap_matches(config);
+    let matches: ArgMatches = clap_command.clone().get_matches();
+
     let restore: bool = matches.get_flag(CONFIG_RESTORE);
     let update: bool = matches.get_flag(SELF_UPDATE);
     let generate_completions: bool = matches.get_flag(GENERATE_COMPLETIONS);
@@ -45,6 +48,12 @@ fn main() {
         eprintln!("{}", "A subcommand is required".red());
 
         exit(1);
+    }
+
+    if matches.subcommand().is_none() {
+        clap_command.print_help().unwrap();
+
+        exit(0);
     }
 
     match matches.subcommand() {
