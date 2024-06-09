@@ -17,7 +17,19 @@ After starting, you can simply run your local web project via a proper domain: `
 This tool is not only for web projects but can be used for any kind of project which is using docker-compose.
 
 ## Installation and Setup
-### Pre-Requirements for installation
+### Installation
+Get the latest release fitting to your platform from [here](https://github.com/BentBr/rusty_dev_tool/releases/latest). \
+After downloading the binary, make it executable and move it to a location in your PATH. \
+
+#### Unix
+`cp ~/Downloads/rdt-macos-%bitness%-v%release% /usr/local/bin/rdt` \
+We are using here the default path for the local user: `/usr/local/bin/`.
+
+### Uninstallation
+Just remove the binary from your PATH. \
+`rm /usr/local/bin/rdt`
+
+### Pre-Requirements for usage
 In the most basic setup you need to have the following tools installed:
 - [docker](https://www.docker.com/products/docker-desktop/) (you don't need the desktop app. [Docker engine](https://docs.docker.com/engine/install/) is enough)
 - [docker-compose](https://docs.docker.com/compose/install/)
@@ -36,20 +48,25 @@ If by accident you delete this file, you can recreate it by running `rdt --confi
 
 In your current project RDT will check for a local config in `%project-root%/.rusty-dev-tool/config.toml`. Those entries will override the ones in the global config.
 
+See the example config files for the [home config](examples/configs/home_config.toml) and the [project config](examples/configs/project_config.toml).
 #### Naming
 It's not needed to have RDT named as `rdt`. You can rename the binary to whatever you like. \
-Just make sure to update the home config: `rdt_name="mfc"` if you work in _my fancy company_ and decided to have your internal tool used as such. \
-On Unix systems you only need to rename the file in respective binary folder.
+Just make sure to update the home config: `rdt_name="mfc"` if you work for _my fancy company_ and decided to have your internal tool used as such. \
+On Unix systems you only need to rename the file in respective binary folder. \
+`mv /usr/local/bin/rdt /usr/local/bin/mfc`
 
-#### Updating
+Now, you can use rdt like: `mfc start` or `mfc shell`.
+
+#### Updating from custom fork / repo
 If you don't want to use the official repository for updates, you can set the following in your config: \
 `download_path="https://my-own-repo.com/rdt/releases/download"` \
 and \
 `meta_path="https://api.my-own-repo.com/repos/rdt/releases/latest"`
 
 The download path builds the key like: https://github.com/BentBr/rusty_dev_tool/releases/download/v0.2.0/rdt-macos-aarch64-v0.2.0 \
-And the meta path checks for the `tag_name` in the json response. \
-You can check the [release workflow](.github/workflows/release.yaml) for it.
+And the meta path checks for the `tag_name` in the json response.
+
+Please check the [release workflow](.github/workflows/release.yaml) for it.
 
 ## Available Commands
 All commands which are running _docker-compose_ do check before if x-mutagen is configured and will run _mutagen-compose_ if so.
@@ -112,7 +129,7 @@ Furthermore, please make sure to add a proper description to your commit message
 - Adding more and basic tests (WIP)
 - Testing during CI and have those being a blocking factor
 - Adding support for environments (shelling into remote k8s setups)
-- Adding support for custom commands
+- ~~Adding support for custom commands~~ ✅
 - Adding support for completions on terminals
 - Adding some generic db connection option(s)
 - Adding support for windows... (maybe). Dunno what works atm and what not ;)
