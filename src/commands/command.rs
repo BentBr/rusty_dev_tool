@@ -1,3 +1,5 @@
+use crate::commands::custom_command::CustomCommand;
+use crate::env::config::Command as ConfigCommand;
 use crate::env::config::Config;
 use crate::error::command_error::CommandError;
 use std::process::{Command as SysCommand, Stdio};
@@ -22,4 +24,8 @@ fn run_command_unix_sh(cmd: &str) -> Result<(), CommandError> {
 pub fn run_command(cmd: &str) -> Result<(), CommandError> {
     // Todo: need to check OS and run the command accordingly
     run_command_unix_sh(cmd)
+}
+
+pub fn new_from_config_command(config_command: ConfigCommand) -> Box<dyn Command> {
+    Box::new(CustomCommand { config_command })
 }

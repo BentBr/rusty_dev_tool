@@ -1,16 +1,18 @@
 use crate::commands::execs::command_list::COMMAND_LIST;
-use clap::{Arg, ArgAction, ArgMatches, Command as ClapCommand};
+use crate::env::config::Config;
+use clap::{Arg, ArgAction, ArgMatches, Command as ClapCommand, Command};
 use clap_complete::{generate, Shell};
+use std::error::Error;
 use std::io;
 
 pub const CONFIG_RESTORE: &str = "config-restore";
 pub const SELF_UPDATE: &str = "self-update";
 pub const GENERATE_COMPLETIONS: &str = "generate-completions";
 
-pub fn get_clap_matches() -> ArgMatches {
+pub fn get_clap_matches(config: Result<Config, Box<dyn Error>>) -> ArgMatches {
     let version = env!("CARGO_PKG_VERSION");
 
-    let mut app = ClapCommand::new("Rusty Dev Tool")
+    let app = ClapCommand::new("Rusty Dev Tool")
         .version(version)
         .author("Bent Brüggemann <mail@bent-brueggemann.de>")
         .about("Docker helper command line tool for developers with docker-compose setups.")
@@ -37,11 +39,32 @@ pub fn get_clap_matches() -> ArgMatches {
     //.possible_values(["bash", "zsh", "fish", "powershell", "elvish"])
     //.takes_value(true))
 
+    register_subcommands(app, config).get_matches()
+}
+
+fn register_subcommands(mut app: Command, config: Result<Config, Box<dyn Error>>) -> Command {
     for (name, description) in COMMAND_LIST.iter() {
         app = app.subcommand(ClapCommand::new(name.as_str()).about(description.as_str()));
     }
 
-    app.get_matches()
+    match &config {
+        Ok(config) => {
+            for (_, command) in config.commands.clone() {
+                // Todo: This is not pretty. Is there a better solution?
+                let alias: &'static str = Box::leak(command.alias.into_boxed_str());
+                app = app.subcommand(
+                    ClapCommand::new(alias).about(format!("Custom command: {}", alias)),
+                );
+            }
+        }
+        Err(_) => {
+            // Todo: find config error: TomlNotReadable (or similar)
+            // We are ignoring errors on purpose here as the config is being parsed and checked
+            // in the "correct" init function later on
+        }
+    }
+
+    app
 }
 
 #[allow(dead_code)]
@@ -52,6 +75,9 @@ fn generate_completions(shell: &Shell) {
         .about("Command-line application")
         .subcommand(ClapCommand::new("start").about("Starts the application"))
         .subcommand(ClapCommand::new("stop").about("Stops the application"));
+    //todo: add more...
+
+    //todo: add global custom commands
 
     generate(*shell, &mut cmd, "abc", &mut io::stdout());
 }

@@ -7,13 +7,15 @@ use crate::clap_args::{get_clap_matches, CONFIG_RESTORE, GENERATE_COMPLETIONS, S
 use crate::commands::command::Command;
 use crate::commands::execs::self_update::SelfUpdate;
 use crate::commands::registry::CommandRegistry;
-use crate::env::init::init;
+use crate::env::init::{init, init_custom_commands};
 use clap::ArgMatches;
 use colored::Colorize;
 use std::process::exit;
 
 fn main() {
-    let matches: ArgMatches = get_clap_matches();
+    let config = init_custom_commands();
+
+    let matches: ArgMatches = get_clap_matches(config);
     let restore: bool = matches.get_flag(CONFIG_RESTORE);
     let update: bool = matches.get_flag(SELF_UPDATE);
     let generate_completions: bool = matches.get_flag(GENERATE_COMPLETIONS);
@@ -36,7 +38,7 @@ fn main() {
         }
     }
 
-    let registry = CommandRegistry::new();
+    let registry = CommandRegistry::new(&config);
 
     // If any flag is not present, require a subcommand
     if !(generate_completions || restore || update) && matches.subcommand().is_none() {
@@ -49,7 +51,7 @@ fn main() {
         Some((command_name, _)) => {
             match registry.get(command_name) {
                 Ok(command) => {
-                    // todo: Add args to command execution
+                    // todo: Add args to command execution (example: shell command with environment target)
                     command.execute(&config).unwrap_or_else(|err| {
                         eprintln!(
                             "{}",
