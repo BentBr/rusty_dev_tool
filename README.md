@@ -34,7 +34,7 @@ In the most basic setup you need to have the following tools installed:
 - [docker](https://www.docker.com/products/docker-desktop/) (you don't need the desktop app. [Docker engine](https://docs.docker.com/engine/install/) is enough)
 - [docker-compose](https://docs.docker.com/compose/install/)
 - [local routing](docs/local-routing-setup.md) setup (to install a local domain to be used for your projects) \
-Strictly spoken not needed but highly recommended as web projects are often using domains and it's very convenient for developrs.
+Strictly spoken not needed but highly recommended as web projects are often using domains, and it's very convenient for develops.
 
 The following tools are optional but recommended for further functionality:
 - [mutagen](https://mutagen.io/documentation/introduction/installation) + [mutagen-compose](https://mutagen.io/documentation/orchestration/compose) (for faster file sync on older macOS versions)
@@ -103,11 +103,11 @@ NOT YET IN
 Generates shell completions for the tool. Available shells are: bash, zsh, fish, powershell... TBD
 
 ## OS
-Currently, Linux and MacOS for amd64 / arm64 are supported.
+Currently, Linux and macOS for amd64 / arm64 are supported.
 Windows is not supported at the moment. The build is just included for future use.
 
 ## Examples
-See the [examples](examples/) folder for some example setups.
+See the [examples](examples) folder for some example setups.
 Please provide your own examples as well as this tool is meant to be used for different setups.
 
 ## Contribution
@@ -135,6 +135,7 @@ Furthermore, please make sure to add a proper description to your commit message
 - Adding some generic db connection option(s)
 - Adding support for windows... (maybe). Dunno what works atm and what not ;)
 - Adding docker build alias for local Dockerfile (to only build the image)
+- Adding arguments for certain commands (such as chown)
 
 ##
 ##
