@@ -17,10 +17,10 @@ local_key="abc"
 # Mandatory node
 [environments]
     # All environments must have a name and a uri but are optional in general
-    [dev]
+    [environments.dev]
         name = "environment1"
         uri = "uri1"
 
-    [prod]
+    [environments.prod]
         name = "environment2"
         uri = "uri2"
