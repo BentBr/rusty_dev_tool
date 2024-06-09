@@ -130,6 +130,7 @@ Furthermore, please make sure to add a proper description to your commit message
 - Testing during CI and have those being a blocking factor
 - Adding support for environments (shelling into remote k8s setups)
 - ~~Adding support for custom commands~~ ✅
+- Sorting of all commands for help menu
 - Adding support for completions on terminals
 - Adding some generic db connection option(s)
 - Adding support for windows... (maybe). Dunno what works atm and what not ;)
