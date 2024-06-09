@@ -9,14 +9,24 @@ meta_path = "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
 
 # Mandatory node
 [commands]
-    # Each command it optional
+    # Each command is optional
     [commands.alpha]
         # Command to be executed is mandatory
         command = "ls -lah"
-        # As is it's alias
+        # As is its alias
         alias = "lisa"
 
     # Each command it optional
     [commands.another_name]
         command = "chown -R www-data:www-data /path/to/folder"
         alias = "porn"
+
+    [commands.stan]
+        # Global stan example
+        command = "docker-compose exec -T php vendor/bin/phpstan analyse -c phpstan.neon"
+        alias = "stan-d"
+
+    [commands.stan-m]
+        # Global stan example
+        command = "mutagen-compose exec -T php vendor/bin/phpstan analyse -c phpstan.neon"
+        alias = "stan-md"
