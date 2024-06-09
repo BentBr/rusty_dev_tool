@@ -8,7 +8,7 @@ use colored::Colorize;
 pub struct Stop;
 
 impl Command for Stop {
-    fn execute(&self, config: &Config) -> Result<(), CommandError> {
+    fn execute(&self, config: &Config, _argument: Option<&String>) -> Result<(), CommandError> {
         let binding = format!("{} down", config.compose).to_string();
         let command = binding.as_str();
 

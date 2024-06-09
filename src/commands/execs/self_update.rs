@@ -20,7 +20,7 @@ struct Release {
 }
 
 impl Command for SelfUpdate {
-    fn execute(&self, config: &Config) -> Result<(), CommandError> {
+    fn execute(&self, config: &Config, _argument: Option<&String>) -> Result<(), CommandError> {
         let check_update_needed = check_update_needed(config)
             .map_err(|error| UpdateError::UpdateCheckFailed(error.to_string()))?;
         match check_update_needed {

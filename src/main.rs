@@ -3,13 +3,15 @@ mod commands;
 mod env;
 mod error;
 
-use crate::clap_args::{get_clap_matches, CONFIG_RESTORE, GENERATE_COMPLETIONS, SELF_UPDATE};
-use clap::{Command as ClapCommand};
+use crate::clap_args::{
+    get_clap_matches, CONFIG_RESTORE, GENERATE_COMPLETIONS, OPTIONAL_ARGUMENT, SELF_UPDATE,
+};
 use crate::commands::command::Command;
 use crate::commands::execs::self_update::SelfUpdate;
 use crate::commands::registry::CommandRegistry;
 use crate::env::init::{init, init_custom_commands};
 use clap::ArgMatches;
+use clap::Command as ClapCommand;
 use colored::Colorize;
 use std::process::exit;
 
@@ -32,7 +34,7 @@ fn main() {
     };
 
     if update {
-        match SelfUpdate.execute(&config) {
+        match SelfUpdate.execute(&config, None) {
             Ok(_) => exit(0),
             Err(err) => {
                 eprintln!("{} {}", "Error updating:".red(), err);
@@ -57,22 +59,21 @@ fn main() {
     }
 
     match matches.subcommand() {
-        Some((command_name, _)) => {
-            match registry.get(command_name) {
-                Ok(command) => {
-                    // todo: Add args to command execution (example: shell command with environment target)
-                    command.execute(&config).unwrap_or_else(|err| {
-                        eprintln!(
-                            "{}",
-                            format!("Error executing {} command: {}", command_name, err).red(),
-                        );
-                    });
-                }
-                Err(err) => {
-                    eprintln!("{} {}", "Error:".red(), err);
-                }
+        Some((command_name, sub_matches)) => match registry.get(command_name) {
+            Ok(command) => {
+                let argument = sub_matches.get_one::<String>(OPTIONAL_ARGUMENT);
+
+                command.execute(&config, argument).unwrap_or_else(|err| {
+                    eprintln!(
+                        "{}",
+                        format!("Error executing {} command: {}", command_name, err).red(),
+                    );
+                });
             }
-        }
+            Err(err) => {
+                eprintln!("{} {}", "Error:".red(), err);
+            }
+        },
         _ => exit(0),
     }
 }

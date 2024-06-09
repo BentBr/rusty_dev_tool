@@ -5,7 +5,7 @@ use crate::error::command_error::CommandError;
 use std::process::{Command as SysCommand, Stdio};
 
 pub trait Command {
-    fn execute(&self, config: &Config) -> Result<(), CommandError>;
+    fn execute(&self, config: &Config, argument: Option<&String>) -> Result<(), CommandError>;
     fn name(&self) -> String;
 }
 

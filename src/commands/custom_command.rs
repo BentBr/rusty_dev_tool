@@ -8,7 +8,7 @@ pub struct CustomCommand {
 }
 
 impl Command for CustomCommand {
-    fn execute(&self, _config: &Config) -> Result<(), CommandError> {
+    fn execute(&self, _config: &Config, _argument: Option<&String>) -> Result<(), CommandError> {
         // Use the command from the ConfigCommand to execute the custom command
         run_command(&self.config_command.command)
     }

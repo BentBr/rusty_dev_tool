@@ -9,6 +9,7 @@ use std::io;
 pub const CONFIG_RESTORE: &str = "config-restore";
 pub const SELF_UPDATE: &str = "self-update";
 pub const GENERATE_COMPLETIONS: &str = "generate-completions";
+pub const OPTIONAL_ARGUMENT: &str = "optional-argument";
 
 pub fn get_clap_matches(config: Result<Config, Box<dyn Error>>) -> ClapCommand {
     let version = env!("CARGO_PKG_VERSION");
@@ -76,7 +77,16 @@ fn register_subcommands(
     .iter();
 
     for (name, description) in commands_iter {
-        app = app.subcommand(ClapCommand::new(name.as_str()).about(description.as_str()));
+        app = app.subcommand(
+            ClapCommand::new(name.as_str())
+                .about(description.as_str())
+                .arg(
+                    Arg::new(OPTIONAL_ARGUMENT)
+                        .help("Optional local argument")
+                        .num_args(0..=1)
+                        .required(false),
+                ),
+        );
     }
 
     app

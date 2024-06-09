@@ -121,7 +121,10 @@ Please use the following commit types:
 - `docs`: for documentation changes
 - `test`: for adding and enhancing tests
 
-Furthermore, please make sure to add a proper description to your commit message. PRs must successfully past tests + clippy checks. Make sure to cover your accordingly.
+Furthermore, please make sure to add a proper description to your commit message. PRs must successfully past tests + clippy checks. Make sure to cover your changes accordingly with tests.
+
+See the Makefile for some helper commands. \
+`make <help>` for details (you have to have make installed)
 
 ## Official todos on the roadmap (the next ones)
 - ~~Adding basic commands: start, stop, shell~~ ✅
@@ -135,7 +138,7 @@ Furthermore, please make sure to add a proper description to your commit message
 - Adding some generic db connection option(s)
 - Adding support for windows... (maybe). Dunno what works atm and what not ;)
 - Adding docker build alias for local Dockerfile (to only build the image)
-- Adding arguments for certain commands (such as chown)
+- ~~Adding arguments for certain commands (such as chown)~~ ✅
 - Removing the command list hashmap (as it doubles the registry). Add command descriptions to Executors
 - fix self-update if release is not built but tag published... -> leads to empty binary file
 

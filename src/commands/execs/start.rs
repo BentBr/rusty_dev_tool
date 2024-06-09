@@ -9,7 +9,7 @@ use colored::Colorize;
 pub struct Start;
 
 impl Command for Start {
-    fn execute(&self, config: &Config) -> Result<(), CommandError> {
+    fn execute(&self, config: &Config, _argument: Option<&String>) -> Result<(), CommandError> {
         let compose_str = config.compose.to_string();
         let binding = format!(
             "{} pull && {} up -d --build && {} exec -T {}",
