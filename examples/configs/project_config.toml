@@ -6,11 +6,11 @@ local_key="abc"
 # Mandatory node
 [commands]
     # All commands must have a command and an alias but are optional in general
-    [first]
+    [commands.first]
         command = "command1"
         alias = "alias1"
 
-    [second]
+    [commands.second]
         command = "command2"
         alias = "alias2"
 
