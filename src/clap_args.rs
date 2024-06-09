@@ -1,7 +1,8 @@
 use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
-use clap::{Arg, ArgAction, ArgMatches, Command as ClapCommand, Command};
+use clap::{Arg, ArgAction, ArgMatches, Command as ClapCommand};
 use clap_complete::{generate, Shell};
+use std::collections::HashMap;
 use std::error::Error;
 use std::io;
 
@@ -42,19 +43,17 @@ pub fn get_clap_matches(config: Result<Config, Box<dyn Error>>) -> ArgMatches {
     register_subcommands(app, config).get_matches()
 }
 
-fn register_subcommands(mut app: Command, config: Result<Config, Box<dyn Error>>) -> Command {
-    for (name, description) in COMMAND_LIST.iter() {
-        app = app.subcommand(ClapCommand::new(name.as_str()).about(description.as_str()));
-    }
+fn register_subcommands(
+    mut app: ClapCommand,
+    config: Result<Config, Box<dyn Error>>,
+) -> ClapCommand {
+    // Todo: we want to get rid of this list as well. In best case all data is coming from the command definitions itself
+    let mut commands_map: HashMap<String, String> = COMMAND_LIST.clone();
 
     match &config {
         Ok(config) => {
             for (_, command) in config.commands.clone() {
-                // Todo: This is not pretty. Is there a better solution?
-                let alias: &'static str = Box::leak(command.alias.into_boxed_str());
-                app = app.subcommand(
-                    ClapCommand::new(alias).about(format!("Custom command: {}", alias)),
-                );
+                commands_map.insert(command.alias.clone(), command.command.clone());
             }
         }
         Err(_) => {
@@ -62,6 +61,19 @@ fn register_subcommands(mut app: Command, config: Result<Config, Box<dyn Error>>
             // We are ignoring errors on purpose here as the config is being parsed and checked
             // in the "correct" init function later on
         }
+    }
+
+    // Todo: This is not pretty. Is there a better solution?
+    let commands_iter = Box::leak(
+        commands_map
+            .into_iter()
+            .collect::<Vec<_>>()
+            .into_boxed_slice(),
+    )
+    .iter();
+
+    for (name, description) in commands_iter {
+        app = app.subcommand(ClapCommand::new(name.as_str()).about(description.as_str()));
     }
 
     app
