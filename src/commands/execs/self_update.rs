@@ -30,7 +30,7 @@ impl Command for SelfUpdate {
 
                 println!(
                     "{}",
-                    format!("Updated to latest version: {}", version).green()
+                    format!("Updated to latest version: {} 🎉", version).green()
                 );
 
                 Ok(())
@@ -39,7 +39,7 @@ impl Command for SelfUpdate {
                 println!(
                     "{}",
                     format!(
-                        "You are already using the latest version of rusty_dev_tool '{}'",
+                        "You are already using the latest version of rusty_dev_tool '{}' ❤️",
                         env!("CARGO_PKG_VERSION")
                     )
                     .green()

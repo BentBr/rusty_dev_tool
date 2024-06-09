@@ -17,6 +17,6 @@ meta_path = "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
         alias = "lisa"
 
     # Each command it optional
-    [another_name]
+    [commands.another_name]
         command = "chown -R www-data:www-data /path/to/folder"
         alias = "porn"

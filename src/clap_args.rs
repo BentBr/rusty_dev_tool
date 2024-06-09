@@ -1,16 +1,19 @@
 use crate::commands::execs::command_list::COMMAND_LIST;
+use crate::env::config::Config;
 use clap::{Arg, ArgAction, ArgMatches, Command as ClapCommand};
 use clap_complete::{generate, Shell};
+use std::collections::HashMap;
+use std::error::Error;
 use std::io;
 
 pub const CONFIG_RESTORE: &str = "config-restore";
 pub const SELF_UPDATE: &str = "self-update";
 pub const GENERATE_COMPLETIONS: &str = "generate-completions";
 
-pub fn get_clap_matches() -> ArgMatches {
+pub fn get_clap_matches(config: Result<Config, Box<dyn Error>>) -> ArgMatches {
     let version = env!("CARGO_PKG_VERSION");
 
-    let mut app = ClapCommand::new("Rusty Dev Tool")
+    let app = ClapCommand::new("Rusty Dev Tool")
         .version(version)
         .author("Bent Brüggemann <mail@bent-brueggemann.de>")
         .about("Docker helper command line tool for developers with docker-compose setups.")
@@ -37,11 +40,43 @@ pub fn get_clap_matches() -> ArgMatches {
     //.possible_values(["bash", "zsh", "fish", "powershell", "elvish"])
     //.takes_value(true))
 
-    for (name, description) in COMMAND_LIST.iter() {
+    register_subcommands(app, config).get_matches()
+}
+
+fn register_subcommands(
+    mut app: ClapCommand,
+    config: Result<Config, Box<dyn Error>>,
+) -> ClapCommand {
+    // Todo: we want to get rid of this list as well. In best case all data is coming from the command definitions itself
+    let mut commands_map: HashMap<String, String> = COMMAND_LIST.clone();
+
+    match &config {
+        Ok(config) => {
+            for (_, command) in config.commands.clone() {
+                commands_map.insert(command.alias.clone(), command.command.clone());
+            }
+        }
+        Err(_) => {
+            // Todo: find config error: TomlNotReadable (or similar)
+            // We are ignoring errors on purpose here as the config is being parsed and checked
+            // in the "correct" init function later on
+        }
+    }
+
+    // Todo: This is not pretty. Is there a better solution?
+    let commands_iter = Box::leak(
+        commands_map
+            .into_iter()
+            .collect::<Vec<_>>()
+            .into_boxed_slice(),
+    )
+    .iter();
+
+    for (name, description) in commands_iter {
         app = app.subcommand(ClapCommand::new(name.as_str()).about(description.as_str()));
     }
 
-    app.get_matches()
+    app
 }
 
 #[allow(dead_code)]
@@ -52,6 +87,9 @@ fn generate_completions(shell: &Shell) {
         .about("Command-line application")
         .subcommand(ClapCommand::new("start").about("Starts the application"))
         .subcommand(ClapCommand::new("stop").about("Stops the application"));
+    //todo: add more...
+
+    //todo: add global custom commands
 
     generate(*shell, &mut cmd, "abc", &mut io::stdout());
 }
