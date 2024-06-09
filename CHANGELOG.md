@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.3.3...v0.4.0) (2024-06-09)
+
+
+### Features
+
+* Custom commands ([#46](https://github.com/BentBr/rusty_dev_tool/issues/46)) ([bc97fcd](https://github.com/BentBr/rusty_dev_tool/commit/bc97fcdfd16d547b44e5c1766d996a50411e8549))
+
 ## [0.3.3](https://github.com/BentBr/rusty_dev_tool/compare/v0.3.2...v0.3.3) (2024-06-08)
 
 
