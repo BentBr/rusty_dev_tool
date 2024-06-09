@@ -1,6 +1,6 @@
 use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
-use clap::{Arg, ArgAction, ArgMatches, Command as ClapCommand};
+use clap::{Arg, ArgAction, Command as ClapCommand};
 use clap_complete::{generate, Shell};
 use std::collections::HashMap;
 use std::error::Error;
@@ -10,7 +10,7 @@ pub const CONFIG_RESTORE: &str = "config-restore";
 pub const SELF_UPDATE: &str = "self-update";
 pub const GENERATE_COMPLETIONS: &str = "generate-completions";
 
-pub fn get_clap_matches(config: Result<Config, Box<dyn Error>>) -> ArgMatches {
+pub fn get_clap_matches(config: Result<Config, Box<dyn Error>>) -> ClapCommand {
     let version = env!("CARGO_PKG_VERSION");
 
     let app = ClapCommand::new("Rusty Dev Tool")
@@ -40,7 +40,7 @@ pub fn get_clap_matches(config: Result<Config, Box<dyn Error>>) -> ArgMatches {
     //.possible_values(["bash", "zsh", "fish", "powershell", "elvish"])
     //.takes_value(true))
 
-    register_subcommands(app, config).get_matches()
+    register_subcommands(app, config)
 }
 
 fn register_subcommands(
