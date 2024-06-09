@@ -88,6 +88,16 @@ Directly runs `docker-compose down`
 For shelling into a container locally. \
 Mostly runs `docker-compose exec php|rust|node bash`
 
+An optional argument can be passed to shell into a different container. \
+`rdt shell node` \
+
+### chown
+Chowning the project folder to the user and group of the container. \
+Especially handy if different actions (IDE vs webserver) are running with different users. 
+
+As per default it's chowning to the www-data:www-data user and group. \
+It takes an optional command such as `rdt chown root:root` to chown to the root user and group.
+
 ### help
 Find out what commands exist and what you can do with this tool.
 
