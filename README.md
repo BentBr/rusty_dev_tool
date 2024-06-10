@@ -89,14 +89,14 @@ For shelling into a container locally. \
 Mostly runs `docker-compose exec php|rust|node bash`
 
 An optional argument can be passed to shell into a different container. \
-`rdt shell node` \
+`rdt shell node`
 
 ### chown
 Chowning the project folder to the user and group of the container. \
 Especially handy if different actions (IDE vs webserver) are running with different users. 
 
 As per default it's chowning to the www-data:www-data user and group. \
-It takes an optional command such as `rdt chown root:root` to chown to the root user and group.
+It takes an optional argument such as `rdt chown root:root` to chown to the root user and group.
 
 ### help
 Find out what commands exist and what you can do with this tool.
@@ -131,10 +131,10 @@ Please use the following commit types:
 - `docs`: for documentation changes
 - `test`: for adding and enhancing tests
 
-Furthermore, please make sure to add a proper description to your commit message. PRs must successfully past tests + clippy checks. Make sure to cover your changes accordingly with tests.
+Furthermore, please make sure to add a proper description to your commit message. PRs must successfully pass tests + clippy checks. Make sure to cover your changes accordingly with tests.
 
 See the Makefile for some helper commands. \
-`make <help>` for details (you have to have make installed)
+`make <help>` for details (you have to have make installed).
 
 ## Official todos on the roadmap (the next ones)
 - ~~Adding basic commands: start, stop, shell~~ ✅
