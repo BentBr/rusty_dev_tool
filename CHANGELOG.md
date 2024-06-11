@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/BentBr/rusty_dev_tool/compare/v0.5.1...v0.5.2) (2024-06-11)
+
+
+### Bug Fixes
+
+* now, the real fix for broken download as the file override only happens if the download worked -.- ([4e94aad](https://github.com/BentBr/rusty_dev_tool/commit/4e94aad3dc2c3e05585e4486635303e3789f6233))
+
 ## [0.5.1](https://github.com/BentBr/rusty_dev_tool/compare/v0.5.0...v0.5.1) (2024-06-11)
 
 
