@@ -150,4 +150,4 @@ See the Makefile for some helper commands. \
 - Adding docker build alias for local Dockerfile (to only build the image)
 - ~~Adding arguments for certain commands (such as chown)~~ ✅
 - Removing the command list hashmap (as it doubles the registry). Add command descriptions to Executors
-- fix self-update if release is not built but tag published... -> leads to empty binary file
+- ~~fix self-update if release is not built but tag published... -> leads to empty binary file~~ ✅
