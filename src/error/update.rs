@@ -17,17 +17,16 @@ impl fmt::Display for UpdateError {
         match self {
             Self::FailedToGetLatestVersion(uri) => write!(
                 f,
-                "Failed to get latest version: '{}'. Maybe check your internet connection?",
-                uri
+                "Failed to get latest version: '{uri}'. Maybe check your internet connection?"
             ),
             Self::FailedToReadVersion(string) => {
-                write!(f, "Failed to read version: '{}'.", string)
+                write!(f, "Failed to read version: '{string}'.")
             }
             Self::UpdateGeneric(error) => {
-                write!(f, "Error during update: '{}'.", error)
+                write!(f, "Error during update: '{error}'.")
             }
             Self::UpdateCheckFailed(string) => {
-                write!(f, "Failed to check for updates: '{}'.", string)
+                write!(f, "Failed to check for updates: '{string}'.")
             }
             Self::UpdateDownloadError(string) => {
                 write!(f, "Failed to download update: '{string}'. Maybe try again later (if release is being built)")

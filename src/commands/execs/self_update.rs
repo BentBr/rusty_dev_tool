@@ -1,8 +1,8 @@
 use crate::commands::command::Command;
 use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
-use crate::error::command_error::CommandError;
-use crate::error::update_error::UpdateError;
+use crate::error::command::Error as CommandError;
+use crate::error::update::UpdateError;
 use colored::Colorize;
 use reqwest::blocking::{get, Client};
 use reqwest::header::{HeaderMap, HeaderValue, USER_AGENT};

@@ -3,7 +3,7 @@ use crate::env::config::{get_config_without_local, merge_configs, Config, PathOp
 use crate::env::home_config::{get_or_create_home_config, HomeConfig};
 use crate::env::language::language_framework_enum::LanguageFramework;
 use crate::env::local_config::{get_local_config, LocalConfig};
-use crate::error::environment_error::EnvironmentError;
+use crate::error::environment::EnvironmentError;
 use std::error::Error;
 use std::fs::File;
 use std::io;
@@ -49,7 +49,7 @@ fn check_docker_compose_setup() -> Result<Compose, EnvironmentError> {
         .get_local_dir()
         .map_err(|_| EnvironmentError::LocalConfigDirNotFound(String::from("project dir")))?;
 
-    let compose_file_path = get_compose_file(local_dir.clone())
+    let compose_file_path = get_compose_file(&local_dir)
         .map_err(|_| EnvironmentError::ComposeFileNotFound(String::from("project dir")))?;
 
     get_compose_enum(compose_file_path.to_string_lossy().to_string()).map_err(|_| {
@@ -62,7 +62,7 @@ fn check_language_framework_setup() -> Result<LanguageFramework, EnvironmentErro
         .get_local_dir()
         .map_err(|_| EnvironmentError::LocalConfigDirNotFound(String::from("project dir")))?;
 
-    let compose_file_path = get_compose_file(local_dir)
+    let compose_file_path = get_compose_file(&local_dir)
         .map_err(|_| EnvironmentError::ComposeFileNotFound(String::from("project dir")))?;
 
     get_language_framework_enum(compose_file_path.to_string_lossy().to_string())
@@ -81,7 +81,7 @@ fn get_compose_enum(file_path: String) -> Result<Compose, EnvironmentError> {
     Ok(Compose::DockerCompose)
 }
 
-fn get_compose_file(local_dir: PathBuf) -> Result<PathBuf, EnvironmentError> {
+fn get_compose_file(local_dir: &PathBuf) -> Result<PathBuf, EnvironmentError> {
     let file_names = vec![
         "compose.yaml",
         "compose.yml",

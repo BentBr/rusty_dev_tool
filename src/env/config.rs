@@ -1,4 +1,4 @@
-use crate::error::file_system_error::FileSystemError;
+use crate::error::file_system::FileSystemError;
 use lazy_static::lazy_static;
 use std::collections::HashMap;
 use std::env;

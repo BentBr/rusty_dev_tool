@@ -3,7 +3,7 @@ use crate::commands::command::Command;
 use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
 use crate::env::language::language_framework_enum::LanguageFramework;
-use crate::error::command_error::CommandError;
+use crate::error::command::Error as CommandError;
 use colored::Colorize;
 
 pub struct Start;

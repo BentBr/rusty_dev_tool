@@ -1,7 +1,7 @@
 use crate::commands::custom_command::CustomCommand;
 use crate::env::config::Command as ConfigCommand;
 use crate::env::config::Config;
-use crate::error::command_error::CommandError;
+use crate::error::command::Error as CommandError;
 use std::process::{Command as SysCommand, Stdio};
 
 pub trait Command {

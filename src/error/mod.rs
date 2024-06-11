@@ -1,5 +1,5 @@
-pub mod command_error;
-pub mod config_error;
-pub mod environment_error;
-pub mod file_system_error;
-pub mod update_error;
+pub mod command;
+pub mod config;
+pub mod environment;
+pub mod file_system;
+pub mod update;

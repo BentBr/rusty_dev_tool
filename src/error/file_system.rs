@@ -13,10 +13,10 @@ impl Error for FileSystemError {}
 impl fmt::Display for FileSystemError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            FileSystemError::FileNotFound(string) => write!(f, "File not found: {}", string),
-            FileSystemError::FolderNotFound(string) => write!(f, "Folder not found: {}", string),
-            FileSystemError::FileWriteFailed(string) => {
-                write!(f, "Failed to write to file: {}", string)
+            Self::FileNotFound(string) => write!(f, "File not found: {string}"),
+            Self::FolderNotFound(string) => write!(f, "Folder not found: {string}"),
+            Self::FileWriteFailed(string) => {
+                write!(f, "Failed to write to file: {string}")
             }
         }
     }

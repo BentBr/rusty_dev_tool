@@ -5,7 +5,7 @@ use crate::commands::execs::start::Start;
 use crate::commands::execs::stop::Stop;
 use crate::env::config::Command as CommandConfig;
 use crate::env::config::Config;
-use crate::error::command_error::CommandError;
+use crate::error::command::Error as CommandError;
 use std::collections::HashMap;
 
 /**

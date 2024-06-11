@@ -1,6 +1,6 @@
 use crate::env::config::{Command, PathOptions, DEFAULT_CONFIG_FILE};
-use crate::error::config_error::ConfigError::TomlNotReadable;
-use crate::error::file_system_error::FileSystemError;
+use crate::error::config::ConfigError::TomlNotReadable;
+use crate::error::file_system::FileSystemError;
 use colored::Colorize;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;

@@ -2,7 +2,7 @@ use crate::commands::command::run_command;
 use crate::commands::command::Command;
 use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
-use crate::error::command_error::CommandError;
+use crate::error::command::Error as CommandError;
 use colored::Colorize;
 
 pub struct Stop;

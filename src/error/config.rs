@@ -11,11 +11,10 @@ impl Error for ConfigError {}
 impl fmt::Display for ConfigError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            ConfigError::TomlNotReadable(dir, error) => {
+            Self::TomlNotReadable(dir, error) => {
                 write!(
                     f,
-                    "Could not read your toml in dir '{}' with error: {}",
-                    dir, error
+                    "Could not read your toml in dir '{dir}' with error: {error}",
                 )
             }
         }

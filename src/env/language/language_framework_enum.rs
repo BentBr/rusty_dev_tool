@@ -1,4 +1,4 @@
-use crate::error::environment_error::EnvironmentError;
+use crate::error::environment::EnvironmentError;
 use regex::Regex;
 use std::fmt;
 use std::fmt::Formatter;

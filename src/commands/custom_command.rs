@@ -1,7 +1,7 @@
 use crate::commands::command::{run_command, Command};
 use crate::env::config::Command as ConfigCommand;
 use crate::env::config::Config;
-use crate::error::command_error::CommandError;
+use crate::error::command::Error as CommandError;
 
 pub struct CustomCommand {
     pub config_command: ConfigCommand,
