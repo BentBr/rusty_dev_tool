@@ -91,6 +91,6 @@ mod tests {
     #[test]
     fn test_update_download_error() {
         let error = UpdateError::UpdateDownloadError("test_string".to_string());
-        assert_eq!(format!("{}", error), "Failed to download update: 'test_string'. Maybe try again later (if release is being built)");
+        assert_eq!(format!("{}", error), "Faialed to download update: 'test_string'. Maybe try again later (if release is being built)");
     }
 }
