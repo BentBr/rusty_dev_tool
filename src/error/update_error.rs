@@ -15,22 +15,22 @@ impl Error for UpdateError {}
 impl fmt::Display for UpdateError {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            UpdateError::FailedToGetLatestVersion(uri) => write!(
+            Self::FailedToGetLatestVersion(uri) => write!(
                 f,
                 "Failed to get latest version: '{}'. Maybe check your internet connection?",
                 uri
             ),
-            UpdateError::FailedToReadVersion(string) => {
+            Self::FailedToReadVersion(string) => {
                 write!(f, "Failed to read version: '{}'.", string)
             }
-            UpdateError::UpdateGeneric(error) => {
+            Self::UpdateGeneric(error) => {
                 write!(f, "Error during update: '{}'.", error)
             }
-            UpdateError::UpdateCheckFailed(string) => {
+            Self::UpdateCheckFailed(string) => {
                 write!(f, "Failed to check for updates: '{}'.", string)
             }
-            UpdateError::UpdateDownloadError(string) => {
-                write!(f, "Failed to download update: '{}'. Maybe try again later (if release is being built)", string)
+            Self::UpdateDownloadError(string) => {
+                write!(f, "Failed to download update: '{string}'. Maybe try again later (if release is being built)")
             }
         }
     }
@@ -38,13 +38,13 @@ impl fmt::Display for UpdateError {
 
 impl From<std::io::Error> for UpdateError {
     fn from(error: std::io::Error) -> Self {
-        UpdateError::UpdateGeneric(Box::new(error))
+        Self::UpdateGeneric(Box::new(error))
     }
 }
 
 impl From<reqwest::Error> for UpdateError {
     fn from(error: reqwest::Error) -> Self {
-        UpdateError::UpdateGeneric(Box::new(error))
+        Self::UpdateGeneric(Box::new(error))
     }
 }
 

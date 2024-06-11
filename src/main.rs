@@ -35,7 +35,7 @@ fn main() {
 
     if update {
         match SelfUpdate.execute(&config, None) {
-            Ok(_) => exit(0),
+            Ok(()) => exit(0),
             Err(err) => {
                 eprintln!("{} {}", "Error updating:".red(), err);
                 exit(1);
@@ -66,7 +66,7 @@ fn main() {
                 command.execute(&config, argument).unwrap_or_else(|err| {
                     eprintln!(
                         "{}",
-                        format!("Error executing {} command: {}", command_name, err).red(),
+                        format!("Error executing {command_name} command: {err}").red(),
                     );
                 });
             }
