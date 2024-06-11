@@ -118,7 +118,17 @@ fn fetch_update(config: &Config, tag_name: String) -> Result<(), UpdateError> {
         fs::File::create(bin_path)?
     };
 
-    if response.status().is_success() {
+    let content_length = match response.content_length() {
+        Some(length) => length,
+        None => {
+            return Err(UpdateError::UpdateDownloadError(
+                "Failed to get content length".to_string(),
+            ))
+        }
+    };
+
+    // Not found string or empty file are less than 100 bytes
+    if response.status().is_success() && content_length > 100 {
         copy(&mut response, &mut dest)?;
     } else {
         return Err(UpdateError::UpdateDownloadError(download_url));
