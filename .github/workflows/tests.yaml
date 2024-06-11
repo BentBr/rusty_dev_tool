@@ -47,7 +47,7 @@ jobs:
                 run: cargo install cargo2junit
 
             -   name: Run tests
-                run: cargo test -- --format=json | cargo2junit > test-results.xml
+                run: cargo test -- -Z unstable-options --format=json | cargo2junit > test-results.xml
                 continue-on-error: true
 
             -   name: Publish Test Results
