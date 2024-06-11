@@ -36,3 +36,26 @@ impl From<UpdateError> for CommandError {
         CommandError::ExecutionFailedGeneric(Box::new(error))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_command_not_found_error() {
+        let error = CommandError::CommandNotFound("test_command".to_string());
+        assert_eq!(
+            format!("{}", error),
+            "Command not found: 'test_command'. Maybe create a custom one in config?"
+        );
+    }
+
+    #[test]
+    fn test_execution_failed_generic_error() {
+        let error = CommandError::ExecutionFailedGeneric(Box::new(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "test_error",
+        )));
+        assert_eq!(format!("{}", error), "Command execution failed: 'test_error'");
+    }
+}

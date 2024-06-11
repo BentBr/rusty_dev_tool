@@ -21,3 +21,17 @@ impl fmt::Display for ConfigError {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_toml_not_readable_error() {
+        let error = ConfigError::TomlNotReadable("test_dir".to_string(), "test_error".to_string());
+        assert_eq!(
+            format!("{}", error),
+            "Could not read your toml in dir 'test_dir' with error: test_error"
+        );
+    }
+}

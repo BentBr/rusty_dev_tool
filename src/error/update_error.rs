@@ -47,3 +47,44 @@ impl From<reqwest::Error> for UpdateError {
         UpdateError::UpdateGeneric(Box::new(error))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_failed_to_get_latest_version_error() {
+        let error = UpdateError::FailedToGetLatestVersion("test_uri".to_string());
+        assert_eq!(
+            format!("{}", error),
+            "Failed to get latest version: 'test_uri'. Maybe check your internet connection?"
+        );
+    }
+
+    #[test]
+    fn test_failed_to_read_version_error() {
+        let error = UpdateError::FailedToReadVersion("test_string".to_string());
+        assert_eq!(format!("{}", error), "Failed to read version: 'test_string'.");
+    }
+
+    #[test]
+    fn test_update_generic_error() {
+        let error = UpdateError::UpdateGeneric(Box::new(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "test_error",
+        )));
+        assert_eq!(format!("{}", error), "Error during update: 'test_error'.");
+    }
+
+    #[test]
+    fn test_update_check_failed_error() {
+        let error = UpdateError::UpdateCheckFailed("test_string".to_string());
+        assert_eq!(format!("{}", error), "Failed to check for updates: 'test_string'.");
+    }
+
+    #[test]
+    fn test_update_download_error() {
+        let error = UpdateError::UpdateDownloadError("test_string".to_string());
+        assert_eq!(format!("{}", error), "Failed to download update: 'test_string'. Maybe try again later (if release is being built)");
+    }
+}
