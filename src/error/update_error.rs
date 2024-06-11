@@ -64,7 +64,10 @@ mod tests {
     #[test]
     fn test_failed_to_read_version_error() {
         let error = UpdateError::FailedToReadVersion("test_string".to_string());
-        assert_eq!(format!("{}", error), "Failed to read version: 'test_string'.");
+        assert_eq!(
+            format!("{}", error),
+            "Failed to read version: 'test_string'."
+        );
     }
 
     #[test]
@@ -79,7 +82,10 @@ mod tests {
     #[test]
     fn test_update_check_failed_error() {
         let error = UpdateError::UpdateCheckFailed("test_string".to_string());
-        assert_eq!(format!("{}", error), "Failed to check for updates: 'test_string'.");
+        assert_eq!(
+            format!("{}", error),
+            "Failed to check for updates: 'test_string'."
+        );
     }
 
     #[test]

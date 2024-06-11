@@ -43,3 +43,105 @@ pub fn get_local_config() -> Result<Option<LocalConfig>, Box<dyn Error>> {
 
     Ok(None)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use env::temp_dir;
+    use std::env;
+    use std::fs::File;
+    use std::io::Write;
+
+    #[test]
+    fn test_from_file() {
+        let dir = temp_dir();
+        let file_path = dir.as_path().join("test1.toml");
+        let mut file = File::create(&file_path).unwrap();
+
+        writeln!(
+            file,
+            r#"
+            local_key = "test_key"
+            [commands]
+                [commands.test_command]
+                    command = "echo Hello, World!"
+                    alias = "test"
+            [environments]
+            "#
+        )
+        .unwrap();
+
+        let config = LocalConfig::from_file(file_path.to_str().unwrap()).unwrap();
+
+        assert_eq!(config.local_key, "test_key");
+        assert!(config.commands.contains_key("test_command"));
+        assert!(config
+            .commands
+            .get("test_command")
+            .unwrap()
+            .command
+            .eq("echo Hello, World!"));
+        assert!(config
+            .commands
+            .get("test_command")
+            .unwrap()
+            .alias
+            .eq("test"));
+        assert!(!config.environments.contains_key("test_env"));
+    }
+
+    #[test]
+    fn test_from_file_fail_environments() {
+        let dir = temp_dir();
+        let file_path = dir.as_path().join("test2.toml");
+        let mut file = File::create(&file_path).unwrap();
+
+        writeln!(
+            file,
+            r#"
+            local_key = "test_key"
+            [commands]
+                [commands.test_command]
+                    command = "echo Hello, World!"
+                    alias = "test"
+            "#
+        )
+        .unwrap();
+
+        let config = LocalConfig::from_file(file_path.to_str().unwrap());
+
+        assert!(config.is_err());
+        assert!(config
+            .unwrap_err()
+            .to_string()
+            .contains("missing field `environments`"));
+    }
+
+    #[test]
+    fn test_from_file_fail_local_key() {
+        let dir = temp_dir();
+        let file_path = dir.as_path().join("test3.toml");
+        let mut file = File::create(&file_path).unwrap();
+
+        writeln!(
+            file,
+            r#"
+            loacal_key = "test_key"
+            [commands]
+                [commands.test_command]
+                    command = "echo Hello, World!"
+                    alias = "test"
+            [environments]
+            "#
+        )
+        .unwrap();
+
+        let config = LocalConfig::from_file(file_path.to_str().unwrap());
+
+        assert!(config.is_err());
+        assert!(config
+            .unwrap_err()
+            .to_string()
+            .contains("missing field `local_key`"));
+    }
+}

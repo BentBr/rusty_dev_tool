@@ -56,6 +56,9 @@ mod tests {
             std::io::ErrorKind::Other,
             "test_error",
         )));
-        assert_eq!(format!("{}", error), "Command execution failed: 'test_error'");
+        assert_eq!(
+            format!("{}", error),
+            "Command execution failed: 'test_error'"
+        );
     }
 }
