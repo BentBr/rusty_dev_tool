@@ -13,6 +13,41 @@ jobs:
     clippy:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v4
-            - name: Run Clippy
-              run: cargo clippy --all-targets --all-features
+            -   name: Checkout repository
+                uses: actions/checkout@v4
+
+            -   name: Set up Rust
+                uses: actions-rs/toolchain@v1
+                with:
+                    toolchain: stable
+                    override: true
+
+            -   name: Cache cargo registry
+                uses: actions/cache@v2
+                with:
+                    path: ~/.cargo/registry
+                    key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-cargo-registry-
+
+            -   name: Cache cargo index
+                uses: actions/cache@v2
+                with:
+                    path: ~/.cargo/git
+                    key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-cargo-index-
+
+            -   name: Cache target directory
+                uses: actions/cache@v2
+                with:
+                    path: target
+                    key: ${{ runner.os }}-cargo-target-${{ hashFiles('**/Cargo.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-cargo-target-
+
+            -   name: Install Clippy
+                run: rustup component add clippy
+
+            -   name: Run Clippy
+                run: cargo clippy --all-targets --all-features
