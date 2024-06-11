@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.1](https://github.com/BentBr/rusty_dev_tool/compare/v0.5.0...v0.5.1) (2024-06-11)
+
+
+### Bug Fixes
+
+* removed the main branch target for PRs running for clippy ([b1cead2](https://github.com/BentBr/rusty_dev_tool/commit/b1cead24bcfd0939d7562c85b8c2ec2aad2acf51))
+* Updated check for download of new tool: checking content length ([f69a4f5](https://github.com/BentBr/rusty_dev_tool/commit/f69a4f5439aa62f0924f4fa0e6b2669cf589e6b4))
+
 ## [0.5.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.4.0...v0.5.0) (2024-06-09)
 
 
