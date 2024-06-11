@@ -111,13 +111,6 @@ fn fetch_update(config: &Config, tag_name: String) -> Result<(), UpdateError> {
     );
 
     let mut response = get(download_url.clone())?;
-    let mut dest = {
-        let bin_path = get_current_bin_path()?;
-        println!("Downloading update to {}", bin_path.to_string_lossy());
-
-        fs::File::create(bin_path)?
-    };
-
     let content_length = match response.content_length() {
         Some(length) => length,
         None => {
@@ -129,6 +122,13 @@ fn fetch_update(config: &Config, tag_name: String) -> Result<(), UpdateError> {
 
     // Not found string or empty file are less than 100 bytes
     if response.status().is_success() && content_length > 100 {
+        let mut dest = {
+            let bin_path = get_current_bin_path()?;
+            println!("Downloading update to {}", bin_path.to_string_lossy());
+
+            fs::File::create(bin_path)?
+        };
+
         copy(&mut response, &mut dest)?;
     } else {
         return Err(UpdateError::UpdateDownloadError(download_url));
