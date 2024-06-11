@@ -50,4 +50,6 @@ jobs:
                 run: rustup component add clippy
 
             -   name: Run Clippy
-                run: cargo clippy --all-targets --all-features
+                uses: actions-rs/clippy-check@v1
+                with:
+                    token: ${{ secrets.GITHUB_TOKEN }}
