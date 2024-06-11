@@ -30,7 +30,7 @@ impl fmt::Display for UpdateError {
                 write!(f, "Failed to check for updates: '{}'.", string)
             }
             UpdateError::UpdateDownloadError(string) => {
-                write!(f, "Failead to download update: '{}'. Maybe try again later (if release is being built)", string)
+                write!(f, "Failed to download update: '{}'. Maybe try again later (if release is being built)", string)
             }
         }
     }
