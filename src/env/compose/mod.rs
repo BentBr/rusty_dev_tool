@@ -1,1 +1,1 @@
-pub mod compose_enum;
+pub mod r#enum;

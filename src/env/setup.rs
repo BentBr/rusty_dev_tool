@@ -1,9 +1,9 @@
-use crate::env::compose::compose_enum::Compose;
+use crate::env::compose::r#enum::Compose;
 use crate::env::config::{get_config_without_local, merge_configs, Config, PathOptions};
-use crate::env::home_config::{get_or_create_home_config, HomeConfig};
-use crate::env::language::language_framework_enum::LanguageFramework;
-use crate::env::local_config::{get_local_config, LocalConfig};
-use crate::error::environment::EnvironmentError;
+use crate::env::home_config::{get_or_create, HomeConfig};
+use crate::env::language::r#enum::LanguageFramework;
+use crate::env::local_config::{get, LocalConfig};
+use crate::error::environment::Error as EnvironmentError;
 use std::error::Error;
 use std::fs::File;
 use std::io;
@@ -11,7 +11,7 @@ use std::io::BufRead;
 use std::path::{Path, PathBuf};
 
 pub fn init(restore: bool, update: bool) -> Result<Config, Box<dyn Error>> {
-    let home_config: HomeConfig = get_or_create_home_config(restore)?;
+    let home_config: HomeConfig = get_or_create(restore)?;
 
     if restore || update {
         return Ok(get_config_without_local(home_config));
@@ -20,7 +20,7 @@ pub fn init(restore: bool, update: bool) -> Result<Config, Box<dyn Error>> {
     let compose = check_docker_compose_setup()?;
     let language_framework = check_language_framework_setup()?;
 
-    let local_config: Option<LocalConfig> = get_local_config()?;
+    let local_config: Option<LocalConfig> = get()?;
 
     Ok(merge_configs(
         home_config,
@@ -31,8 +31,8 @@ pub fn init(restore: bool, update: bool) -> Result<Config, Box<dyn Error>> {
 }
 
 pub fn init_custom_commands() -> Result<Config, Box<dyn Error>> {
-    let home_config: HomeConfig = get_or_create_home_config(false)?;
-    let local_config = get_local_config()?;
+    let home_config: HomeConfig = get_or_create(false)?;
+    let local_config = get()?;
 
     // We are using the default compose and language framework here as they are not needed
     // for the custom commands
@@ -46,31 +46,31 @@ pub fn init_custom_commands() -> Result<Config, Box<dyn Error>> {
 
 fn check_docker_compose_setup() -> Result<Compose, EnvironmentError> {
     let local_dir = PathOptions::new()
-        .get_local_dir()
+        .get_local_working_dir()
         .map_err(|_| EnvironmentError::LocalConfigDirNotFound(String::from("project dir")))?;
 
     let compose_file_path = get_compose_file(&local_dir)
         .map_err(|_| EnvironmentError::ComposeFileNotFound(String::from("project dir")))?;
 
-    get_compose_enum(compose_file_path.to_string_lossy().to_string()).map_err(|_| {
+    get_compose_enum(compose_file_path.to_string_lossy().as_ref()).map_err(|_| {
         EnvironmentError::DockerComposeNotInstalled(local_dir.to_string_lossy().to_string())
     })
 }
 
 fn check_language_framework_setup() -> Result<LanguageFramework, EnvironmentError> {
     let local_dir = PathOptions::new()
-        .get_local_dir()
+        .get_local_working_dir()
         .map_err(|_| EnvironmentError::LocalConfigDirNotFound(String::from("project dir")))?;
 
-    let compose_file_path = get_compose_file(&local_dir)
+    let compose_file_path = get_compose_file(local_dir.as_path())
         .map_err(|_| EnvironmentError::ComposeFileNotFound(String::from("project dir")))?;
 
-    get_language_framework_enum(compose_file_path.to_string_lossy().to_string())
+    get_language_framework_enum(compose_file_path.to_string_lossy().as_ref())
 }
 
-fn get_compose_enum(file_path: String) -> Result<Compose, EnvironmentError> {
+fn get_compose_enum(file_path: &str) -> Result<Compose, EnvironmentError> {
     let file = File::open(Path::new(&file_path))
-        .map_err(|_| EnvironmentError::ComposeFileNotReadable(file_path.clone()))?;
+        .map_err(|_| EnvironmentError::ComposeFileNotReadable(file_path.to_string()))?;
 
     for line in io::BufReader::new(file).lines().map_while(Result::ok) {
         if line.eq("x-mutagen:") {
@@ -81,7 +81,7 @@ fn get_compose_enum(file_path: String) -> Result<Compose, EnvironmentError> {
     Ok(Compose::DockerCompose)
 }
 
-fn get_compose_file(local_dir: &PathBuf) -> Result<PathBuf, EnvironmentError> {
+fn get_compose_file(local_dir: &Path) -> Result<PathBuf, EnvironmentError> {
     let file_names = vec![
         "compose.yaml",
         "compose.yml",
@@ -101,9 +101,9 @@ fn get_compose_file(local_dir: &PathBuf) -> Result<PathBuf, EnvironmentError> {
     ))
 }
 
-fn get_language_framework_enum(file_path: String) -> Result<LanguageFramework, EnvironmentError> {
-    let file = File::open(Path::new(&file_path))
-        .map_err(|_| EnvironmentError::ComposeFileNotReadable(file_path.clone()))?;
+fn get_language_framework_enum(file_path: &str) -> Result<LanguageFramework, EnvironmentError> {
+    let file = File::open(Path::new(file_path))
+        .map_err(|_| EnvironmentError::ComposeFileNotReadable(file_path.to_string()))?;
 
     for line in io::BufReader::new(file).lines().map_while(Result::ok) {
         if line.contains("MAIN_SERVICE") {

@@ -1,14 +1,13 @@
-use crate::error::file_system::FileSystemError;
+use crate::env::compose::r#enum::Compose;
+use crate::env::home_config::HomeConfig;
+use crate::env::language::r#enum::LanguageFramework;
+use crate::env::local_config::{Environment, LocalConfig};
+use crate::error::file_system::Error as FileSystemError;
+use dirs::home_dir;
 use lazy_static::lazy_static;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::env;
-
-use crate::env::compose::compose_enum::Compose;
-use crate::env::home_config::HomeConfig;
-use crate::env::language::language_framework_enum::LanguageFramework;
-use crate::env::local_config::{Environment, LocalConfig};
-use dirs::home_dir;
-use serde::{Deserialize, Serialize};
 use std::fs::create_dir_all;
 use std::path::PathBuf;
 
@@ -63,8 +62,8 @@ impl PathOptions {
         )))
     }
 
-    pub fn get_local_dir_default(&self) -> Result<PathBuf, FileSystemError> {
-        if let Ok(current_dir) = self.get_local_dir() {
+    pub fn get_local_dir_default_config(&self) -> Result<PathBuf, FileSystemError> {
+        if let Ok(current_dir) = self.get_local_working_dir() {
             let local_dir_default = current_dir.join(self.default_path.as_str());
 
             if local_dir_default.exists() {
@@ -76,7 +75,9 @@ impl PathOptions {
             "Local local default config dir",
         )))
     }
-    pub fn get_local_dir(&self) -> Result<PathBuf, FileSystemError> {
+
+    #[allow(clippy::unused_self)]
+    pub fn get_local_working_dir(&self) -> Result<PathBuf, FileSystemError> {
         if let Ok(current_dir) = env::current_dir() {
             return Ok(current_dir);
         }
@@ -98,7 +99,7 @@ fn find_or_create_default_dir_in(mut path: PathBuf) -> Result<PathBuf, FileSyste
 
     create_dir_all(&path).map_err(|error| FileSystemError::FolderNotFound(error.to_string()))?;
 
-    Ok(path.to_owned())
+    Ok(path)
 }
 
 pub fn merge_configs(
@@ -159,8 +160,8 @@ fn merge_commands(
     home_commands: HashMap<String, Command>,
     local_commands: HashMap<String, Command>,
 ) -> HashMap<String, Command> {
-    let mut merged_commands = home_commands.clone();
-    merged_commands.extend(local_commands.clone());
+    let mut merged_commands = home_commands;
+    merged_commands.extend(local_commands);
 
     merged_commands
 }

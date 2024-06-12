@@ -145,6 +145,7 @@ See the Makefile for some helper commands. \
 - Adding some generic db connection option(s)
 - Adding support for windows... (maybe). Dunno what works atm and what not ;)
 - Adding docker build alias for local Dockerfile (to only build the image)
+- Add an option (config) to only have aliases (custom commands) without compose.yaml config mandatory
 - ~~Adding basic commands: start, stop, shell~~ ✅
 - ~~Adding update functionality~~ ✅
 - ~~Testing during CI and have those being a blocking factor~~ ✅

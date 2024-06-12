@@ -1,6 +1,7 @@
 use crate::env::config::{Command, PathOptions, DEFAULT_CONFIG_FILE};
-use crate::error::config::ConfigError::TomlNotReadable;
-use crate::error::file_system::FileSystemError;
+use crate::env::traits::FromFile;
+use crate::error::config::Error as ConfigError;
+use crate::error::file_system::Error as FileSystemError;
 use colored::Colorize;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
@@ -30,15 +31,11 @@ impl HomeConfig {
             commands: HashMap::new(),
         }
     }
-
-    fn from_file(file_path: &str) -> Result<Self, Box<dyn Error>> {
-        let content = fs::read_to_string(file_path)?;
-        let config: HomeConfig = toml::from_str(&content)?;
-        Ok(config)
-    }
 }
 
-pub fn get_or_create_home_config(restore: bool) -> Result<HomeConfig, Box<dyn Error>> {
+impl FromFile for HomeConfig {}
+
+pub fn get_or_create(restore: bool) -> Result<HomeConfig, Box<dyn Error>> {
     let home_config_dir = PathOptions::new().get_or_create_home_dir_default()?;
 
     let config_file = home_config_dir.join(DEFAULT_CONFIG_FILE.as_str());
@@ -47,7 +44,10 @@ pub fn get_or_create_home_config(restore: bool) -> Result<HomeConfig, Box<dyn Er
         return Ok(
             HomeConfig::from_file(config_file.to_string_lossy().to_string().as_str()).map_err(
                 |error| {
-                    TomlNotReadable(config_file.to_string_lossy().to_string(), error.to_string())
+                    ConfigError::TomlNotReadable(
+                        config_file.to_string_lossy().to_string(),
+                        error.to_string(),
+                    )
                 },
             )?,
         );

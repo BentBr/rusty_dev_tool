@@ -8,8 +8,8 @@ use crate::clap_args::{
 };
 use crate::commands::command::Command;
 use crate::commands::execs::self_update::SelfUpdate;
-use crate::commands::registry::CommandRegistry;
-use crate::env::init::{init, init_custom_commands};
+use crate::commands::registry::Registry;
+use crate::env::setup::{init, init_custom_commands};
 use clap::ArgMatches;
 use clap::Command as ClapCommand;
 use colored::Colorize;
@@ -18,7 +18,7 @@ use std::process::exit;
 fn main() {
     let config = init_custom_commands();
 
-    let mut clap_command: ClapCommand = get_clap_matches(config);
+    let mut clap_command: ClapCommand = get_clap_matches(&config);
     let matches: ArgMatches = clap_command.clone().get_matches();
 
     let restore: bool = matches.get_flag(CONFIG_RESTORE);
@@ -43,7 +43,7 @@ fn main() {
         }
     }
 
-    let registry = CommandRegistry::new(&config);
+    let registry = Registry::new(&config);
 
     // If any flag is not present, require a subcommand
     if !(generate_completions || restore || update) && matches.subcommand().is_none() {

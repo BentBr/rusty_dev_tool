@@ -1,4 +1,4 @@
-use crate::error::environment::EnvironmentError;
+use crate::error::environment::Error as EnvironmentError;
 use regex::Regex;
 use std::fmt;
 use std::fmt::Formatter;
@@ -13,21 +13,21 @@ pub enum LanguageFramework {
 impl fmt::Display for LanguageFramework {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
-            LanguageFramework::Rust => write!(f, "rust",),
-            LanguageFramework::Php => write!(f, "php",),
-            LanguageFramework::Node => write!(f, "node",),
+            Self::Rust => write!(f, "rust",),
+            Self::Php => write!(f, "php",),
+            Self::Node => write!(f, "node",),
         }
     }
 }
 
 impl LanguageFramework {
-    pub fn from_main_service(service: &str) -> Result<LanguageFramework, EnvironmentError> {
+    pub fn from_main_service(service: &str) -> Result<Self, EnvironmentError> {
         let service_string = get_main_service_via_regex(service);
 
         match service_string {
-            Some("rust") => Ok(LanguageFramework::Rust),
-            Some("php") => Ok(LanguageFramework::Php),
-            Some("node") => Ok(LanguageFramework::Node),
+            Some("rust") => Ok(Self::Rust),
+            Some("php") => Ok(Self::Php),
+            Some("node") => Ok(Self::Node),
             _ => Err(EnvironmentError::NotExistingServiceConfig(
                 service.to_string(),
             )),

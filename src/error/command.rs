@@ -1,4 +1,4 @@
-use crate::error::update::UpdateError;
+use crate::error::update::Error as UpdateError;
 use std::error::Error as StdError;
 use std::fmt;
 

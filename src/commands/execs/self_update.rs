@@ -2,7 +2,7 @@ use crate::commands::command::Command;
 use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
 use crate::error::command::Error as CommandError;
-use crate::error::update::UpdateError;
+use crate::error::update::Error as UpdateError;
 use colored::Colorize;
 use reqwest::blocking::{get, Client};
 use reqwest::header::{HeaderMap, HeaderValue, USER_AGENT};
@@ -23,31 +23,27 @@ impl Command for SelfUpdate {
     fn execute(&self, config: &Config, _argument: Option<&String>) -> Result<(), CommandError> {
         let check_update_needed = check_update_needed(config)
             .map_err(|error| UpdateError::UpdateCheckFailed(error.to_string()))?;
-        match check_update_needed {
-            Some(version) => {
-                println!("new version: {}", version);
-                fetch_update(config, version.clone())?;
 
-                println!(
-                    "{}",
-                    format!("Updated to latest version: {} 🎉", version).green()
-                );
+        if let Some(version) = check_update_needed {
+            println!("new version: {version}");
+            fetch_update(config, &version)?;
 
-                Ok(())
-            }
-            None => {
-                println!(
-                    "{}",
-                    format!(
-                        "You are already using the latest version of rusty_dev_tool '{}' ❤️",
-                        env!("CARGO_PKG_VERSION")
-                    )
-                    .green()
-                );
-
-                Ok(())
-            }
+            println!(
+                "{}",
+                format!("Updated to latest version: {version} 🎉").green()
+            );
+        } else {
+            println!(
+                "{}",
+                format!(
+                    "You are already using the latest version of rusty_dev_tool '{}' ❤️",
+                    env!("CARGO_PKG_VERSION")
+                )
+                .green()
+            );
         }
+
+        Ok(())
     }
 
     fn name(&self) -> String {
@@ -93,7 +89,7 @@ fn check_update_needed(config: &Config) -> Result<Option<String>, UpdateError> {
     Ok(None)
 }
 
-fn fetch_update(config: &Config, tag_name: String) -> Result<(), UpdateError> {
+fn fetch_update(config: &Config, tag_name: &str) -> Result<(), UpdateError> {
     let os = os_info::get();
     let binary_name = match os.os_type() {
         os_info::Type::Macos => match env::consts::ARCH {
@@ -111,13 +107,10 @@ fn fetch_update(config: &Config, tag_name: String) -> Result<(), UpdateError> {
     );
 
     let mut response = get(download_url.clone())?;
-    let content_length = match response.content_length() {
-        Some(length) => length,
-        None => {
-            return Err(UpdateError::UpdateDownloadError(
-                "Failed to get content length".to_string(),
-            ))
-        }
+    let Some(content_length) = response.content_length() else {
+        return Err(UpdateError::UpdateDownload(
+            "Failed to get content length".to_string(),
+        ));
     };
 
     // Not found string or empty file are less than 100 bytes
@@ -131,7 +124,7 @@ fn fetch_update(config: &Config, tag_name: String) -> Result<(), UpdateError> {
 
         copy(&mut response, &mut dest)?;
     } else {
-        return Err(UpdateError::UpdateDownloadError(download_url));
+        return Err(UpdateError::UpdateDownload(download_url));
     }
 
     Ok(())

@@ -1,8 +1,8 @@
-use std::error::Error;
+use std::error::Error as StdError;
 use std::fmt;
 
 #[derive(Debug)]
-pub enum EnvironmentError {
+pub enum Error {
     DockerComposeNotInstalled(String),
     ComposeFileNotReadable(String),
     ComposeFileNotFound(String),
@@ -11,9 +11,9 @@ pub enum EnvironmentError {
     NoMainServiceDefined(),
 }
 
-impl Error for EnvironmentError {}
+impl StdError for Error {}
 
-impl fmt::Display for EnvironmentError {
+impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::DockerComposeNotInstalled(dir) => {
@@ -29,10 +29,7 @@ impl fmt::Display for EnvironmentError {
                 write!(f, "Local config dir not found in location '{dir}'")
             }
             Self::NotExistingServiceConfig(service) => {
-                write!(
-                    f,
-                    "The main service '{service}' definition does not exist"
-                )
+                write!(f, "The main service '{service}' definition does not exist")
             }
             Self::NoMainServiceDefined() => {
                 write!(f, "Non of your services in compose.yaml has the environment 'MAIN_SERVICE=node|rust|php defined")
@@ -47,7 +44,7 @@ mod tests {
 
     #[test]
     fn test_docker_compose_not_installed_error() {
-        let error = EnvironmentError::DockerComposeNotInstalled("test_dir".to_string());
+        let error = Error::DockerComposeNotInstalled("test_dir".to_string());
         assert_eq!(
             format!("{}", error),
             "Docker compose setup not found in dir 'test_dir'"
@@ -56,7 +53,7 @@ mod tests {
 
     #[test]
     fn test_compose_file_not_readable_error() {
-        let error = EnvironmentError::ComposeFileNotReadable("test_file".to_string());
+        let error = Error::ComposeFileNotReadable("test_file".to_string());
         assert_eq!(
             format!("{}", error),
             "Compose file 'test_file' not readable"
@@ -65,7 +62,7 @@ mod tests {
 
     #[test]
     fn test_compose_file_not_found_error() {
-        let error = EnvironmentError::ComposeFileNotFound("test_dir".to_string());
+        let error = Error::ComposeFileNotFound("test_dir".to_string());
         assert_eq!(
             format!("{}", error),
             "Local compose file not found in location 'test_dir'"
@@ -74,7 +71,7 @@ mod tests {
 
     #[test]
     fn test_local_config_dir_not_found_error() {
-        let error = EnvironmentError::LocalConfigDirNotFound("test_dir".to_string());
+        let error = Error::LocalConfigDirNotFound("test_dir".to_string());
         assert_eq!(
             format!("{}", error),
             "Local config dir not found in location 'test_dir'"
@@ -83,7 +80,7 @@ mod tests {
 
     #[test]
     fn test_not_existing_service_config_error() {
-        let error = EnvironmentError::NotExistingServiceConfig("test_service".to_string());
+        let error = Error::NotExistingServiceConfig("test_service".to_string());
         assert_eq!(
             format!("{}", error),
             "The main service 'test_service' definition does not exist"
@@ -92,7 +89,7 @@ mod tests {
 
     #[test]
     fn test_no_main_service_defined_error() {
-        let error = EnvironmentError::NoMainServiceDefined();
+        let error = Error::NoMainServiceDefined();
         assert_eq!(
             format!("{}", error),
             "Non of your services in compose.yaml has the environment 'MAIN_SERVICE=node|rust|php defined"
