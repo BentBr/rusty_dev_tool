@@ -4,6 +4,7 @@ on:
     push:
         branches: [ main ]
     pull_request:
+        types: [opened, synchronize]
 
 # Make sure CI fails on all warnings, including Clippy lints
 env:
@@ -53,3 +54,4 @@ jobs:
                 uses: actions-rs/clippy-check@v1
                 with:
                     token: ${{ secrets.GITHUB_TOKEN }}
+                    args: -- -D clippy::all -D warnings -D clippy::pedantic -D clippy::nursery

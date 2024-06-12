@@ -1,21 +1,20 @@
-use std::error::Error;
+use std::error::Error as StdError;
 use std::fmt;
 
 #[derive(Debug)]
-pub enum ConfigError {
+pub enum Error {
     TomlNotReadable(String, String),
 }
 
-impl Error for ConfigError {}
+impl StdError for Error {}
 
-impl fmt::Display for ConfigError {
+impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            ConfigError::TomlNotReadable(dir, error) => {
+            Self::TomlNotReadable(dir, error) => {
                 write!(
                     f,
-                    "Could not read your toml in dir '{}' with error: {}",
-                    dir, error
+                    "Could not read your toml in dir '{dir}' with error: {error}",
                 )
             }
         }
@@ -28,7 +27,7 @@ mod tests {
 
     #[test]
     fn test_toml_not_readable_error() {
-        let error = ConfigError::TomlNotReadable("test_dir".to_string(), "test_error".to_string());
+        let error = Error::TomlNotReadable("test_dir".to_string(), "test_error".to_string());
         assert_eq!(
             format!("{}", error),
             "Could not read your toml in dir 'test_dir' with error: test_error"

@@ -11,7 +11,7 @@ pub const SELF_UPDATE: &str = "self-update";
 pub const GENERATE_COMPLETIONS: &str = "generate-completions";
 pub const OPTIONAL_ARGUMENT: &str = "optional-argument";
 
-pub fn get_clap_matches(config: Result<Config, Box<dyn Error>>) -> ClapCommand {
+pub fn get_clap_matches(config: &Result<Config, Box<dyn Error>>) -> ClapCommand {
     let version = env!("CARGO_PKG_VERSION");
 
     let app = ClapCommand::new("Rusty Dev Tool")
@@ -46,7 +46,7 @@ pub fn get_clap_matches(config: Result<Config, Box<dyn Error>>) -> ClapCommand {
 
 fn register_subcommands(
     mut app: ClapCommand,
-    config: Result<Config, Box<dyn Error>>,
+    config: &Result<Config, Box<dyn Error>>,
 ) -> ClapCommand {
     // Todo: we want to get rid of this list as well. In best case all data is coming from the command definitions itself
     let mut commands_map: HashMap<String, String> = COMMAND_LIST.clone();
@@ -93,7 +93,7 @@ fn register_subcommands(
 }
 
 #[allow(dead_code)]
-fn generate_completions(shell: &Shell) {
+fn generate_completions(shell: Shell) {
     let mut cmd = ClapCommand::new("abc")
         .version("1.0")
         .author("Your Name <your.email@example.com>")
@@ -104,7 +104,7 @@ fn generate_completions(shell: &Shell) {
 
     //todo: add global custom commands
 
-    generate(*shell, &mut cmd, "abc", &mut io::stdout());
+    generate(shell, &mut cmd, "abc", &mut io::stdout());
 }
 
 // todo: add the generation script for auto-completion

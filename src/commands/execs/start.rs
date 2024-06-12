@@ -1,9 +1,9 @@
-use crate::commands::command::run_command;
+use crate::commands::command::run;
 use crate::commands::command::Command;
 use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
-use crate::env::language::language_framework_enum::LanguageFramework;
-use crate::error::command_error::CommandError;
+use crate::env::language::r#enum::LanguageFramework;
+use crate::error::command::Error as CommandError;
 use colored::Colorize;
 
 pub struct Start;
@@ -17,8 +17,7 @@ impl Command for Start {
             compose_str,
             compose_str,
             get_main_service_install(config)
-        )
-        .to_string();
+        );
         let command = binding.as_str();
 
         println!(
@@ -30,7 +29,7 @@ impl Command for Start {
             .blue()
         );
 
-        run_command(command)
+        run(command)
     }
 
     fn name(&self) -> String {

@@ -1,20 +1,20 @@
-use crate::commands::command::run_command;
+use crate::commands::command::run;
 use crate::commands::command::Command;
 use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
-use crate::error::command_error::CommandError;
+use crate::error::command::Error as CommandError;
 use colored::Colorize;
 
 pub struct Stop;
 
 impl Command for Stop {
     fn execute(&self, config: &Config, _argument: Option<&String>) -> Result<(), CommandError> {
-        let binding = format!("{} down", config.compose).to_string();
+        let binding = format!("{} down", config.compose);
         let command = binding.as_str();
 
         println!("{}", "Executing stop command".blue());
 
-        run_command(command)
+        run(command)
     }
 
     fn name(&self) -> String {

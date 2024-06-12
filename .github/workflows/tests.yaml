@@ -4,6 +4,7 @@ on:
     push:
         branches: [ main ]
     pull_request:
+        types: [opened, synchronize]
 
 jobs:
     tests:
@@ -15,7 +16,7 @@ jobs:
             -   name: Set up Rust
                 uses: actions-rs/toolchain@v1
                 with:
-                    toolchain: stable
+                    toolchain: nightly
                     override: true
 
             -   name: Cache cargo registry
@@ -46,7 +47,7 @@ jobs:
                 run: cargo install cargo2junit
 
             -   name: Run tests
-                run: cargo test -- --format=json | cargo2junit > test-results.xml
+                run: cargo test -- -Z unstable-options --format=json | cargo2junit > test-results.xml
                 continue-on-error: true
 
             -   name: Publish Test Results
@@ -55,4 +56,4 @@ jobs:
                 with:
                     name: Test Results
                     path: test-results.xml
-                    reporter: junit
+                    reporter: java-junit
