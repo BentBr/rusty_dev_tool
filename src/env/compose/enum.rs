@@ -1,7 +1,7 @@
 use std::fmt;
 use std::fmt::Formatter;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Compose {
     DockerCompose,
     MutagenCompose,

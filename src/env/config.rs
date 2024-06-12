@@ -29,6 +29,7 @@ pub struct Config {
     pub environments: HashMap<String, Environment>,
     pub compose: Compose,
     pub language_framework: LanguageFramework,
+    pub local_key: String
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -120,6 +121,7 @@ pub fn merge_configs(
             environments: HashMap::new(),
             compose,
             language_framework,
+            local_key: String::new(),
         },
     }
 }
@@ -133,6 +135,7 @@ pub fn get_config_without_local(home_config: HomeConfig) -> Config {
         environments: HashMap::new(),
         compose: Compose::DockerCompose,
         language_framework: LanguageFramework::Rust,
+        local_key: String::new(),
     }
 }
 
@@ -150,6 +153,7 @@ fn merge_configs_with_local(
         environments: local_config.environments,
         compose,
         language_framework,
+        local_key: local_config.local_key,
     }
 }
 
@@ -164,4 +168,112 @@ fn merge_commands(
     merged_commands.extend(local_commands);
 
     merged_commands
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_merge_commands() {
+        let mut home_commands = HashMap::new();
+        home_commands.insert(
+            String::from("home_command"),
+            Command {
+                command: String::from("echo Home"),
+                alias: String::from("home"),
+            },
+        );
+
+        let mut local_commands = HashMap::new();
+        local_commands.insert(
+            String::from("local_command"),
+            Command {
+                command: String::from("echo Local"),
+                alias: String::from("local"),
+            },
+        );
+
+        let merged_commands = merge_commands(home_commands, local_commands);
+
+        assert_eq!(merged_commands.len(), 2);
+        assert!(merged_commands.contains_key("home_command"));
+        assert!(merged_commands.contains_key("local_command"));
+    }
+
+    #[test]
+    fn test_merge_commands_override() {
+        let mut home_commands = HashMap::new();
+        home_commands.insert(
+            String::from("home_command"),
+            Command {
+                command: String::from("echo Home"),
+                alias: String::from("home"),
+            },
+        );
+
+        home_commands.insert(
+            String::from("home_command2"),
+            Command {
+                command: String::from("echo Home2"),
+                alias: String::from("home"),
+            },
+        );
+
+        let mut local_commands = HashMap::new();
+        local_commands.insert(
+            String::from("home_command2"),
+            Command {
+                command: String::from("overridden"),
+                alias: String::from("moin"),
+            },
+        );
+
+        let merged_commands = merge_commands(home_commands, local_commands);
+
+        assert_eq!(merged_commands.len(), 2);
+        assert!(merged_commands.contains_key("home_command"));
+        assert!(merged_commands.contains_key("home_command2"));
+        assert_eq!(
+            merged_commands.get("home_command2").unwrap().command,
+            "overridden"
+        );
+    }
+
+    #[test]
+    fn test_merge_configs_with_local() {
+        let home_config = HomeConfig::default();
+        let local_config = LocalConfig {
+            commands: HashMap::new(),
+            local_key: String::from("new-project"),
+            environments: HashMap::new(),
+        };
+        let compose = Compose::DockerCompose;
+        let language_framework = LanguageFramework::Rust;
+
+        let config = merge_configs_with_local(home_config, local_config, compose, language_framework);
+
+        assert_eq!(config.rdt_name, "rdt");
+        assert_eq!(config.download_path, "https://github.com/BentBr/rusty_dev_tool/releases/download");
+        assert_eq!(config.meta_path, "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest");
+        assert!(config.commands.is_empty());
+        assert!(config.environments.is_empty());
+        assert_eq!(config.compose, Compose::DockerCompose);
+        assert_eq!(config.language_framework, LanguageFramework::Rust);
+        assert_eq!(config.local_key, "new-project");
+    }
+
+    #[test]
+    fn test_get_config_without_local() {
+        let home_config = HomeConfig::default();
+
+        let config = get_config_without_local(home_config);
+
+        assert_eq!(config.rdt_name, "rdt");
+        assert_eq!(config.download_path, "https://github.com/BentBr/rusty_dev_tool/releases/download");
+        assert_eq!(config.meta_path, "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest");
+        assert!(config.commands.is_empty());
+        assert!(config.environments.is_empty());
+        assert_eq!(config.local_key, "");
+    }
 }

@@ -19,7 +19,7 @@ pub struct HomeConfig {
 
 impl HomeConfig {
     // This is our default config being written to home config file when no one is found during startup
-    fn default() -> Self {
+    pub fn default() -> Self {
         Self {
             rdt_name: String::from("rdt"),
             download_path: String::from(
@@ -90,4 +90,115 @@ fn backup_home_config(config_file_path: &Path) -> Result<(), Box<dyn Error>> {
     );
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use env::temp_dir;
+    use std::env;
+    use std::fs::File;
+    use std::io::Write;
+
+    #[test]
+    fn test_from_file() {
+        let dir = temp_dir();
+        let file_path = dir.as_path().join("test4.toml");
+        let mut file = File::create(&file_path).unwrap();
+
+        writeln!(
+            file,
+            r#"
+            rdt_name = "test_name"
+            download_path = "short-path"
+            meta_path = "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
+            [commands]
+                [commands.test_command]
+                    command = "echo Hello, World!"
+                    alias = "test"
+            "#
+        )
+            .unwrap();
+
+        let config = HomeConfig::from_file(file_path.to_str().unwrap()).unwrap();
+
+        assert_eq!(config.rdt_name, "test_name");
+        assert_eq!(config.download_path, "short-path");
+        assert!(config.commands.contains_key("test_command"));
+        assert!(config
+            .commands
+            .get("test_command")
+            .unwrap()
+            .command
+            .eq("echo Hello, World!"));
+        assert!(config
+            .commands
+            .get("test_command")
+            .unwrap()
+            .alias
+            .eq("test"));
+    }
+
+    #[test]
+    fn test_from_file_fail_commands() {
+        let dir = temp_dir();
+        let file_path = dir.as_path().join("test5.toml");
+        let mut file = File::create(&file_path).unwrap();
+
+        writeln!(
+            file,
+            r#"
+            rdt_name = "test_name"
+            download_path = "short-path"
+            meta_path = "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
+            "#
+        )
+            .unwrap();
+
+        let config = HomeConfig::from_file(file_path.to_str().unwrap());
+
+        assert!(config.is_err());
+        assert!(config
+            .unwrap_err()
+            .to_string()
+            .contains("missing field `commands`"));
+    }
+
+    #[test]
+    fn test_from_file_fail_meta_path() {
+        let dir = temp_dir();
+        let file_path = dir.as_path().join("test6.toml");
+        let mut file = File::create(&file_path).unwrap();
+
+        writeln!(
+            file,
+            r#"
+            rdt_name = "test_name"
+            download_path = "short-path"
+            metaaa_path = "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
+            [commands]
+            "#
+        )
+            .unwrap();
+
+        let config = HomeConfig::from_file(file_path.to_str().unwrap());
+
+        assert!(config.is_err());
+        assert!(config
+            .unwrap_err()
+            .to_string()
+            .contains("missing field `meta_path`"));
+    }
+
+    #[test]
+    fn test_get_or_create_fresh() {
+        let dir = temp_dir();
+        env::set_var("HOME", dir.as_path());
+
+        let config = get_or_create(false).unwrap();
+
+        assert_eq!(config.rdt_name, "rdt");
+        assert_eq!(config.download_path, "https://github.com/BentBr/rusty_dev_tool/releases/download");
+        assert!(config.commands.is_empty());
+    }
 }

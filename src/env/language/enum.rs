@@ -3,7 +3,7 @@ use regex::Regex;
 use std::fmt;
 use std::fmt::Formatter;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum LanguageFramework {
     Rust,
     Php,

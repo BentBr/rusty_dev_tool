@@ -10,10 +10,8 @@ pub struct Chown;
 impl Command for Chown {
     fn execute(&self, config: &Config, argument: Option<&String>) -> Result<(), CommandError> {
         // We are explicitly using the optional argument for the user group
-        let groups: String = argument.map_or_else(
-            || "www-data:www-data".to_string(),
-            ToString::to_string,
-        );
+        let groups: String =
+            argument.map_or_else(|| "www-data:www-data".to_string(), ToString::to_string);
 
         let binding = format!(
             "{} exec --user=root -T {} chown -R {} .",
