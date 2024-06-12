@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.6.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.5.2...v0.6.0) (2024-06-12)
+
+
+### Features
+
+* adding a little flag if compose is being used locally - maybe to set only aliases for easier working ([54d9bf0](https://github.com/BentBr/rusty_dev_tool/commit/54d9bf0af31cfc25cdc5c910f660123ad2f3b016))
+
+
+### Bug Fixes
+
+* updating readme for testing purposes of test pipeline ([#53](https://github.com/BentBr/rusty_dev_tool/issues/53)) ([135fb0c](https://github.com/BentBr/rusty_dev_tool/commit/135fb0c46c26263a7a01c9ece418be48c44282ac))
+* updating tests to publish results ([10e86c3](https://github.com/BentBr/rusty_dev_tool/commit/10e86c3f8018c9ba83260844fe7469dd992a9d89))
+
 ## [0.5.2](https://github.com/BentBr/rusty_dev_tool/compare/v0.5.1...v0.5.2) (2024-06-11)
 
 
