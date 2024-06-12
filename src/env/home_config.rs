@@ -118,7 +118,7 @@ mod tests {
                     alias = "test"
             "#
         )
-            .unwrap();
+        .unwrap();
 
         let config = HomeConfig::from_file(file_path.to_str().unwrap()).unwrap();
 
@@ -153,7 +153,7 @@ mod tests {
             meta_path = "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
             "#
         )
-            .unwrap();
+        .unwrap();
 
         let config = HomeConfig::from_file(file_path.to_str().unwrap());
 
@@ -179,7 +179,7 @@ mod tests {
             [commands]
             "#
         )
-            .unwrap();
+        .unwrap();
 
         let config = HomeConfig::from_file(file_path.to_str().unwrap());
 
@@ -198,7 +198,10 @@ mod tests {
         let config = get_or_create(false).unwrap();
 
         assert_eq!(config.rdt_name, "rdt");
-        assert_eq!(config.download_path, "https://github.com/BentBr/rusty_dev_tool/releases/download");
+        assert_eq!(
+            config.download_path,
+            "https://github.com/BentBr/rusty_dev_tool/releases/download"
+        );
         assert!(config.commands.is_empty());
     }
 }

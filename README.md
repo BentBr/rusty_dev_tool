@@ -133,8 +133,9 @@ Please use the following commit types:
 
 Furthermore, please make sure to add a proper description to your commit message. PRs must successfully pass tests + clippy checks. Make sure to cover your changes accordingly with tests.
 
-See the Makefile for some helper commands. \
-`make <help>` for details (you have to have make installed).
+See the custom commands in config toml for some helpers. \
+We are using our beloved tool for local building and linting.
+`rdt help` for details (you have to have make installed).
 
 ## Official todos on the roadmap (the next ones)
 - Adding more and basic tests (WIP)
@@ -145,7 +146,7 @@ See the Makefile for some helper commands. \
 - Adding some generic db connection option(s)
 - Adding support for windows... (maybe). Dunno what works atm and what not ;)
 - Adding docker build alias for local Dockerfile (to only build the image)
-- Add an option (config) to only have aliases (custom commands) without compose.yaml config mandatory
+- ~~Add an option (config) to only have aliases (custom commands) without compose.yaml config mandatory~~  ✅
 - ~~Adding basic commands: start, stop, shell~~ ✅
 - ~~Adding update functionality~~ ✅
 - ~~Testing during CI and have those being a blocking factor~~ ✅

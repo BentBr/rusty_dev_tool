@@ -15,11 +15,11 @@ pub trait FromFile {
 
 #[cfg(test)]
 mod tests {
-    use std::env::temp_dir;
     use super::*;
+    use serde::Deserialize;
+    use std::env::temp_dir;
     use std::fs::File;
     use std::io::Write;
-    use serde::Deserialize;
 
     #[derive(Deserialize)]
     struct TestConfig {

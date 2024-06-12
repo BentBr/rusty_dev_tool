@@ -1,7 +1,8 @@
 # This project config must be located in: %project_root%/.rusty_dev_tool/config.toml
 
 # Mandatory field
-local_key="abc"
+local_key = "abc"
+no_docker_compose = false
 
 # Mandatory node
 [commands]

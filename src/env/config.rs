@@ -29,7 +29,7 @@ pub struct Config {
     pub environments: HashMap<String, Environment>,
     pub compose: Compose,
     pub language_framework: LanguageFramework,
-    pub local_key: String
+    pub local_key: String,
 }
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
@@ -247,15 +247,23 @@ mod tests {
             commands: HashMap::new(),
             local_key: String::from("new-project"),
             environments: HashMap::new(),
+            no_docker_compose: false,
         };
         let compose = Compose::DockerCompose;
         let language_framework = LanguageFramework::Rust;
 
-        let config = merge_configs_with_local(home_config, local_config, compose, language_framework);
+        let config =
+            merge_configs_with_local(home_config, local_config, compose, language_framework);
 
         assert_eq!(config.rdt_name, "rdt");
-        assert_eq!(config.download_path, "https://github.com/BentBr/rusty_dev_tool/releases/download");
-        assert_eq!(config.meta_path, "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest");
+        assert_eq!(
+            config.download_path,
+            "https://github.com/BentBr/rusty_dev_tool/releases/download"
+        );
+        assert_eq!(
+            config.meta_path,
+            "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
+        );
         assert!(config.commands.is_empty());
         assert!(config.environments.is_empty());
         assert_eq!(config.compose, Compose::DockerCompose);
@@ -270,8 +278,14 @@ mod tests {
         let config = get_config_without_local(home_config);
 
         assert_eq!(config.rdt_name, "rdt");
-        assert_eq!(config.download_path, "https://github.com/BentBr/rusty_dev_tool/releases/download");
-        assert_eq!(config.meta_path, "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest");
+        assert_eq!(
+            config.download_path,
+            "https://github.com/BentBr/rusty_dev_tool/releases/download"
+        );
+        assert_eq!(
+            config.meta_path,
+            "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
+        );
         assert!(config.commands.is_empty());
         assert!(config.environments.is_empty());
         assert_eq!(config.local_key, "");

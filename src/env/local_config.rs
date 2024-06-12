@@ -10,6 +10,7 @@ pub struct LocalConfig {
     pub commands: HashMap<String, Command>,
     pub local_key: String,
     pub environments: HashMap<String, Environment>,
+    pub no_docker_compose: bool,
 }
 
 #[derive(Deserialize, Debug)]
@@ -54,6 +55,7 @@ mod tests {
             file,
             r#"
             local_key = "test_key"
+            no_docker_compose = false
             [commands]
                 [commands.test_command]
                     command = "echo Hello, World!"
@@ -92,6 +94,7 @@ mod tests {
             file,
             r#"
             local_key = "test_key"
+            no_docker_compose = false
             [commands]
                 [commands.test_command]
                     command = "echo Hello, World!"
@@ -119,6 +122,7 @@ mod tests {
             file,
             r#"
             loacal_key = "test_key"
+            no_docker_compose = false
             [commands]
                 [commands.test_command]
                     command = "echo Hello, World!"

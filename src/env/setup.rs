@@ -17,10 +17,27 @@ pub fn init(restore: bool, update: bool) -> Result<Config, Box<dyn Error>> {
         return Ok(get_config_without_local(home_config));
     }
 
-    let compose = check_docker_compose_setup()?;
-    let language_framework = check_language_framework_setup()?;
-
     let local_config: Option<LocalConfig> = get()?;
+    let compose;
+    let language_framework;
+
+    // This is a bit nasty - but we must get the local config to know if compose will be a thing here
+    // Setting those to default values
+    match &local_config {
+        Some(local_config) => {
+            if local_config.no_docker_compose {
+                compose = Compose::DockerCompose;
+                language_framework = LanguageFramework::Rust;
+            } else {
+                compose = check_docker_compose_setup()?;
+                language_framework = check_language_framework_setup()?;
+            }
+        }
+        None => {
+            compose = check_docker_compose_setup()?;
+            language_framework = check_language_framework_setup()?;
+        }
+    }
 
     Ok(merge_configs(
         home_config,
@@ -49,8 +66,7 @@ fn check_docker_compose_setup() -> Result<Compose, EnvironmentError> {
         .get_local_working_dir()
         .map_err(|_| EnvironmentError::LocalConfigDirNotFound(String::from("project dir")))?;
 
-    let compose_file_path = get_compose_file(&local_dir)
-        .map_err(|_| EnvironmentError::ComposeFileNotFound(String::from("project dir")))?;
+    let compose_file_path = get_compose_file(&local_dir)?;
 
     get_compose_enum(compose_file_path.to_string_lossy().as_ref()).map_err(|_| {
         EnvironmentError::DockerComposeNotInstalled(local_dir.to_string_lossy().to_string())
@@ -62,8 +78,7 @@ fn check_language_framework_setup() -> Result<LanguageFramework, EnvironmentErro
         .get_local_working_dir()
         .map_err(|_| EnvironmentError::LocalConfigDirNotFound(String::from("project dir")))?;
 
-    let compose_file_path = get_compose_file(local_dir.as_path())
-        .map_err(|_| EnvironmentError::ComposeFileNotFound(String::from("project dir")))?;
+    let compose_file_path = get_compose_file(local_dir.as_path())?;
 
     get_language_framework_enum(compose_file_path.to_string_lossy().as_ref())
 }
