@@ -133,8 +133,8 @@ pub fn get_config_without_local(home_config: HomeConfig) -> Config {
         meta_path: home_config.meta_path,
         commands: home_config.commands,
         environments: HashMap::new(),
-        compose: Compose::DockerCompose,
-        language_framework: LanguageFramework::Rust,
+        compose: Compose::DefaultNotUsable,
+        language_framework: LanguageFramework::DefaultNotUsable,
         local_key: String::new(),
     }
 }
@@ -249,7 +249,7 @@ mod tests {
             environments: HashMap::new(),
             no_docker_compose: false,
         };
-        let compose = Compose::DockerCompose;
+        let compose = Compose::Docker;
         let language_framework = LanguageFramework::Rust;
 
         let config =
@@ -266,7 +266,7 @@ mod tests {
         );
         assert!(config.commands.is_empty());
         assert!(config.environments.is_empty());
-        assert_eq!(config.compose, Compose::DockerCompose);
+        assert_eq!(config.compose, Compose::Docker);
         assert_eq!(config.language_framework, LanguageFramework::Rust);
         assert_eq!(config.local_key, "new-project");
     }

@@ -8,6 +8,7 @@ pub enum LanguageFramework {
     Rust,
     Php,
     Node,
+    DefaultNotUsable,
 }
 
 impl fmt::Display for LanguageFramework {
@@ -16,6 +17,7 @@ impl fmt::Display for LanguageFramework {
             Self::Rust => write!(f, "rust",),
             Self::Php => write!(f, "php",),
             Self::Node => write!(f, "node",),
+            Self::DefaultNotUsable => write!(f, "DefaultNotUsable"),
         }
     }
 }

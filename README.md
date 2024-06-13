@@ -135,7 +135,7 @@ Furthermore, please make sure to add a proper description to your commit message
 
 See the custom commands in config toml for some helpers. \
 We are using our beloved tool for local building and linting.
-`rdt help` for details (you have to have make installed).
+`rdt help` for details.
 
 ## Official todos on the roadmap (the next ones)
 - Adding more and basic tests (WIP)

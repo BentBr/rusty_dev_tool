@@ -4,6 +4,7 @@ use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
 use crate::env::language::r#enum::LanguageFramework;
 use crate::error::command::Error as CommandError;
+use crate::error::environment::Error::NoComposeServiceDefined;
 use colored::Colorize;
 
 pub struct Start;
@@ -46,5 +47,8 @@ fn get_main_service_install(config: &Config) -> String {
         LanguageFramework::Php => "php composer install".to_string(),
         LanguageFramework::Node => "node yarn install".to_string(),
         LanguageFramework::Rust => "rust cargo build".to_string(),
+        LanguageFramework::DefaultNotUsable => {
+            NoComposeServiceDefined("DefaultNotUsable".to_string()).to_string()
+        }
     }
 }

@@ -9,6 +9,7 @@ pub enum Error {
     LocalConfigDirNotFound(String),
     NotExistingServiceConfig(String),
     NoMainServiceDefined(),
+    NoComposeServiceDefined(String),
 }
 
 impl StdError for Error {}
@@ -33,6 +34,9 @@ impl fmt::Display for Error {
             }
             Self::NoMainServiceDefined() => {
                 write!(f, "Non of your services in compose.yaml has the environment 'MAIN_SERVICE=node|rust|php defined")
+            }
+            Self::NoComposeServiceDefined(service) => {
+                write!(f, "The service '{service}' cannot be used")
             }
         }
     }
@@ -93,6 +97,15 @@ mod tests {
         assert_eq!(
             format!("{}", error),
             "Non of your services in compose.yaml has the environment 'MAIN_SERVICE=node|rust|php defined"
+        );
+    }
+
+    #[test]
+    fn test_no_compose_service_defined_error() {
+        let error = Error::NoComposeServiceDefined("test_service".to_string());
+        assert_eq!(
+            format!("{}", error),
+            "The service 'test_service' cannot be used"
         );
     }
 }

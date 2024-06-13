@@ -2,7 +2,7 @@
 
 # Mandatory field
 local_key = "rdt"
-# Just using at for aliases
+# Just using it for aliases
 no_docker_compose = true
 
 # Mandatory node
@@ -10,6 +10,7 @@ no_docker_compose = true
 # All commands must have a command and an alias but are optional in general
     [commands.build]
         "alias" = "build"
+        # This is being used on macOS to easy and fast build during coding
         "command" = "cargo build --release && cp target/release/rusty_dev_tool /usr/local/bin/rdt && ls -lah /usr/local/bin/rdt && echo \"\\033[32mBuilt and copied!\\033[39m\""
     [commands.clippy]
         "alias" = "clippy"

@@ -2,6 +2,8 @@
 
 # Mandatory field
 local_key = "abc"
+# If you want to use docker-compose, set this to true. So you can use the custom commands and everything not related
+# to docker-compose will be ignored (or fail gracefully)
 no_docker_compose = false
 
 # Mandatory node

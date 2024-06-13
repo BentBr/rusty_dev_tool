@@ -26,8 +26,8 @@ pub fn init(restore: bool, update: bool) -> Result<Config, Box<dyn Error>> {
     match &local_config {
         Some(local_config) => {
             if local_config.no_docker_compose {
-                compose = Compose::DockerCompose;
-                language_framework = LanguageFramework::Rust;
+                compose = Compose::DefaultNotUsable;
+                language_framework = LanguageFramework::DefaultNotUsable;
             } else {
                 compose = check_docker_compose_setup()?;
                 language_framework = check_language_framework_setup()?;
@@ -56,8 +56,8 @@ pub fn init_custom_commands() -> Result<Config, Box<dyn Error>> {
     Ok(merge_configs(
         home_config,
         local_config,
-        Compose::DockerCompose,
-        LanguageFramework::Rust,
+        Compose::DefaultNotUsable,
+        LanguageFramework::DefaultNotUsable,
     ))
 }
 
@@ -89,11 +89,11 @@ fn get_compose_enum(file_path: &str) -> Result<Compose, EnvironmentError> {
 
     for line in io::BufReader::new(file).lines().map_while(Result::ok) {
         if line.eq("x-mutagen:") {
-            return Ok(Compose::MutagenCompose);
+            return Ok(Compose::Mutagen);
         }
     }
 
-    Ok(Compose::DockerCompose)
+    Ok(Compose::Docker)
 }
 
 fn get_compose_file(local_dir: &Path) -> Result<PathBuf, EnvironmentError> {
