@@ -9,17 +9,19 @@ The crucial idea is to **NO PROJECT SPECIFIC CONFIG DONE LOCALLY**. Everything s
 ## TL;DR
 
 Run the following commands to interact with your docker-compose setup or shell into your remote kubernetes setup. 
-- `rdt start`
-- `rdt stop`
-- `rdt shell`
+- `rdt start` (starting and installing docker-compose setup)
+- `rdt stop` (stopping docker-compose setup)
+- `rdt shell` (shelling into docker-compose setup
+- `rdt chown` (chowning inside the container for debugging)
+- `rdt build` (building docker image locally)
 
-After starting, you can simply run your local web project via a proper domain: `http://my-project.docker` \
+After starting, you can simply run your local web project via a proper domain: `http://my-project.docker` (if setup correctly 😜 )\
 This tool is not only for web projects but can be used for any kind of project which is using docker-compose.
 
 ## Installation and Setup
 ### Installation
 Get the latest release fitting to your platform from [here](https://github.com/BentBr/rusty_dev_tool/releases/latest). \
-After downloading the binary, make it executable and move it to a location in your PATH. \
+After downloading the binary, make it executable and move it to a location in your PATH.
 
 #### Unix
 `cp ~/Downloads/rdt-macos-%bitness%-v%release% /usr/local/bin/rdt` \
@@ -98,6 +100,10 @@ Especially handy if different actions (IDE vs webserver) are running with differ
 As per default it's chowning to the www-data:www-data user and group. \
 It takes an optional argument such as `rdt chown root:root` to chown to the root user and group.
 
+### build
+Building the docker image locally. \
+Runs `docker buildx build .`
+
 ### help
 Find out what commands exist and what you can do with this tool.
 
@@ -145,7 +151,7 @@ We are using our beloved tool for local building and linting.
 - Adding support for completions on terminals
 - Adding some generic db connection option(s)
 - Adding support for windows... (maybe). Dunno what works atm and what not ;)
-- Adding docker build alias for local Dockerfile (to only build the image)
+- ~~Adding docker build alias for local Dockerfile (to only build the image)~~ ✅
 - ~~Add an option (config) to only have aliases (custom commands) without compose.yaml config mandatory~~  ✅
 - ~~Adding basic commands: start, stop, shell~~ ✅
 - ~~Adding update functionality~~ ✅
