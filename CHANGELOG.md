@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.6.0...v0.7.0) (2024-06-13)
+
+
+### Features
+
+* Adding local build command ([8133bb8](https://github.com/BentBr/rusty_dev_tool/commit/8133bb8990015b9a65eefc30de6a7778ec434906))
+
 ## [0.6.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.5.2...v0.6.0) (2024-06-12)
 
 
