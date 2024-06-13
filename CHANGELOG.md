@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/BentBr/rusty_dev_tool/compare/v0.7.0...v0.7.1) (2024-06-13)
+
+
+### Bug Fixes
+
+* adding a check for local dir vs home dir ([7157725](https://github.com/BentBr/rusty_dev_tool/commit/71577255a601f2f7e4afc3d246b8c31a337a1ce8))
+
 ## [0.7.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.6.0...v0.7.0) (2024-06-13)
 
 
