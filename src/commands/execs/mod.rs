@@ -1,3 +1,4 @@
+pub mod build;
 pub mod chown;
 pub mod command_list;
 pub mod self_update;

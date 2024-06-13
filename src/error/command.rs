@@ -1,4 +1,5 @@
 use crate::error::update::Error as UpdateError;
+use crate::error::environment::Error as EnvironmentError;
 use std::error::Error as StdError;
 use std::fmt;
 
@@ -26,6 +27,12 @@ impl fmt::Display for Error {
 
 impl From<std::io::Error> for Error {
     fn from(error: std::io::Error) -> Self {
+        Self::ExecutionFailedGeneric(Box::new(error))
+    }
+}
+
+impl From<EnvironmentError> for Error {
+    fn from(error: EnvironmentError) -> Self {
         Self::ExecutionFailedGeneric(Box::new(error))
     }
 }

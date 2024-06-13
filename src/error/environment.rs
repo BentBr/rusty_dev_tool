@@ -1,5 +1,6 @@
 use std::error::Error as StdError;
 use std::fmt;
+use crate::error;
 
 #[derive(Debug)]
 pub enum Error {
@@ -10,9 +11,23 @@ pub enum Error {
     NotExistingServiceConfig(String),
     NoMainServiceDefined(),
     NoComposeServiceDefined(String),
+    DockerFileNotFound(String),
+    EnvironmentGeneric(Box<dyn StdError>),
 }
 
 impl StdError for Error {}
+
+impl From<std::io::Error> for Error {
+    fn from(error: std::io::Error) -> Self {
+        Self::EnvironmentGeneric(Box::new(error))
+    }
+}
+
+impl From<error::file_system::Error> for Error {
+    fn from(error: error::file_system::Error) -> Self {
+        Self::EnvironmentGeneric(Box::new(error))
+    }
+}
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -37,6 +52,12 @@ impl fmt::Display for Error {
             }
             Self::NoComposeServiceDefined(service) => {
                 write!(f, "The service '{service}' cannot be used")
+            }
+            Self::DockerFileNotFound(dir) => {
+                write!(f, "Dockerfile not found in location '{dir}'")
+            }
+            Self::EnvironmentGeneric(error) => {
+                write!(f, "Error during environment setup or check: '{error}'")
             }
         }
     }
@@ -106,6 +127,25 @@ mod tests {
         assert_eq!(
             format!("{}", error),
             "The service 'test_service' cannot be used"
+        );
+    }
+
+    #[test]
+    fn test_docker_file_not_found_error() {
+        let error = Error::DockerFileNotFound("test_dir_diiiir".to_string());
+        assert_eq!(
+            format!("{}", error),
+            "Dockerfile not found in location 'test_dir_diiiir'"
+        );
+    }
+
+    #[test]
+    fn test_environment_generic_error() {
+        let error =
+            Error::EnvironmentGeneric(Box::new(std::io::Error::new(std::io::ErrorKind::Other, "test_error")));
+        assert_eq!(
+            format!("{}", error),
+            "Error during environment setup or check: 'test_error'"
         );
     }
 }

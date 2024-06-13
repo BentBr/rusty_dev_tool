@@ -1,4 +1,5 @@
 use crate::commands::command::{new_from_config, Command};
+use crate::commands::execs::build::Build;
 use crate::commands::execs::chown::Chown;
 use crate::commands::execs::shell::Shell;
 use crate::commands::execs::start::Start;
@@ -27,6 +28,7 @@ impl Registry {
         registry.register(Box::new(Stop));
         registry.register(Box::new(Shell));
         registry.register(Box::new(Chown));
+        registry.register(Box::new(Build));
 
         registry.register_custom_commands(config.commands.clone());
 
