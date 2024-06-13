@@ -50,6 +50,9 @@ impl PathOptions {
         }
     }
 
+    /**
+    * Get or create the home directory for the tool this is `%home_dir%/.rusty_dev_tool/`
+    */
     pub fn get_or_create_home_dir_default(&self) -> Result<PathBuf, FileSystemError> {
         if let Some(mut home) = home_dir() {
             // Append your tool's configuration directory to the home directory

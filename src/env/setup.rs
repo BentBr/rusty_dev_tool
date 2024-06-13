@@ -6,12 +6,14 @@ use crate::env::local_config::{get, LocalConfig};
 use crate::error::environment::Error as EnvironmentError;
 use std::error::Error;
 use std::fs::File;
-use std::io;
+use std::{env, io};
 use std::io::BufRead;
 use std::path::{Path, PathBuf};
 
 pub fn init(restore: bool, update: bool) -> Result<Config, Box<dyn Error>> {
     let home_config: HomeConfig = get_or_create(restore)?;
+
+    check_home_dir_is_current_dir()?;
 
     if restore || update {
         return Ok(get_config_without_local(home_config));
@@ -127,4 +129,17 @@ fn get_language_framework_enum(file_path: &str) -> Result<LanguageFramework, Env
     }
 
     Err(EnvironmentError::NoMainServiceDefined())
+}
+
+fn check_home_dir_is_current_dir() -> Result<(), EnvironmentError> {
+    let current_dir = env::current_dir()?;
+    let home_dir = dirs::home_dir().ok_or(EnvironmentError::HomeDirNotFound())?; // This should never happen
+
+    if current_dir.as_path().eq(home_dir.as_path()) {
+        Err(EnvironmentError::HomeDirIsCurrentDir(
+            home_dir.to_string_lossy().to_string(),
+        ))
+    } else {
+        Ok(())
+    }
 }

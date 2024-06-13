@@ -13,6 +13,8 @@ pub enum Error {
     NoComposeServiceDefined(String),
     DockerFileNotFound(String),
     EnvironmentGeneric(Box<dyn StdError>),
+    HomeDirIsCurrentDir(String),
+    HomeDirNotFound()
 }
 
 impl StdError for Error {}
@@ -58,6 +60,12 @@ impl fmt::Display for Error {
             }
             Self::EnvironmentGeneric(error) => {
                 write!(f, "Error during environment setup or check: '{error}'")
+            }
+            Self::HomeDirIsCurrentDir(dir) => {
+                write!(f, "Home directory is the current directory '{dir}'. RDT must not be used here as it confuses the configurations in .rusty_dev_tool/config.toml")
+            }
+            Self::HomeDirNotFound() => {
+                write!(f, "Home directory not found!")
             }
         }
     }
@@ -146,6 +154,24 @@ mod tests {
         assert_eq!(
             format!("{}", error),
             "Error during environment setup or check: 'test_error'"
+        );
+    }
+
+    #[test]
+    fn test_home_dir_is_current_dir_error() {
+        let error = Error::HomeDirIsCurrentDir("%home%/test_dir".to_string());
+        assert_eq!(
+            format!("{}", error),
+            "Home directory is the current directory '%home%/test_dir'. RDT must not be used here as it confuses the configurations in .rusty_dev_tool/config.toml"
+        );
+    }
+
+    #[test]
+    fn test_home_dir_not_found_error() {
+        let error = Error::HomeDirNotFound();
+        assert_eq!(
+            format!("{}", error),
+            "Home directory not found!"
         );
     }
 }
