@@ -159,6 +159,10 @@ Then, you can run the tests with coverage: `rdt test-coverage`
 - Adding support for completions on terminals
 - Adding some generic db connection option(s)
 - Adding support for windows... (maybe). Dunno what works atm and what not ;)
+- Update the logic and fields for custom commands:
+  - command alias in toml node
+  - command as is
+  - description additional (refactor with the registry)
 - ~~Adding docker build alias for local Dockerfile (to only build the image)~~ ✅
 - ~~Add an option (config) to only have aliases (custom commands) without compose.yaml config mandatory~~  ✅
 - ~~Adding basic commands: start, stop, shell~~ ✅

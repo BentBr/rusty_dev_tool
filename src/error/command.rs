@@ -6,6 +6,7 @@ use std::fmt;
 #[derive(Debug)]
 pub enum Error {
     CommandNotFound(String),
+    CommandFailed(String),
     ExecutionFailedGeneric(Box<dyn StdError>),
 }
 
@@ -21,6 +22,7 @@ impl fmt::Display for Error {
             Self::ExecutionFailedGeneric(error) => {
                 write!(f, "Command execution failed: '{error}'")
             }
+            Self::CommandFailed(error) => write!(f, "Command failed: '{error}'"),
         }
     }
 }
@@ -66,5 +68,11 @@ mod tests {
             format!("{}", error),
             "Command execution failed: 'test_error'"
         );
+    }
+
+    #[test]
+    fn test_command_failed_error() {
+        let error = Error::CommandFailed("test_error".to_string());
+        assert_eq!(format!("{}", error), "Command failed: 'test_error'");
     }
 }

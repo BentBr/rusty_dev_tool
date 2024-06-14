@@ -4,6 +4,7 @@ use crate::commands::execs::chown::Chown;
 use crate::commands::execs::shell::Shell;
 use crate::commands::execs::start::Start;
 use crate::commands::execs::stop::Stop;
+use crate::commands::execs::db::Db;
 use crate::env::config::Command as CommandConfig;
 use crate::env::config::Config;
 use crate::error::command::Error as CommandError;
@@ -29,6 +30,7 @@ impl Registry {
         registry.register(Box::new(Shell));
         registry.register(Box::new(Chown));
         registry.register(Box::new(Build));
+        registry.register(Box::new(Db));
 
         registry.register_custom_commands(config.commands.clone());
 
