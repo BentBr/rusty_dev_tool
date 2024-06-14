@@ -18,6 +18,9 @@ no_docker_compose = true
     [commands.test]
         "alias" = "test"
         "command" = "cargo test"
+    [commands.test-coverage]
+        "alias" = "test-coverage"
+        "command" = "RUSTFLAGS=\"-C instrument-coverage\" LLVM_PROFILE_FILE=\"rusty_dev_tool-%p-%m.profraw\" cargo clean && RUSTFLAGS=\"-C instrument-coverage\" LLVM_PROFILE_FILE=\"rusty_dev_tool-%p-%m.profraw\" cargo test && grcov . --binary-path ./target/debug/ -s . -t html --ignore-not-existing --excl-start \"#\\[cfg\\(test\\)\\]\" --excl-line \"#\\[derive\\(\" --ignore \"/*\" -o ./target/debug/coverage/ && rm rusty_dev_tool*.profraw"
 
 # Mandatory node
 [environments]

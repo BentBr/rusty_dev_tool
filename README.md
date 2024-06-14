@@ -143,6 +143,14 @@ See the custom commands in config toml for some helpers. \
 We are using our beloved tool for local building and linting.
 `rdt help` for details.
 
+### Test coverage
+Install grcov::
+- `cargo install grcov` Install the coverage report generator
+- `rustup component add llvm-tools-preview` component to check usages during test
+- `rustup install nightly && rustup default nightly` nightly build for instrument-coverage usage
+
+Then, you can run the tests with coverage: `rdt test-coverage`
+
 ## Official todos on the roadmap (the next ones)
 - Adding more and basic tests (WIP)
 - Adding support for environments (shelling into remote k8s setups)
