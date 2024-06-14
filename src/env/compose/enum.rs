@@ -17,3 +17,15 @@ impl fmt::Display for Compose {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_display() {
+        assert_eq!(format!("{}", Compose::Docker), "docker-compose");
+        assert_eq!(format!("{}", Compose::Mutagen), "mutagen-compose");
+        assert_eq!(format!("{}", Compose::DefaultNotUsable), "DefaultNotUsable");
+    }
+}

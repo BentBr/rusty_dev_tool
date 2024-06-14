@@ -293,4 +293,56 @@ mod tests {
         assert!(config.environments.is_empty());
         assert_eq!(config.local_key, "");
     }
+
+    #[test]
+    fn test_merge_configs() {
+        let home_config = HomeConfig::default();
+        let local_config = LocalConfig {
+            commands: HashMap::new(),
+            local_key: String::from("new-project"),
+            environments: HashMap::new(),
+            no_docker_compose: false,
+        };
+        let compose = Compose::Docker;
+        let language_framework = LanguageFramework::Rust;
+
+        let config = merge_configs(home_config, Some(local_config), compose, language_framework);
+
+        assert_eq!(config.rdt_name, "rdt");
+        assert_eq!(
+            config.download_path,
+            "https://github.com/BentBr/rusty_dev_tool/releases/download"
+        );
+        assert_eq!(
+            config.meta_path,
+            "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
+        );
+        assert!(
+            config.commands.is_empty()
+        );
+        assert_eq!(config.local_key, "new-project");
+    }
+
+    #[test]
+    fn test_merge_configs_none_local() {
+        let home_config = HomeConfig::default();
+        let compose = Compose::Docker;
+        let language_framework = LanguageFramework::Rust;
+
+        let config = merge_configs(home_config, None, compose, language_framework);
+
+        assert_eq!(config.rdt_name, "rdt");
+        assert_eq!(
+            config.download_path,
+            "https://github.com/BentBr/rusty_dev_tool/releases/download"
+        );
+        assert_eq!(
+            config.meta_path,
+            "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
+        );
+        assert!(
+            config.commands.is_empty()
+        );
+        assert_eq!(config.local_key, "");
+    }
 }

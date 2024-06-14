@@ -143,3 +143,59 @@ fn check_home_dir_is_current_dir() -> Result<(), EnvironmentError> {
         Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::fs::File;
+    use std::io::Write;
+    use env::temp_dir;
+    use std::fs;
+
+    #[test]
+    fn test_get_compose_file() {
+        let dir = temp_dir().join("test1_sub");
+        fs::create_dir_all(&dir).unwrap();
+        let file_path = dir.clone().as_path().join("docker-compose.yaml");
+        File::create(&file_path).unwrap();
+
+        let new_file_path = dir.clone().as_path().join("docker-compose.yaml");
+
+        assert_eq!(get_compose_file(dir.as_path()).unwrap(), new_file_path);
+    }
+
+    #[test]
+    fn test_get_compose_enum() {
+        let dir = temp_dir();
+        let file_path = dir.as_path().join("compose.yaml");
+        let mut file = File::create(&file_path).unwrap();
+        writeln!(file, "some stuff\nx-mutagen:").unwrap();
+
+        assert_eq!(get_compose_enum(file_path.to_str().unwrap()).unwrap(), Compose::Mutagen);
+
+        let mut file = File::create(&file_path).unwrap();
+        writeln!(file, "other content").unwrap();
+
+        assert_eq!(get_compose_enum(file_path.to_str().unwrap()).unwrap(), Compose::Docker);
+    }
+
+    #[test]
+    fn test_get_language_framework_enum() {
+        let dir = temp_dir();
+        let file_path = dir.as_path().join("compose.yml");
+        let mut file = File::create(&file_path).unwrap();
+        writeln!(file, "some stuff\nMAIN_SERVICE=rust").unwrap();
+
+        assert_eq!(get_language_framework_enum(file_path.to_str().unwrap()).unwrap(), LanguageFramework::Rust);
+    }
+
+    #[test]
+    fn test_get_language_framework_enum_fail() {
+        let dir = temp_dir();
+        let file_path = dir.as_path().join("docker-compose.yml");
+        let mut file = File::create(&file_path).unwrap();
+        writeln!(file, "more stuff\nNo_service=none").unwrap();
+
+        assert!(get_language_framework_enum(file_path.to_str().unwrap()).is_err());
+    }
+}

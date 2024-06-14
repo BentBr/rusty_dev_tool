@@ -48,3 +48,31 @@ fn get_main_service_via_regex(string: &str) -> Option<&str> {
 
     None
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_display() {
+        assert_eq!(format!("{}", LanguageFramework::Rust), "rust");
+        assert_eq!(format!("{}", LanguageFramework::Php), "php");
+        assert_eq!(format!("{}", LanguageFramework::Node), "node");
+        assert_eq!(format!("{}", LanguageFramework::DefaultNotUsable), "DefaultNotUsable");
+    }
+
+    #[test]
+    fn test_from_main_service() {
+        assert_eq!(LanguageFramework::from_main_service("MAIN_SERVICE=rust").unwrap(), LanguageFramework::Rust);
+        assert_eq!(LanguageFramework::from_main_service("MAIN_SERVICE=php").unwrap(), LanguageFramework::Php);
+        assert_eq!(LanguageFramework::from_main_service("MAIN_SERVICE=node").unwrap(), LanguageFramework::Node);
+        assert!(LanguageFramework::from_main_service("MAIN_SERVICE=unknown").is_err());
+    }
+
+    #[test]
+    fn test_get_main_service_via_regex() {
+        assert_eq!(get_main_service_via_regex("and some more MAIN_SERVICE=rust in that string"), Some("rust"));
+        assert_eq!(get_main_service_via_regex("MAIN_SERVICE=php"), Some("php"));
+        assert!(get_main_service_via_regex("none").is_none());
+    }
+}
