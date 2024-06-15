@@ -10,7 +10,6 @@ use reqwest::header::{HeaderMap, HeaderValue, USER_AGENT};
 use semver::Version;
 use serde::Deserialize;
 use std::io::copy;
-use std::path::PathBuf;
 use std::{env, fs};
 
 pub struct SelfUpdate;
@@ -108,22 +107,20 @@ fn fetch_update(config: &Config, tag_name: &str) -> Result<(), UpdateError> {
 
     // Not found string or empty file are less than 100 bytes
     if response.status().is_success() && content_length > 100 {
+        let bin_path = env::temp_dir().join("rdt-update");
         let mut dest = {
-            let bin_path = get_current_bin_path()?;
-            println!("Downloading update to {}", bin_path.to_string_lossy());
+            println!("Downloading update to {}", &bin_path.to_string_lossy());
 
-            fs::File::create(bin_path)?
+            fs::File::create(&bin_path)?
         };
 
         copy(&mut response, &mut dest)?;
+
+        self_replace::self_replace(&bin_path)?;
+        fs::remove_file(&bin_path)?;
     } else {
         return Err(UpdateError::UpdateDownload(download_url));
     }
 
     Ok(())
-}
-
-fn get_current_bin_path() -> Result<PathBuf, std::io::Error> {
-    let bin_path = env::current_exe()?;
-    Ok(bin_path)
 }
