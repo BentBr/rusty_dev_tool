@@ -11,7 +11,8 @@ The crucial idea is to **NO PROJECT SPECIFIC CONFIG DONE LOCALLY**. Everything s
 Run the following commands to interact with your docker-compose setup or shell into your remote kubernetes setup. 
 - `rdt start` (starting and installing docker-compose setup)
 - `rdt stop` (stopping docker-compose setup)
-- `rdt shell` (shelling into docker-compose setup
+- `rdt shell` (shelling into docker-compose setup)
+- `rdt db` (getting a local dump into your container)
 - `rdt chown` (chowning inside the container for debugging)
 - `rdt build` (building docker image locally)
 
@@ -93,6 +94,13 @@ Mostly runs `docker-compose exec php|rust|node bash`
 An optional argument can be passed to shell into a different container. \
 `rdt shell node`
 
+#### db
+Bringing in a local dump into the container's database. \
+`rdt db` fetches dump.sql from the project's root folder. \
+`rdt db my-dump/file.sql.gz` fetches the specified file relative to the current working directory.
+
+It automatically checks if the dump is zipped (.gz) and unzips it before importing.
+
 ### chown
 Chowning the project folder to the user and group of the container. \
 Especially handy if different actions (IDE vs webserver) are running with different users. 
@@ -157,12 +165,12 @@ Then, you can run the tests with coverage: `rdt test-coverage`
 - Removing the command list hashmap (as it doubles the registry). Add command descriptions to Executors
 - Sorting of all commands for help menu
 - Adding support for completions on terminals
-- Adding some generic db connection option(s)
 - Adding support for windows... (maybe). Dunno what works atm and what not ;)
 - Update the logic and fields for custom commands:
   - command alias in toml node
   - command as is
   - description additional (refactor with the registry)
+- ~~Adding some generic db connection option(s)~~ ✅
 - ~~Adding docker build alias for local Dockerfile (to only build the image)~~ ✅
 - ~~Add an option (config) to only have aliases (custom commands) without compose.yaml config mandatory~~  ✅
 - ~~Adding basic commands: start, stop, shell~~ ✅
