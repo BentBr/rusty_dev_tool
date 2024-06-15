@@ -13,7 +13,7 @@ pub struct LocalConfig {
     pub no_docker_compose: bool,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 #[allow(dead_code)]
 pub struct Environment {
     pub name: String,

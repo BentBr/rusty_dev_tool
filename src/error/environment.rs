@@ -1,4 +1,5 @@
 use crate::error;
+use std::env::VarError;
 use std::error::Error as StdError;
 use std::fmt;
 
@@ -15,6 +16,7 @@ pub enum Error {
     EnvironmentGeneric(Box<dyn StdError>),
     HomeDirIsCurrentDir(String),
     HomeDirNotFound(),
+    ShellNotSupported(String),
 }
 
 impl StdError for Error {}
@@ -27,6 +29,12 @@ impl From<std::io::Error> for Error {
 
 impl From<error::file_system::Error> for Error {
     fn from(error: error::file_system::Error) -> Self {
+        Self::EnvironmentGeneric(Box::new(error))
+    }
+}
+
+impl From<VarError> for Error {
+    fn from(error: VarError) -> Self {
         Self::EnvironmentGeneric(Box::new(error))
     }
 }
@@ -66,6 +74,9 @@ impl fmt::Display for Error {
             }
             Self::HomeDirNotFound() => {
                 write!(f, "Home directory not found!")
+            }
+            Self::ShellNotSupported(shell) => {
+                write!(f, "Shell '{shell}' not supported")
             }
         }
     }
@@ -172,5 +183,11 @@ mod tests {
     fn test_home_dir_not_found_error() {
         let error = Error::HomeDirNotFound();
         assert_eq!(format!("{}", error), "Home directory not found!");
+    }
+
+    #[test]
+    fn test_shell_not_supported_error() {
+        let error = Error::ShellNotSupported("test_shell".to_string());
+        assert_eq!(format!("{}", error), "Shell 'test_shell' not supported");
     }
 }

@@ -1,9 +1,9 @@
 use crate::commands::custom_command::CustomCommand;
 use crate::env::config::Command as ConfigCommand;
 use crate::env::config::Config;
+use crate::env::resolve::shell as resolve_shell;
 use crate::error::command::Error as CommandError;
 use std::process::{Command as SysCommand, Stdio};
-use crate::env::resolve::shell as resolve_shell;
 
 pub trait Command {
     fn execute(&self, config: &Config, argument: Option<&String>) -> Result<(), CommandError>;

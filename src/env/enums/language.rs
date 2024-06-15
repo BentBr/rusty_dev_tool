@@ -4,15 +4,15 @@ use regex::Regex;
 use std::fmt;
 use std::fmt::Formatter;
 
-#[derive(Debug, PartialEq, Eq)]
-pub enum LanguageFramework {
+#[derive(Debug, PartialEq, Eq, Clone)]
+pub enum Enum {
     Rust,
     Php,
     Node,
     DefaultNotUsable,
 }
 
-impl fmt::Display for LanguageFramework {
+impl fmt::Display for Enum {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Self::Rust => write!(f, "rust",),
@@ -23,7 +23,7 @@ impl fmt::Display for LanguageFramework {
     }
 }
 
-impl LanguageFramework {
+impl Enum {
     pub fn from_main_service(service: &str) -> Result<Self, EnvironmentError> {
         let service_string = get_main_service_via_regex(service);
 
@@ -50,11 +50,11 @@ mod tests {
 
     #[test]
     fn test_display() {
-        assert_eq!(format!("{}", LanguageFramework::Rust), "rust");
-        assert_eq!(format!("{}", LanguageFramework::Php), "php");
-        assert_eq!(format!("{}", LanguageFramework::Node), "node");
+        assert_eq!(format!("{}", Enum::Rust), "rust");
+        assert_eq!(format!("{}", Enum::Php), "php");
+        assert_eq!(format!("{}", Enum::Node), "node");
         assert_eq!(
-            format!("{}", LanguageFramework::DefaultNotUsable),
+            format!("{}", Enum::DefaultNotUsable),
             "DefaultNotUsable"
         );
     }
@@ -62,18 +62,18 @@ mod tests {
     #[test]
     fn test_from_main_service() {
         assert_eq!(
-            LanguageFramework::from_main_service("MAIN_SERVICE=rust").unwrap(),
-            LanguageFramework::Rust
+            Enum::from_main_service("MAIN_SERVICE=rust").unwrap(),
+            Enum::Rust
         );
         assert_eq!(
-            LanguageFramework::from_main_service("MAIN_SERVICE=php").unwrap(),
-            LanguageFramework::Php
+            Enum::from_main_service("MAIN_SERVICE=php").unwrap(),
+            Enum::Php
         );
         assert_eq!(
-            LanguageFramework::from_main_service("MAIN_SERVICE=node").unwrap(),
-            LanguageFramework::Node
+            Enum::from_main_service("MAIN_SERVICE=node").unwrap(),
+            Enum::Node
         );
-        assert!(LanguageFramework::from_main_service("MAIN_SERVICE=unknown").is_err());
+        assert!(Enum::from_main_service("MAIN_SERVICE=unknown").is_err());
     }
 
     #[test]

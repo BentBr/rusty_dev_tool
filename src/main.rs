@@ -4,9 +4,10 @@ mod env;
 mod error;
 
 use crate::clap_args::{
-    get_clap_matches, CONFIG_RESTORE, GENERATE_COMPLETIONS, OPTIONAL_ARGUMENT, SELF_UPDATE,
+    get_clap, CONFIG_RESTORE, GENERATE_COMPLETIONS, OPTIONAL_ARGUMENT, SELF_UPDATE,
 };
 use crate::commands::command::Command;
+use crate::commands::execs::generate_completions::GenerateCompletions;
 use crate::commands::execs::self_update::SelfUpdate;
 use crate::commands::registry::Registry;
 use crate::env::setup::{init, init_custom_commands};
@@ -21,14 +22,14 @@ fn main() {
 
     let config = init_custom_commands();
 
-    let mut clap_command: ClapCommand = get_clap_matches(&config);
+    let mut clap_command: ClapCommand = get_clap(&config);
     let matches: ArgMatches = clap_command.clone().get_matches();
 
     let restore: bool = matches.get_flag(CONFIG_RESTORE);
     let update: bool = matches.get_flag(SELF_UPDATE);
     let generate_completions: bool = matches.get_flag(GENERATE_COMPLETIONS);
 
-    let config = match init(restore, update) {
+    let config = match init(restore, update, generate_completions) {
         Ok(config) => config,
         Err(error) => {
             eprintln!("{} {}", "Error initializing environment:".red(), error);
@@ -41,6 +42,16 @@ fn main() {
             Ok(()) => exit(EXIT_SUCCESS),
             Err(err) => {
                 eprintln!("{} {}", "Error updating:".red(), err);
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
+
+    if generate_completions {
+        match GenerateCompletions.execute(&config, None) {
+            Ok(()) => exit(EXIT_SUCCESS),
+            Err(err) => {
+                eprintln!("{} {}", "Error generating completions:".red(), err);
                 exit(EXIT_FAILURE);
             }
         }

@@ -1,6 +1,6 @@
-use std::env;
-use crate::env::enums::shell::CompletionShell;
+use crate::env::enums::shell::Enum as CompletionShell;
 use crate::error::environment::Error as EnvironmentError;
+use std::env;
 
 pub fn shell() -> Result<CompletionShell, EnvironmentError> {
     let shell = env::var("SHELL")?;
@@ -9,7 +9,7 @@ pub fn shell() -> Result<CompletionShell, EnvironmentError> {
         "/bin/bash" => Ok(CompletionShell::Bash),
         "/bin/zsh" => Ok(CompletionShell::Zsh),
         "/usr/bin/fish" => Ok(CompletionShell::Fish),
-        "/usr/bin/pwsh" => Ok(CompletionShell::Powershell),
+        "/usr/bin/pwsh" => Ok(CompletionShell::PowerShell),
         "/usr/bin/elvish" => Ok(CompletionShell::Elvish),
         _ => Err(EnvironmentError::ShellNotSupported(shell)),
     }

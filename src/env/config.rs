@@ -1,6 +1,6 @@
-use crate::env::compose::r#enum::Compose;
+use crate::env::enums::compose::Compose;
+use crate::env::enums::language::Enum as LanguageFramework;
 use crate::env::home_config::HomeConfig;
-use crate::env::language::r#enum::LanguageFramework;
 use crate::env::local_config::{Environment, LocalConfig};
 use crate::error::file_system::Error as FileSystemError;
 use dirs::home_dir;
@@ -19,7 +19,7 @@ lazy_static! {
 /**
 * Config struct that is the result of merged home and local project config
 */
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct Config {
     pub rdt_name: String,

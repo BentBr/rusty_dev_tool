@@ -1,17 +1,15 @@
 use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
 use clap::{Arg, ArgAction, Command as ClapCommand};
-use clap_complete::{generate, Shell};
 use std::collections::HashMap;
 use std::error::Error;
-use std::io;
 
 pub const CONFIG_RESTORE: &str = "config-restore";
 pub const SELF_UPDATE: &str = "self-update";
 pub const GENERATE_COMPLETIONS: &str = "generate-completions";
 pub const OPTIONAL_ARGUMENT: &str = "optional-argument";
 
-pub fn get_clap_matches(config: &Result<Config, Box<dyn Error>>) -> ClapCommand {
+pub fn get_clap(config: &Result<Config, Box<dyn Error>>) -> ClapCommand {
     let version = env!("CARGO_PKG_VERSION");
 
     let app = ClapCommand::new("Rusty Dev Tool")
@@ -21,9 +19,8 @@ pub fn get_clap_matches(config: &Result<Config, Box<dyn Error>>) -> ClapCommand 
         .arg(
             Arg::new(GENERATE_COMPLETIONS)
                 .long(GENERATE_COMPLETIONS)
-                .value_name("SHELL")
                 .help("Generate shell completions")
-                .action(ArgAction::SetFalse),
+                .action(ArgAction::SetTrue),
         )
         .arg(
             Arg::new(CONFIG_RESTORE)
@@ -37,9 +34,6 @@ pub fn get_clap_matches(config: &Result<Config, Box<dyn Error>>) -> ClapCommand 
                 .help("Updates this very tool to the latest version")
                 .action(ArgAction::SetTrue),
         );
-    // Todo: fix the shell completion
-    //.possible_values(["bash", "zsh", "fish", "powershell", "elvish"])
-    //.takes_value(true))
 
     register_subcommands(app, config)
 }
@@ -98,35 +92,3 @@ fn register_subcommands(
 
     app
 }
-
-#[allow(dead_code)]
-fn generate_completions(shell: Shell) {
-    let mut cmd = ClapCommand::new("abc")
-        .version("1.0")
-        .author("Your Name <your.email@example.com>")
-        .about("Command-line application")
-        .subcommand(ClapCommand::new("start").about("Starts the application"))
-        .subcommand(ClapCommand::new("stop").about("Stops the application"));
-    //todo: add more...
-
-    //todo: add global custom commands
-
-    generate(shell, &mut cmd, "abc", &mut io::stdout());
-}
-
-// todo: add the generation script for auto-completion
-//
-// fn generate_completions(shell: &Shell) {
-//     let mut cmd = ClapCommand::new("abc")
-//         .version("1.0")
-//         .author("Your Name <your.email@example.com>")
-//         .about("Command-line application");
-//
-//     let registry = CommandRegistry::new();
-//     for (name, _command) in registry.iter() {
-//         cmd = cmd.subcommand(ClapCommand::new(name.as_str())
-//             .about(&format!("Runs the {} command", name)));
-//     }
-//
-//     generate(shell.clone(), &mut cmd, "abc", &mut io::stdout());
-// }

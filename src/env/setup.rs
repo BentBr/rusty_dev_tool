@@ -1,7 +1,7 @@
-use crate::env::compose::r#enum::Compose;
 use crate::env::config::{get_config_without_local, merge_configs, Config, PathOptions};
+use crate::env::enums::compose::Compose;
+use crate::env::enums::language::Enum as LanguageFramework;
 use crate::env::home_config::{get_or_create, HomeConfig};
-use crate::env::language::r#enum::LanguageFramework;
 use crate::env::local_config::{get, LocalConfig};
 use crate::error::environment::Error as EnvironmentError;
 use regex::Regex;
@@ -11,12 +11,12 @@ use std::io::BufRead;
 use std::path::{Path, PathBuf};
 use std::{env, io};
 
-pub fn init(restore: bool, update: bool) -> Result<Config, Box<dyn Error>> {
+pub fn init(restore: bool, update: bool, completions: bool) -> Result<Config, Box<dyn Error>> {
     let home_config: HomeConfig = get_or_create(restore)?;
 
     check_home_dir_is_current_dir()?;
 
-    if restore || update {
+    if restore || update || completions {
         return Ok(get_config_without_local(home_config));
     }
 

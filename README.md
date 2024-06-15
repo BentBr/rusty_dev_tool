@@ -123,11 +123,20 @@ Updates the tool to the latest version.
 Same as the help subcommand.
 
 ### --generate-completions
-NOT YET IN
-Generates shell completions for the tool. Available shells are: bash, zsh, fish, powershell... TBD
+Generates an auto-completion script for RDT in your current terminal. Available shells are: bash, zsh, fish, PowerShell... \
+All official commands are supported. Additionally, those from the [current config](examples/configs/home_config.toml) will be taken as well (If you are in a project dir with local commands those will be taken as well).
+
+It takes into account if you changed the name of your binary and reads from the home config file the `rdt_name`.
+
+#### Usage
+`rdt --generate-completions bash > ~/.zsh/auto_completion.sh` \
+Then, you have to source this script as it is being loaded on shell start: `source ~/.zsh/auto_completion.sh` \
+Add this command to your shell's profile file to have it loaded on every shell start (like: `~/.zprofile, ~/.bash_profile, ~/.zshrc, etc.`.
+
+Don't forget to adapt to your current shell which you can find out via `echo $0` (Unix).
 
 ## OS
-Currently, Linux and macOS for amd64 / arm64 are supported.
+Currently, Linux and macOS for amd64 / arm64 are supported (Unix in general).
 Windows is not supported at the moment. The build is just included for future use.
 
 ## Examples
@@ -163,15 +172,17 @@ Then, you can run the tests with coverage: `rdt test-coverage`
 - Adding more and basic tests (WIP)
 - Adding support for environments (shelling into remote k8s setups)
 - Removing the command list hashmap (as it doubles the registry). Add command descriptions to Executors
-- Adding support for completions on terminals
-- Adding support for windows... (maybe). Dunno what works atm and what not ;)
+- Adding support for windows... (maybe). Dunno what works atm and what not ;) \
+  Known things that will break:
   - Colours in terminal
-  - fetching the correct console
-- Adding a check to run via current terminal and not always sh(sh, bash, zsh, fish, powershell, cmd)
+  - fetching the correct console (so no exec works)
+  - auto-complete generation
 - Update the logic and fields for custom commands:
   - command alias in toml node
   - command as is
   - description additional (refactor with the registry)
+- ~~Adding a check to run via current terminal and not always sh(sh, bash, zsh, fish, PowerShell, cmd)~~ ✅
+- ~~Adding support for auto completions on terminals~~ ✅ 
 - ~~Sorting of all commands for help menu~~ ✅
 - ~~Adding some generic db connection option(s)~~ ✅
 - ~~Adding docker build alias for local Dockerfile (to only build the image)~~ ✅
