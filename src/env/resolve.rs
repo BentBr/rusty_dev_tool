@@ -10,11 +10,11 @@ pub fn shell() -> Result<CompletionShell, EnvironmentError> {
     let shell = env::var("SHELL")?;
 
     match shell.as_str() {
-        "/bin/bash" => Ok(CompletionShell::Bash),
-        "/bin/zsh" => Ok(CompletionShell::Zsh),
-        "/usr/bin/fish" => Ok(CompletionShell::Fish),
-        "/usr/bin/pwsh" => Ok(CompletionShell::PowerShell),
-        "/usr/bin/elvish" => Ok(CompletionShell::Elvish),
+        "/usr/bin/bash" | "/bin/bash" => Ok(CompletionShell::Bash),
+        "/usr/bin/zsh" | "/bin/zsh" => Ok(CompletionShell::Zsh),
+        "/usr/bin/fish" | "/bin/fish" => Ok(CompletionShell::Fish),
+        "/usr/bin/pwsh" | "/bin/pwsh" => Ok(CompletionShell::PowerShell),
+        "/usr/bin/elvish" | "/bin/elvish" => Ok(CompletionShell::Elvish),
         _ => Err(EnvironmentError::ShellNotSupported(shell)),
     }
 }
