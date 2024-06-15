@@ -45,7 +45,7 @@ impl Registry {
         for (_, command) in commands {
             let new_command = new_from_config(command.clone());
 
-            // If the command is already registered, it's overriding the previous one!
+            // If the command is already registered, it's overriding the previous one (purposefully)!
             self.commands.insert(command.alias, new_command);
         }
     }
@@ -55,5 +55,43 @@ impl Registry {
             .get(command_name)
             .map(|command| &**command)
             .ok_or(CommandError::CommandNotFound(command_name.to_string()))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::env::config::Config;
+    use std::collections::HashMap;
+
+    #[test]
+    fn test_registry() {
+        let mut commands = HashMap::new();
+        commands.insert(
+            "custom".to_string(),
+            CommandConfig {
+                alias: "custom".to_string(),
+                command: "echo custom".to_string(),
+            },
+        );
+
+        let mut config = Config::default();
+        config.commands = commands;
+
+        let registry = Registry::new(&config);
+
+        // Test predefined commands
+        assert!(registry.get("start").is_ok());
+        assert!(registry.get("stop").is_ok());
+        assert!(registry.get("shell").is_ok());
+        assert!(registry.get("chown").is_ok());
+        assert!(registry.get("build").is_ok());
+        assert!(registry.get("db").is_ok());
+
+        // Test custom command
+        assert!(registry.get("custom").is_ok());
+
+        // Test non-existent command
+        assert!(registry.get("non_existent").is_err());
     }
 }

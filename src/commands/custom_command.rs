@@ -17,3 +17,21 @@ impl Command for CustomCommand {
         self.config_command.alias.clone()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::commands::command::Command;
+    use crate::env::config::Command as ConfigCommand;
+
+    #[test]
+    fn test_custom_command_name() {
+        let config_command = ConfigCommand {
+            alias: "test".to_string(),
+            command: "echo test".to_string(),
+        };
+        let custom_command = CustomCommand { config_command };
+
+        assert_eq!(custom_command.name(), "test");
+    }
+}

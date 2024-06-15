@@ -1,5 +1,6 @@
 use crate::env::enums::compose::Compose;
 use crate::env::enums::language::Enum as LanguageFramework;
+use crate::env::enums::language::Enum::DefaultNotUsable;
 use crate::env::home_config::HomeConfig;
 use crate::env::local_config::{Environment, LocalConfig};
 use crate::error::file_system::Error as FileSystemError;
@@ -40,6 +41,23 @@ pub struct Command {
 
 pub struct PathOptions {
     default_path: String,
+}
+
+impl Config {
+    // Used for testing
+    #[allow(dead_code)]
+    pub fn default() -> Self {
+        Self {
+            commands: HashMap::new(),
+            rdt_name: String::new(),
+            download_path: String::new(),
+            meta_path: String::new(),
+            environments: HashMap::new(),
+            compose: Compose::DefaultNotUsable,
+            language_framework: DefaultNotUsable,
+            local_key: String::new(),
+        }
+    }
 }
 
 impl PathOptions {
@@ -339,6 +357,23 @@ mod tests {
             "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
         );
         assert!(config.commands.is_empty());
+        assert_eq!(config.local_key, "");
+    }
+
+    #[test]
+    fn test_config_default() {
+        let config = Config::default();
+
+        assert!(config.commands.is_empty());
+        assert_eq!(config.rdt_name, "");
+        assert_eq!(config.download_path, "");
+        assert_eq!(config.meta_path, "");
+        assert!(config.environments.is_empty());
+        assert_eq!(config.compose, Compose::DefaultNotUsable);
+        assert_eq!(
+            config.language_framework,
+            LanguageFramework::DefaultNotUsable
+        );
         assert_eq!(config.local_key, "");
     }
 }
