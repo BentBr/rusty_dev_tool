@@ -94,7 +94,7 @@ Mostly runs `docker-compose exec php|rust|node bash`
 An optional argument can be passed to shell into a different container. \
 `rdt shell node`
 
-#### db
+### db
 Bringing in a local dump into the container's database. \
 `rdt db` fetches dump.sql from the project's root folder. \
 `rdt db my-dump/file.sql.gz` fetches the specified file relative to the current working directory.
