@@ -165,6 +165,9 @@ Then, you can run the tests with coverage: `rdt test-coverage`
 - Removing the command list hashmap (as it doubles the registry). Add command descriptions to Executors
 - Adding support for completions on terminals
 - Adding support for windows... (maybe). Dunno what works atm and what not ;)
+  - Colours in terminal
+  - fetching the correct console
+- Adding a check to run via current terminal and not always sh(sh, bash, zsh, fish, powershell, cmd)
 - Update the logic and fields for custom commands:
   - command alias in toml node
   - command as is
