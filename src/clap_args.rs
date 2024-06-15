@@ -49,12 +49,13 @@ fn register_subcommands(
     config: &Result<Config, Box<dyn Error>>,
 ) -> ClapCommand {
     // Todo: we want to get rid of this list as well. In best case all data is coming from the command definitions itself
-    let mut commands_map: HashMap<String, String> = COMMAND_LIST.clone();
+    let official_commands_map: HashMap<String, String> = COMMAND_LIST.clone();
+    let mut custom_commands_map: HashMap<String, String> = HashMap::new();
 
     match &config {
         Ok(config) => {
             for (_, command) in config.commands.clone() {
-                commands_map.insert(
+                custom_commands_map.insert(
                     command.alias.clone(),
                     format!("Custom command: {}", command.command.clone()),
                 );
@@ -67,16 +68,22 @@ fn register_subcommands(
         }
     }
 
-    // Todo: This is not pretty. Is there a better solution?
-    let commands_iter = Box::leak(
-        commands_map
-            .into_iter()
-            .collect::<Vec<_>>()
-            .into_boxed_slice(),
-    )
-    .iter();
+    // Sort the official and custom commands
+    let mut official_commands: Vec<_> = official_commands_map.into_iter().collect();
+    official_commands.sort_by(|a, b| a.0.cmp(&b.0));
 
-    for (name, description) in commands_iter {
+    let mut custom_commands: Vec<_> = custom_commands_map.into_iter().collect();
+    custom_commands.sort_by(|a, b| a.0.cmp(&b.0));
+
+    // Merge the official and custom commands
+    let commands = official_commands.into_iter().chain(custom_commands);
+
+    // Leak the commands to get a 'static reference
+    // // Todo: This is not pretty. Is there a better solution?
+    let commands: &'static [(String, String)] =
+        Box::leak(commands.collect::<Vec<_>>().into_boxed_slice());
+
+    for (name, description) in commands {
         app = app.subcommand(
             ClapCommand::new(name.as_str())
                 .about(description.as_str())

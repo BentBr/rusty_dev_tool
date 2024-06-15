@@ -163,13 +163,13 @@ Then, you can run the tests with coverage: `rdt test-coverage`
 - Adding more and basic tests (WIP)
 - Adding support for environments (shelling into remote k8s setups)
 - Removing the command list hashmap (as it doubles the registry). Add command descriptions to Executors
-- Sorting of all commands for help menu
 - Adding support for completions on terminals
 - Adding support for windows... (maybe). Dunno what works atm and what not ;)
 - Update the logic and fields for custom commands:
   - command alias in toml node
   - command as is
   - description additional (refactor with the registry)
+- ~~Sorting of all commands for help menu~~ ✅
 - ~~Adding some generic db connection option(s)~~ ✅
 - ~~Adding docker build alias for local Dockerfile (to only build the image)~~ ✅
 - ~~Add an option (config) to only have aliases (custom commands) without compose.yaml config mandatory~~  ✅
