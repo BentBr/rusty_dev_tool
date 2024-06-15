@@ -16,6 +16,9 @@ use colored::Colorize;
 use std::process::exit;
 
 fn main() {
+    const EXIT_SUCCESS: i32 = 0;
+    const EXIT_FAILURE: i32 = 1;
+
     let config = init_custom_commands();
 
     let mut clap_command: ClapCommand = get_clap_matches(&config);
@@ -35,10 +38,10 @@ fn main() {
 
     if update {
         match SelfUpdate.execute(&config, None) {
-            Ok(()) => exit(0),
+            Ok(()) => exit(EXIT_SUCCESS),
             Err(err) => {
                 eprintln!("{} {}", "Error updating:".red(), err);
-                exit(1);
+                exit(EXIT_FAILURE);
             }
         }
     }
@@ -49,13 +52,13 @@ fn main() {
     if !(generate_completions || restore || update) && matches.subcommand().is_none() {
         eprintln!("{}", "A subcommand is required".red());
 
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     if matches.subcommand().is_none() {
         clap_command.print_help().unwrap();
 
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
 
     match matches.subcommand() {
@@ -74,6 +77,6 @@ fn main() {
                 eprintln!("{} {}", "Error:".red(), err);
             }
         },
-        _ => exit(0),
+        _ => exit(EXIT_SUCCESS),
     }
 }
