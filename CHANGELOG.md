@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.8.0...v0.9.0) (2024-06-15)
+
+
+### Features
+
+* Added shell auto-completion script and refaactored a lot of the project ([2394349](https://github.com/BentBr/rusty_dev_tool/commit/239434999206278058952fc9d5434272113c997e))
+
 ## [0.8.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.7.1...v0.8.0) (2024-06-15)
 
 
