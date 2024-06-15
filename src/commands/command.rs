@@ -3,6 +3,7 @@ use crate::env::config::Command as ConfigCommand;
 use crate::env::config::Config;
 use crate::error::command::Error as CommandError;
 use std::process::{Command as SysCommand, Stdio};
+use crate::env::resolve::shell as resolve_shell;
 
 pub trait Command {
     fn execute(&self, config: &Config, argument: Option<&String>) -> Result<(), CommandError>;
@@ -10,7 +11,9 @@ pub trait Command {
 }
 
 fn run_command_unix_sh(cmd: &str) -> Result<(), CommandError> {
-    let _ = SysCommand::new("sh")
+    let shell = resolve_shell_program()?;
+
+    let _ = SysCommand::new(shell)
         .arg("-c")
         .arg(cmd)
         .stdout(Stdio::inherit())
@@ -28,4 +31,10 @@ pub fn run(cmd: &str) -> Result<(), CommandError> {
 
 pub fn new_from_config(config_command: ConfigCommand) -> Box<dyn Command> {
     Box::new(CustomCommand { config_command })
+}
+
+fn resolve_shell_program() -> Result<String, CommandError> {
+    let shell = resolve_shell()?;
+
+    Ok(shell.to_binary_string())
 }
