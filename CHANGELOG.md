@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.1](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.0...v0.9.1) (2024-06-15)
+
+
+### Bug Fixes
+
+* Addded more tests ([3a3e28b](https://github.com/BentBr/rusty_dev_tool/commit/3a3e28b07d005fe400af582d1d32d8554052e465))
+
 ## [0.9.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.8.0...v0.9.0) (2024-06-15)
 
 
