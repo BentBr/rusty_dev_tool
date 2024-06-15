@@ -8,6 +8,8 @@ pub enum Error {
     UpdateGeneric(Box<dyn StdError>),
     UpdateCheckFailed(String),
     UpdateDownload(String),
+    UnsupportedOs(String),
+    UnsupportedArchitecture(String),
 }
 
 impl StdError for Error {}
@@ -30,6 +32,12 @@ impl fmt::Display for Error {
             }
             Self::UpdateDownload(string) => {
                 write!(f, "Failed to download update: '{string}'. Maybe try again later (if release is being built)")
+            }
+            Self::UnsupportedOs(os) => {
+                write!(f, "Os '{os}' is not (yet) supported! Maybe create a PR or an issue on github: https://github.com/BentBr/rusty_dev_tool")
+            }
+            Self::UnsupportedArchitecture(architecture) => {
+                write!(f, "Architecture '{architecture}' is not supported!")
             }
         }
     }
@@ -91,5 +99,23 @@ mod tests {
     fn test_update_download_error() {
         let error = Error::UpdateDownload("test_string".to_string());
         assert_eq!(format!("{}", error), "Failed to download update: 'test_string'. Maybe try again later (if release is being built)");
+    }
+
+    #[test]
+    fn test_unsupported_os_error() {
+        let error = Error::UnsupportedOs("test_string".to_string());
+        assert_eq!(
+            format!("{}", error),
+            "Os 'test_string' is not (yet) supported! Maybe create a PR or an issue on github: https://github.com/BentBr/rusty_dev_tool"
+        );
+    }
+
+    #[test]
+    fn test_unsupported_architecture_error() {
+        let error = Error::UnsupportedArchitecture("test_string".to_string());
+        assert_eq!(
+            format!("{}", error),
+            "Architecture 'test_string' is not supported!"
+        );
     }
 }

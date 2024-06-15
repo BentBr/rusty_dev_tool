@@ -1,6 +1,7 @@
 use crate::commands::command::Command;
 use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
+use crate::env::resolve::binary_name;
 use crate::error::command::Error as CommandError;
 use crate::error::update::Error as UpdateError;
 use colored::Colorize;
@@ -91,15 +92,7 @@ fn check_update_needed(config: &Config) -> Result<Option<String>, UpdateError> {
 
 fn fetch_update(config: &Config, tag_name: &str) -> Result<(), UpdateError> {
     let os = os_info::get();
-    let binary_name = match os.os_type() {
-        os_info::Type::Macos => match env::consts::ARCH {
-            "x86_64" => "rdt-macos-x86_64-",
-            "aarch64" => "rdt-macos-aarch64-",
-            _ => panic!("Unsupported architecture"),
-        },
-        os_info::Type::Linux => "rdt-linux-x86_64-",
-        _ => panic!("Unsupported OS"),
-    };
+    let binary_name = binary_name(&os)?;
 
     let download_url = format!(
         "{}/v{}/{}v{}",
