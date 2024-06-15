@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.3](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.2...v0.9.3) (2024-06-15)
+
+
+### Bug Fixes
+
+* updating shell resolving ([9b8ab0c](https://github.com/BentBr/rusty_dev_tool/commit/9b8ab0c1ff62889904c4fd13a5cc726a3f72a4a6))
+
 ## [0.9.2](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.1...v0.9.2) (2024-06-15)
 
 
