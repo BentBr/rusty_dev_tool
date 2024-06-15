@@ -52,3 +52,50 @@ fn get_main_service_install(config: &Config) -> String {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::env::config::Config;
+    use crate::env::enums::language::Enum as LanguageFramework;
+    use crate::error::environment::Error::NoComposeServiceDefined;
+
+    #[test]
+    fn test_get_main_service_install_php() {
+        let config = Config {
+            language_framework: LanguageFramework::Php,
+            ..Config::default()
+        };
+        assert_eq!(get_main_service_install(&config), "php composer install");
+    }
+
+    #[test]
+    fn test_get_main_service_install_node() {
+        let config = Config {
+            language_framework: LanguageFramework::Node,
+            ..Config::default()
+        };
+        assert_eq!(get_main_service_install(&config), "node yarn install");
+    }
+
+    #[test]
+    fn test_get_main_service_install_rust() {
+        let config = Config {
+            language_framework: LanguageFramework::Rust,
+            ..Config::default()
+        };
+        assert_eq!(get_main_service_install(&config), "rust cargo build");
+    }
+
+    #[test]
+    fn test_get_main_service_install_default_not_usable() {
+        let config = Config {
+            language_framework: LanguageFramework::DefaultNotUsable,
+            ..Config::default()
+        };
+        assert_eq!(
+            get_main_service_install(&config),
+            NoComposeServiceDefined("DefaultNotUsable".to_string()).to_string()
+        );
+    }
+}

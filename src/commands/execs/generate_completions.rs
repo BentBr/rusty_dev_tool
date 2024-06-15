@@ -38,3 +38,22 @@ const fn get_clap_shell(shell: &CompletionShell) -> clap_complete::Shell {
         CompletionShell::Elvish => clap_complete::Shell::Elvish,
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::env::enums::shell::Enum as CompletionShell;
+    use clap_complete::Shell;
+
+    #[test]
+    fn test_get_clap_shell() {
+        assert_eq!(get_clap_shell(&CompletionShell::Bash), Shell::Bash);
+        assert_eq!(get_clap_shell(&CompletionShell::Fish), Shell::Fish);
+        assert_eq!(get_clap_shell(&CompletionShell::Zsh), Shell::Zsh);
+        assert_eq!(
+            get_clap_shell(&CompletionShell::PowerShell),
+            Shell::PowerShell
+        );
+        assert_eq!(get_clap_shell(&CompletionShell::Elvish), Shell::Elvish);
+    }
+}

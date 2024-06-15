@@ -35,8 +35,8 @@ impl Command for Db {
 
         let file_ext = check_file_type(Path::new(&path_name))?;
 
-        let db_pass = get_mysql_pass_from_file(&file)?;
-        let db = get_mysql_db_from_file(&file)?;
+        let db_pass = get_mysql_pass_from_file(&file, &compose_file_path.to_string_lossy())?;
+        let db = get_mysql_db_from_file(&file, &compose_file_path.to_string_lossy())?;
 
         let binding: String = match file_ext.as_str() {
             "gz" => {
@@ -74,16 +74,20 @@ impl Command for Db {
     }
 }
 
-fn get_mysql_pass_from_file(file: &File) -> Result<String, CommandError> {
-    extract_string_from_file(file, "MYSQL_ROOT_PASSWORD")
+fn get_mysql_pass_from_file(file: &File, file_path: &str) -> Result<String, CommandError> {
+    extract_string_from_file(file, file_path, "MYSQL_ROOT_PASSWORD")
 }
 
-fn get_mysql_db_from_file(file: &File) -> Result<String, CommandError> {
-    extract_string_from_file(file, "MYSQL_DATABASE")
+fn get_mysql_db_from_file(file: &File, file_path: &str) -> Result<String, CommandError> {
+    extract_string_from_file(file, file_path, "MYSQL_DATABASE")
 }
 
-fn extract_string_from_file(mut file: &File, string: &str) -> Result<String, CommandError> {
-    let regex = Regex::new(format!(r"{string}=(\w+)").as_str()).unwrap();
+fn extract_string_from_file(
+    mut file: &File,
+    file_path: &str,
+    string: &str,
+) -> Result<String, CommandError> {
+    let regex = Regex::new(&format!(r"{string}=(\w+)")).unwrap();
     file.seek(SeekFrom::Start(0))?;
 
     for line in io::BufReader::new(file).lines().map_while(Result::ok) {
@@ -93,7 +97,7 @@ fn extract_string_from_file(mut file: &File, string: &str) -> Result<String, Com
             return option.map_or_else(
                 || {
                     Err(CommandError::CommandFailed(format!(
-                        "{string} not found in compose file"
+                        "{string} not found in {file_path} file"
                     )))
                 },
                 |value| Ok(value.to_string()),
@@ -102,7 +106,7 @@ fn extract_string_from_file(mut file: &File, string: &str) -> Result<String, Com
     }
 
     Err(CommandError::CommandFailed(format!(
-        "{string} not found in compose file"
+        "{string} not found in file: {file_path}"
     )))
 }
 
@@ -115,5 +119,32 @@ fn check_file_type(path: &Path) -> Result<String, CommandError> {
         _ => Err(CommandError::CommandFailed(
             "Unsupported file type".to_string(),
         )),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::path::Path;
+
+    #[test]
+    fn test_check_file_type_sql() {
+        let path = Path::new("test_db4.sql");
+        let result = check_file_type(&path);
+        assert_eq!(result.unwrap(), "sql".to_string());
+    }
+
+    #[test]
+    fn test_check_file_type_gz() {
+        let path = Path::new("test_db5.gz");
+        let result = check_file_type(&path);
+        assert_eq!(result.unwrap(), "gz".to_string());
+    }
+
+    #[test]
+    fn test_check_file_type_fail() {
+        let path = Path::new("test_db6.bla");
+        let result = check_file_type(&path);
+        assert!(result.is_err());
     }
 }

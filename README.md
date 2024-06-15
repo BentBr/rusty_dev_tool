@@ -169,7 +169,6 @@ Install grcov::
 Then, you can run the tests with coverage: `rdt test-coverage`
 
 ## Official todos on the roadmap (the next ones)
-- Adding more and basic tests (WIP)
 - Adding support for environments (shelling into remote k8s setups)
 - Removing the command list hashmap (as it doubles the registry). Add command descriptions to Executors
 - Adding support for windows... (maybe). Dunno what works atm and what not ;) \
@@ -181,6 +180,8 @@ Then, you can run the tests with coverage: `rdt test-coverage`
   - command alias in toml node
   - command as is
   - description additional (refactor with the registry)
+- ~~Adding more and basic tests (WIP)~~ ✅
+  - ~~Tests for non-system functions... otherwise mocking should be done extensively~~
 - ~~Adding a check to run via current terminal and not always sh(sh, bash, zsh, fish, PowerShell, cmd)~~ ✅
 - ~~Adding support for auto completions on terminals~~ ✅ 
 - ~~Sorting of all commands for help menu~~ ✅
