@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.8.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.7.1...v0.8.0) (2024-06-15)
+
+
+### Features
+
+* added db command ([143d2c3](https://github.com/BentBr/rusty_dev_tool/commit/143d2c3d3b2e831be9fb949d887da6a4a5d0fdb8))
+* adding db command ([4d27411](https://github.com/BentBr/rusty_dev_tool/commit/4d274114da24e4fd8301aa20cd16d6058b032277))
+
+
+### Bug Fixes
+
+* can now use .gz and .sql files ([fdf2411](https://github.com/BentBr/rusty_dev_tool/commit/fdf24110964d5c6d42510a7c00603e1eabc967cb))
+
 ## [0.7.1](https://github.com/BentBr/rusty_dev_tool/compare/v0.7.0...v0.7.1) (2024-06-13)
 
 
