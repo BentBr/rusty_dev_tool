@@ -49,6 +49,8 @@ jobs:
             -   name: Run tests
                 run: cargo test -- -Z unstable-options --format=json | cargo2junit > test-results.xml
                 continue-on-error: true
+                env:
+                    SHELL: "/bin/bash"
 
             -   name: Publish Test Results
                 if: always()
