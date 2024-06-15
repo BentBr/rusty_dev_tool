@@ -1,6 +1,6 @@
+use crate::error;
 use std::error::Error as StdError;
 use std::fmt;
-use crate::error;
 
 #[derive(Debug)]
 pub enum Error {
@@ -14,7 +14,7 @@ pub enum Error {
     DockerFileNotFound(String),
     EnvironmentGeneric(Box<dyn StdError>),
     HomeDirIsCurrentDir(String),
-    HomeDirNotFound()
+    HomeDirNotFound(),
 }
 
 impl StdError for Error {}
@@ -149,8 +149,10 @@ mod tests {
 
     #[test]
     fn test_environment_generic_error() {
-        let error =
-            Error::EnvironmentGeneric(Box::new(std::io::Error::new(std::io::ErrorKind::Other, "test_error")));
+        let error = Error::EnvironmentGeneric(Box::new(std::io::Error::new(
+            std::io::ErrorKind::Other,
+            "test_error",
+        )));
         assert_eq!(
             format!("{}", error),
             "Error during environment setup or check: 'test_error'"
@@ -169,9 +171,6 @@ mod tests {
     #[test]
     fn test_home_dir_not_found_error() {
         let error = Error::HomeDirNotFound();
-        assert_eq!(
-            format!("{}", error),
-            "Home directory not found!"
-        );
+        assert_eq!(format!("{}", error), "Home directory not found!");
     }
 }

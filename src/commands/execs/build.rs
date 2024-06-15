@@ -35,8 +35,9 @@ fn check_for_dockerfile() -> Result<(), EnvironmentError> {
     let local_dir = PathOptions::new().get_local_working_dir()?;
     let dockerfile_path = local_dir.join("Dockerfile");
 
-    File::open(Path::new(&dockerfile_path))
-        .map_err(|_| EnvironmentError::DockerFileNotFound(dockerfile_path.to_string_lossy().to_string()))?;
+    File::open(Path::new(&dockerfile_path)).map_err(|_| {
+        EnvironmentError::DockerFileNotFound(dockerfile_path.to_string_lossy().to_string())
+    })?;
 
     Ok(())
 }

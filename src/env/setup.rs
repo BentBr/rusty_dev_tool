@@ -4,11 +4,12 @@ use crate::env::home_config::{get_or_create, HomeConfig};
 use crate::env::language::r#enum::LanguageFramework;
 use crate::env::local_config::{get, LocalConfig};
 use crate::error::environment::Error as EnvironmentError;
+use regex::Regex;
 use std::error::Error;
 use std::fs::File;
-use std::{env, io};
 use std::io::BufRead;
 use std::path::{Path, PathBuf};
+use std::{env, io};
 
 pub fn init(restore: bool, update: bool) -> Result<Config, Box<dyn Error>> {
     let home_config: HomeConfig = get_or_create(restore)?;
@@ -98,7 +99,7 @@ fn get_compose_enum(file_path: &str) -> Result<Compose, EnvironmentError> {
     Ok(Compose::Docker)
 }
 
-fn get_compose_file(local_dir: &Path) -> Result<PathBuf, EnvironmentError> {
+pub fn get_compose_file(local_dir: &Path) -> Result<PathBuf, EnvironmentError> {
     let file_names = vec![
         "compose.yaml",
         "compose.yml",
@@ -144,13 +145,23 @@ fn check_home_dir_is_current_dir() -> Result<(), EnvironmentError> {
     }
 }
 
+pub fn get_string_via_regex<'a>(string: &'a str, regex: &Regex) -> Option<&'a str> {
+    if let Some(captures) = regex.captures(string) {
+        if let Some(service) = captures.get(1) {
+            return Some(service.as_str());
+        }
+    }
+
+    None
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::fs::File;
-    use std::io::Write;
     use env::temp_dir;
     use std::fs;
+    use std::fs::File;
+    use std::io::Write;
 
     #[test]
     fn test_get_compose_file() {
@@ -171,12 +182,18 @@ mod tests {
         let mut file = File::create(&file_path).unwrap();
         writeln!(file, "some stuff\nx-mutagen:").unwrap();
 
-        assert_eq!(get_compose_enum(file_path.to_str().unwrap()).unwrap(), Compose::Mutagen);
+        assert_eq!(
+            get_compose_enum(file_path.to_str().unwrap()).unwrap(),
+            Compose::Mutagen
+        );
 
         let mut file = File::create(&file_path).unwrap();
         writeln!(file, "other content").unwrap();
 
-        assert_eq!(get_compose_enum(file_path.to_str().unwrap()).unwrap(), Compose::Docker);
+        assert_eq!(
+            get_compose_enum(file_path.to_str().unwrap()).unwrap(),
+            Compose::Docker
+        );
     }
 
     #[test]
@@ -186,7 +203,10 @@ mod tests {
         let mut file = File::create(&file_path).unwrap();
         writeln!(file, "some stuff\nMAIN_SERVICE=rust").unwrap();
 
-        assert_eq!(get_language_framework_enum(file_path.to_str().unwrap()).unwrap(), LanguageFramework::Rust);
+        assert_eq!(
+            get_language_framework_enum(file_path.to_str().unwrap()).unwrap(),
+            LanguageFramework::Rust
+        );
     }
 
     #[test]

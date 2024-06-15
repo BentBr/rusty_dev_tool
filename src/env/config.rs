@@ -51,8 +51,8 @@ impl PathOptions {
     }
 
     /**
-    * Get or create the home directory for the tool this is `%home_dir%/.rusty_dev_tool/`
-    */
+     * Get or create the home directory for the tool this is `%home_dir%/.rusty_dev_tool/`
+     */
     pub fn get_or_create_home_dir_default(&self) -> Result<PathBuf, FileSystemError> {
         if let Some(mut home) = home_dir() {
             // Append your tool's configuration directory to the home directory
@@ -317,9 +317,7 @@ mod tests {
             config.meta_path,
             "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
         );
-        assert!(
-            config.commands.is_empty()
-        );
+        assert!(config.commands.is_empty());
         assert_eq!(config.local_key, "new-project");
     }
 
@@ -340,9 +338,7 @@ mod tests {
             config.meta_path,
             "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
         );
-        assert!(
-            config.commands.is_empty()
-        );
+        assert!(config.commands.is_empty());
         assert_eq!(config.local_key, "");
     }
 }

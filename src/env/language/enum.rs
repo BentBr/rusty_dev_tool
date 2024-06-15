@@ -1,3 +1,4 @@
+use crate::env::setup::get_string_via_regex;
 use crate::error::environment::Error as EnvironmentError;
 use regex::Regex;
 use std::fmt;
@@ -38,15 +39,9 @@ impl LanguageFramework {
 }
 
 fn get_main_service_via_regex(string: &str) -> Option<&str> {
-    let re = Regex::new(r"MAIN_SERVICE=(\w+)").unwrap();
+    let regex = Regex::new(r"MAIN_SERVICE=(\w+)").unwrap();
 
-    if let Some(captures) = re.captures(string) {
-        if let Some(service) = captures.get(1) {
-            return Some(service.as_str());
-        }
-    }
-
-    None
+    get_string_via_regex(string, &regex)
 }
 
 #[cfg(test)]
@@ -58,20 +53,35 @@ mod tests {
         assert_eq!(format!("{}", LanguageFramework::Rust), "rust");
         assert_eq!(format!("{}", LanguageFramework::Php), "php");
         assert_eq!(format!("{}", LanguageFramework::Node), "node");
-        assert_eq!(format!("{}", LanguageFramework::DefaultNotUsable), "DefaultNotUsable");
+        assert_eq!(
+            format!("{}", LanguageFramework::DefaultNotUsable),
+            "DefaultNotUsable"
+        );
     }
 
     #[test]
     fn test_from_main_service() {
-        assert_eq!(LanguageFramework::from_main_service("MAIN_SERVICE=rust").unwrap(), LanguageFramework::Rust);
-        assert_eq!(LanguageFramework::from_main_service("MAIN_SERVICE=php").unwrap(), LanguageFramework::Php);
-        assert_eq!(LanguageFramework::from_main_service("MAIN_SERVICE=node").unwrap(), LanguageFramework::Node);
+        assert_eq!(
+            LanguageFramework::from_main_service("MAIN_SERVICE=rust").unwrap(),
+            LanguageFramework::Rust
+        );
+        assert_eq!(
+            LanguageFramework::from_main_service("MAIN_SERVICE=php").unwrap(),
+            LanguageFramework::Php
+        );
+        assert_eq!(
+            LanguageFramework::from_main_service("MAIN_SERVICE=node").unwrap(),
+            LanguageFramework::Node
+        );
         assert!(LanguageFramework::from_main_service("MAIN_SERVICE=unknown").is_err());
     }
 
     #[test]
     fn test_get_main_service_via_regex() {
-        assert_eq!(get_main_service_via_regex("and some more MAIN_SERVICE=rust in that string"), Some("rust"));
+        assert_eq!(
+            get_main_service_via_regex("and some more MAIN_SERVICE=rust in that string"),
+            Some("rust")
+        );
         assert_eq!(get_main_service_via_regex("MAIN_SERVICE=php"), Some("php"));
         assert!(get_main_service_via_regex("none").is_none());
     }

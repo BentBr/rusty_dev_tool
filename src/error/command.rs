@@ -1,5 +1,5 @@
-use crate::error::update::Error as UpdateError;
 use crate::error::environment::Error as EnvironmentError;
+use crate::error::update::Error as UpdateError;
 use std::error::Error as StdError;
 use std::fmt;
 
