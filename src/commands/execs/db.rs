@@ -33,13 +33,31 @@ impl Command for Db {
             )
         })?;
 
+        let file_ext = check_file_type(Path::new(&path_name))?;
+
         let db_pass = get_mysql_pass_from_file(&file)?;
         let db = get_mysql_db_from_file(&file)?;
 
-        let binding = format!(
-            "gunzip -c {} | {} exec --user=root -T db mysql -f -u root -p{} {}",
-            path_name, config.compose, db_pass, db
-        );
+        let binding: String = match file_ext.as_str() {
+            "gz" => {
+                format!(
+                    "gunzip -c {} | {} exec --user=root -T db mysql -f -u root -p{} {}",
+                    path_name, config.compose, db_pass, db
+                )
+            }
+            "sql" => {
+                format!(
+                    "{} exec --user=root -T db mysql -f -u root -p{} {} < {}",
+                    config.compose, db_pass, db, path_name
+                )
+            }
+            _ => {
+                return Err(CommandError::CommandFailed(
+                    "Unsupported file type".to_string(),
+                ))
+            }
+        };
+
         let command = binding.as_str();
 
         println!("{}", "Executing Db command".blue());
@@ -86,4 +104,16 @@ fn extract_string_from_file(mut file: &File, string: &str) -> Result<String, Com
     Err(CommandError::CommandFailed(format!(
         "{string} not found in compose file"
     )))
+}
+
+fn check_file_type(path: &Path) -> Result<String, CommandError> {
+    let path = Path::new(path);
+
+    match path.extension() {
+        Some(ext) if ext == "gz" => Ok("gz".to_string()),
+        Some(ext) if ext == "sql" => Ok("sql".to_string()),
+        _ => Err(CommandError::CommandFailed(
+            "Unsupported file type".to_string(),
+        )),
+    }
 }
