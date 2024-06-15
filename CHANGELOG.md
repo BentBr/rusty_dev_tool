@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.2](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.1...v0.9.2) (2024-06-15)
+
+
+### Bug Fixes
+
+* adding shell env to ci ([076481a](https://github.com/BentBr/rusty_dev_tool/commit/076481a94b41f3d0e4c72ad5348e197132a1c543))
+* Create LICENSE.md ([999503a](https://github.com/BentBr/rusty_dev_tool/commit/999503aae3e270fb677088cfb106d878a92d0289))
+
 ## [0.9.1](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.0...v0.9.1) (2024-06-15)
 
 
