@@ -53,10 +53,7 @@ mod tests {
         assert_eq!(format!("{}", Enum::Rust), "rust");
         assert_eq!(format!("{}", Enum::Php), "php");
         assert_eq!(format!("{}", Enum::Node), "node");
-        assert_eq!(
-            format!("{}", Enum::DefaultNotUsable),
-            "DefaultNotUsable"
-        );
+        assert_eq!(format!("{}", Enum::DefaultNotUsable), "DefaultNotUsable");
     }
 
     #[test]

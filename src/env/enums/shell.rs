@@ -1,7 +1,7 @@
 use std::fmt;
 
-#[derive(Clone, Debug)]
-pub  enum Enum {
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub enum Enum {
     Bash,
     Zsh,
     Fish,

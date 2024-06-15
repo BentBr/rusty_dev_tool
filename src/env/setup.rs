@@ -3,13 +3,13 @@ use crate::env::enums::compose::Compose;
 use crate::env::enums::language::Enum as LanguageFramework;
 use crate::env::home_config::{get_or_create, HomeConfig};
 use crate::env::local_config::{get, LocalConfig};
+use crate::env::resolve::compose;
+use crate::env::resolve::language_framework;
 use crate::error::environment::Error as EnvironmentError;
 use regex::Regex;
+use std::env;
 use std::error::Error;
-use std::fs::File;
-use std::io::BufRead;
 use std::path::{Path, PathBuf};
-use std::{env, io};
 
 pub fn init(restore: bool, update: bool, completions: bool) -> Result<Config, Box<dyn Error>> {
     let home_config: HomeConfig = get_or_create(restore)?;
@@ -71,7 +71,7 @@ fn check_docker_compose_setup() -> Result<Compose, EnvironmentError> {
 
     let compose_file_path = get_compose_file(&local_dir)?;
 
-    get_compose_enum(compose_file_path.to_string_lossy().as_ref()).map_err(|_| {
+    compose(compose_file_path.to_string_lossy().as_ref()).map_err(|_| {
         EnvironmentError::DockerComposeNotInstalled(local_dir.to_string_lossy().to_string())
     })
 }
@@ -83,20 +83,7 @@ fn check_language_framework_setup() -> Result<LanguageFramework, EnvironmentErro
 
     let compose_file_path = get_compose_file(local_dir.as_path())?;
 
-    get_language_framework_enum(compose_file_path.to_string_lossy().as_ref())
-}
-
-fn get_compose_enum(file_path: &str) -> Result<Compose, EnvironmentError> {
-    let file = File::open(Path::new(&file_path))
-        .map_err(|_| EnvironmentError::ComposeFileNotReadable(file_path.to_string()))?;
-
-    for line in io::BufReader::new(file).lines().map_while(Result::ok) {
-        if line.eq("x-mutagen:") {
-            return Ok(Compose::Mutagen);
-        }
-    }
-
-    Ok(Compose::Docker)
+    language_framework(compose_file_path.to_string_lossy().as_ref())
 }
 
 pub fn get_compose_file(local_dir: &Path) -> Result<PathBuf, EnvironmentError> {
@@ -117,19 +104,6 @@ pub fn get_compose_file(local_dir: &Path) -> Result<PathBuf, EnvironmentError> {
     Err(EnvironmentError::ComposeFileNotFound(
         local_dir.to_string_lossy().to_string(),
     ))
-}
-
-fn get_language_framework_enum(file_path: &str) -> Result<LanguageFramework, EnvironmentError> {
-    let file = File::open(Path::new(file_path))
-        .map_err(|_| EnvironmentError::ComposeFileNotReadable(file_path.to_string()))?;
-
-    for line in io::BufReader::new(file).lines().map_while(Result::ok) {
-        if line.contains("MAIN_SERVICE") {
-            return LanguageFramework::from_main_service(&line);
-        }
-    }
-
-    Err(EnvironmentError::NoMainServiceDefined())
 }
 
 fn check_home_dir_is_current_dir() -> Result<(), EnvironmentError> {
@@ -161,7 +135,6 @@ mod tests {
     use env::temp_dir;
     use std::fs;
     use std::fs::File;
-    use std::io::Write;
 
     #[test]
     fn test_get_compose_file() {
@@ -176,46 +149,15 @@ mod tests {
     }
 
     #[test]
-    fn test_get_compose_enum() {
-        let dir = temp_dir();
-        let file_path = dir.as_path().join("compose.yaml");
-        let mut file = File::create(&file_path).unwrap();
-        writeln!(file, "some stuff\nx-mutagen:").unwrap();
+    fn test_get_string_via_regex() {
+        let regex = Regex::new(r"(\d+)").unwrap();
+        let string = "Hello123World";
+        assert_eq!(get_string_via_regex(string, &regex), Some("123"));
 
-        assert_eq!(
-            get_compose_enum(file_path.to_str().unwrap()).unwrap(),
-            Compose::Mutagen
-        );
+        let regex = Regex::new(r"(World)").unwrap();
+        assert_eq!(get_string_via_regex(string, &regex), Some("World"));
 
-        let mut file = File::create(&file_path).unwrap();
-        writeln!(file, "other content").unwrap();
-
-        assert_eq!(
-            get_compose_enum(file_path.to_str().unwrap()).unwrap(),
-            Compose::Docker
-        );
-    }
-
-    #[test]
-    fn test_get_language_framework_enum() {
-        let dir = temp_dir();
-        let file_path = dir.as_path().join("compose.yml");
-        let mut file = File::create(&file_path).unwrap();
-        writeln!(file, "some stuff\nMAIN_SERVICE=rust").unwrap();
-
-        assert_eq!(
-            get_language_framework_enum(file_path.to_str().unwrap()).unwrap(),
-            LanguageFramework::Rust
-        );
-    }
-
-    #[test]
-    fn test_get_language_framework_enum_fail() {
-        let dir = temp_dir();
-        let file_path = dir.as_path().join("docker-compose.yml");
-        let mut file = File::create(&file_path).unwrap();
-        writeln!(file, "more stuff\nNo_service=none").unwrap();
-
-        assert!(get_language_framework_enum(file_path.to_str().unwrap()).is_err());
+        let regex = Regex::new(r"(NotFound)").unwrap();
+        assert_eq!(get_string_via_regex(string, &regex), None);
     }
 }

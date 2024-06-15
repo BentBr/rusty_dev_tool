@@ -1,6 +1,10 @@
+use crate::env::enums::compose::Compose;
 use crate::env::enums::shell::Enum as CompletionShell;
 use crate::error::environment::Error as EnvironmentError;
-use std::env;
+use std::fs::File;
+use std::io::BufRead;
+use std::path::Path;
+use std::{env, io};
 
 pub fn shell() -> Result<CompletionShell, EnvironmentError> {
     let shell = env::var("SHELL")?;
@@ -15,20 +19,102 @@ pub fn shell() -> Result<CompletionShell, EnvironmentError> {
     }
 }
 
-// Todo: refactor the resolving for compose and the language framework as well
-// pub fn compose() -> Result<String, crate::error::environment::Error> {
-//     let compose = env::var("COMPOSE_FILE")?;
-//
-//     Ok(compose)
-// }
-//
-// pub fn language_framework() -> Result<String, crate::error::environment::Error> {
-//     let service = env::var("MAIN_SERVICE")?;
-//
-//     Ok(service)
-// }
+pub fn language_framework(
+    file_path: &str,
+) -> Result<crate::env::enums::language::Enum, EnvironmentError> {
+    let file = File::open(Path::new(file_path))
+        .map_err(|_| EnvironmentError::ComposeFileNotReadable(file_path.to_string()))?;
 
-// Getting if we are on wind or unix
-// pub fn os() -> Result<String, crate::error::environment::Error> {
-//     let os = env::var("OS")?;
-// }
+    for line in io::BufReader::new(file).lines().map_while(Result::ok) {
+        if line.contains("MAIN_SERVICE") {
+            return crate::env::enums::language::Enum::from_main_service(&line);
+        }
+    }
+
+    Err(EnvironmentError::NoMainServiceDefined())
+}
+
+pub fn compose(file_path: &str) -> Result<Compose, EnvironmentError> {
+    let file = File::open(Path::new(&file_path))
+        .map_err(|_| EnvironmentError::ComposeFileNotReadable(file_path.to_string()))?;
+
+    for line in io::BufReader::new(file).lines().map_while(Result::ok) {
+        if line.eq("x-mutagen:") {
+            return Ok(Compose::Mutagen);
+        }
+    }
+
+    Ok(Compose::Docker)
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use env::temp_dir;
+    use std::fs::File;
+    use std::io::Write;
+
+    #[test]
+    fn test_shell() {
+        env::set_var("SHELL", "/bin/bash");
+        assert_eq!(shell().unwrap(), CompletionShell::Bash);
+
+        env::set_var("SHELL", "/bin/zsh");
+        assert_eq!(shell().unwrap(), CompletionShell::Zsh);
+
+        env::set_var("SHELL", "/usr/bin/fish");
+        assert_eq!(shell().unwrap(), CompletionShell::Fish);
+
+        env::set_var("SHELL", "/usr/bin/pwsh");
+        assert_eq!(shell().unwrap(), CompletionShell::PowerShell);
+
+        env::set_var("SHELL", "/usr/bin/elvish");
+        assert_eq!(shell().unwrap(), CompletionShell::Elvish);
+
+        env::set_var("SHELL", "/not/valid/shell");
+        assert!(shell().is_err());
+    }
+
+    #[test]
+    fn test_get_language_framework_enum() {
+        let dir = temp_dir();
+        let file_path = dir.as_path().join("compose.yml");
+        let mut file = File::create(&file_path).unwrap();
+        writeln!(file, "some stuff\nMAIN_SERVICE=rust").unwrap();
+
+        assert_eq!(
+            language_framework(file_path.to_str().unwrap()).unwrap(),
+            crate::env::enums::language::Enum::Rust
+        );
+    }
+
+    #[test]
+    fn test_get_language_framework_enum_fail() {
+        let dir = temp_dir();
+        let file_path = dir.as_path().join("docker-compose.yml");
+        let mut file = File::create(&file_path).unwrap();
+        writeln!(file, "more stuff\nNo_service=none").unwrap();
+
+        assert!(language_framework(file_path.to_str().unwrap()).is_err());
+    }
+
+    #[test]
+    fn test_get_compose_enum() {
+        let dir = temp_dir();
+        let file_path = dir.as_path().join("compose.yaml");
+        let mut file = File::create(&file_path).unwrap();
+        writeln!(file, "some stuff\nx-mutagen:").unwrap();
+
+        assert_eq!(
+            compose(file_path.to_str().unwrap()).unwrap(),
+            Compose::Mutagen
+        );
+
+        let mut file = File::create(&file_path).unwrap();
+        writeln!(file, "other content").unwrap();
+
+        assert_eq!(
+            compose(file_path.to_str().unwrap()).unwrap(),
+            Compose::Docker
+        );
+    }
+}
