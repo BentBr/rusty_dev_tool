@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.9.4](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.3...v0.9.4) (2024-06-16)
+
+
+### Bug Fixes
+
+* adding proper os to be part of updating routine (no win yet) ([a767727](https://github.com/BentBr/rusty_dev_tool/commit/a767727f3dd44b7562f5108da7853bf815b28b3c))
+* fixing update routine for self-update ([315d8c1](https://github.com/BentBr/rusty_dev_tool/commit/315d8c15a609c66cf55f44a63100e4040615b7e2))
+
+## [0.9.3](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.2...v0.9.3) (2024-06-15)
+
+
+### Bug Fixes
+
+* updating shell resolving ([9b8ab0c](https://github.com/BentBr/rusty_dev_tool/commit/9b8ab0c1ff62889904c4fd13a5cc726a3f72a4a6))
+
+## [0.9.2](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.1...v0.9.2) (2024-06-15)
+
+
+### Bug Fixes
+
+* adding shell env to ci ([076481a](https://github.com/BentBr/rusty_dev_tool/commit/076481a94b41f3d0e4c72ad5348e197132a1c543))
+* Create LICENSE.md ([999503a](https://github.com/BentBr/rusty_dev_tool/commit/999503aae3e270fb677088cfb106d878a92d0289))
+
 ## [0.9.1](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.0...v0.9.1) (2024-06-15)
 
 

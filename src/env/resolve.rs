@@ -1,6 +1,8 @@
 use crate::env::enums::compose::Compose;
 use crate::env::enums::shell::Enum as CompletionShell;
 use crate::error::environment::Error as EnvironmentError;
+use crate::error::update::Error as UpdateError;
+use os_info::{Info, Type};
 use std::fs::File;
 use std::io::BufRead;
 use std::path::Path;
@@ -10,11 +12,11 @@ pub fn shell() -> Result<CompletionShell, EnvironmentError> {
     let shell = env::var("SHELL")?;
 
     match shell.as_str() {
-        "/bin/bash" => Ok(CompletionShell::Bash),
-        "/bin/zsh" => Ok(CompletionShell::Zsh),
-        "/usr/bin/fish" => Ok(CompletionShell::Fish),
-        "/usr/bin/pwsh" => Ok(CompletionShell::PowerShell),
-        "/usr/bin/elvish" => Ok(CompletionShell::Elvish),
+        "/usr/bin/bash" | "/bin/bash" => Ok(CompletionShell::Bash),
+        "/usr/bin/zsh" | "/bin/zsh" => Ok(CompletionShell::Zsh),
+        "/usr/bin/fish" | "/bin/fish" => Ok(CompletionShell::Fish),
+        "/usr/bin/pwsh" | "/bin/pwsh" => Ok(CompletionShell::PowerShell),
+        "/usr/bin/elvish" | "/bin/elvish" => Ok(CompletionShell::Elvish),
         _ => Err(EnvironmentError::ShellNotSupported(shell)),
     }
 }
@@ -46,6 +48,27 @@ pub fn compose(file_path: &str) -> Result<Compose, EnvironmentError> {
 
     Ok(Compose::Docker)
 }
+
+pub fn binary_name(os: &Info) -> Result<String, UpdateError> {
+    match os.os_type() {
+        Type::Macos => match env::consts::ARCH {
+            "x86_64" => Ok("rdt-macos-x86_64-".to_string()),
+            "aarch64" => Ok("rdt-macos-aarch64-".to_string()),
+            architecture => Err(UpdateError::UnsupportedArchitecture(
+                architecture.to_string(),
+            )),
+        },
+        Type::Linux
+        | Type::Arch
+        | Type::Ubuntu
+        | Type::Debian
+        | Type::CentOS
+        | Type::Redhat
+        | Type::FreeBSD => Ok("rdt-linux-x86_64-".to_string()),
+        os => Err(UpdateError::UnsupportedOs(os.to_string())),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -117,4 +140,6 @@ mod tests {
             Compose::Docker
         );
     }
+
+    //Todo: test binary_name
 }

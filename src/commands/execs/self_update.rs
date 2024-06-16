@@ -1,6 +1,7 @@
 use crate::commands::command::Command;
 use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
+use crate::env::resolve::binary_name;
 use crate::error::command::Error as CommandError;
 use crate::error::update::Error as UpdateError;
 use colored::Colorize;
@@ -9,7 +10,6 @@ use reqwest::header::{HeaderMap, HeaderValue, USER_AGENT};
 use semver::Version;
 use serde::Deserialize;
 use std::io::copy;
-use std::path::PathBuf;
 use std::{env, fs};
 
 pub struct SelfUpdate;
@@ -91,15 +91,7 @@ fn check_update_needed(config: &Config) -> Result<Option<String>, UpdateError> {
 
 fn fetch_update(config: &Config, tag_name: &str) -> Result<(), UpdateError> {
     let os = os_info::get();
-    let binary_name = match os.os_type() {
-        os_info::Type::Macos => match env::consts::ARCH {
-            "x86_64" => "rdt-macos-x86_64-",
-            "aarch64" => "rdt-macos-aarch64-",
-            _ => panic!("Unsupported architecture"),
-        },
-        os_info::Type::Linux => "rdt-linux-x86_64-",
-        _ => panic!("Unsupported OS"),
-    };
+    let binary_name = binary_name(&os)?;
 
     let download_url = format!(
         "{}/v{}/{}v{}",
@@ -115,22 +107,20 @@ fn fetch_update(config: &Config, tag_name: &str) -> Result<(), UpdateError> {
 
     // Not found string or empty file are less than 100 bytes
     if response.status().is_success() && content_length > 100 {
+        let bin_path = env::temp_dir().join("rdt-update");
         let mut dest = {
-            let bin_path = get_current_bin_path()?;
-            println!("Downloading update to {}", bin_path.to_string_lossy());
+            println!("Downloading update to {}", &bin_path.to_string_lossy());
 
-            fs::File::create(bin_path)?
+            fs::File::create(&bin_path)?
         };
 
         copy(&mut response, &mut dest)?;
+
+        self_replace::self_replace(&bin_path)?;
+        fs::remove_file(&bin_path)?;
     } else {
         return Err(UpdateError::UpdateDownload(download_url));
     }
 
     Ok(())
-}
-
-fn get_current_bin_path() -> Result<PathBuf, std::io::Error> {
-    let bin_path = env::current_exe()?;
-    Ok(bin_path)
 }
