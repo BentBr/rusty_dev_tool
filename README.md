@@ -28,6 +28,9 @@ After downloading the binary, make it executable and move it to a location in yo
 `cp ~/Downloads/rdt-macos-%bitness%-v%release% /usr/local/bin/rdt` \
 We are using here the default path for the local user: `/usr/local/bin/`.
 
+Depending on the system you might have to use a custom folder like `~/bin/rdt` due to access-rights into the bin/ folder during update routines.
+If --self-update fails please move to a folder in your %home%.
+
 ### Uninstallation
 Just remove the binary from your PATH. \
 `rm /usr/local/bin/rdt`
