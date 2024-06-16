@@ -81,14 +81,29 @@ mod tests {
         env::set_var("SHELL", "/bin/bash");
         assert_eq!(shell().unwrap(), CompletionShell::Bash);
 
+        env::set_var("SHELL", "/usr/bin/bash");
+        assert_eq!(shell().unwrap(), CompletionShell::Bash);
+
         env::set_var("SHELL", "/bin/zsh");
         assert_eq!(shell().unwrap(), CompletionShell::Zsh);
+
+        env::set_var("SHELL", "/usr/bin/zsh");
+        assert_eq!(shell().unwrap(), CompletionShell::Zsh);
+
+        env::set_var("SHELL", "/bin/fish");
+        assert_eq!(shell().unwrap(), CompletionShell::Fish);
 
         env::set_var("SHELL", "/usr/bin/fish");
         assert_eq!(shell().unwrap(), CompletionShell::Fish);
 
+        env::set_var("SHELL", "/bin/pwsh");
+        assert_eq!(shell().unwrap(), CompletionShell::PowerShell);
+
         env::set_var("SHELL", "/usr/bin/pwsh");
         assert_eq!(shell().unwrap(), CompletionShell::PowerShell);
+
+        env::set_var("SHELL", "/bin/elvish");
+        assert_eq!(shell().unwrap(), CompletionShell::Elvish);
 
         env::set_var("SHELL", "/usr/bin/elvish");
         assert_eq!(shell().unwrap(), CompletionShell::Elvish);
@@ -141,5 +156,30 @@ mod tests {
         );
     }
 
-    //Todo: test binary_name
+    #[test]
+    fn test_binary_name_linux() {
+        let os = Info::with_type(Type::Linux);
+        assert_eq!(binary_name(&os).unwrap(), "rdt-linux-x86_64-");
+
+        let os = Info::with_type(Type::Redhat);
+        assert_eq!(binary_name(&os).unwrap(), "rdt-linux-x86_64-");
+
+        let os = Info::with_type(Type::CentOS);
+        assert_eq!(binary_name(&os).unwrap(), "rdt-linux-x86_64-");
+
+        let os = Info::with_type(Type::Ubuntu);
+        assert_eq!(binary_name(&os).unwrap(), "rdt-linux-x86_64-");
+
+        let os = Info::with_type(Type::Debian);
+        assert_eq!(binary_name(&os).unwrap(), "rdt-linux-x86_64-");
+
+        let os = Info::with_type(Type::FreeBSD);
+        assert_eq!(binary_name(&os).unwrap(), "rdt-linux-x86_64-");
+    }
+
+    #[test]
+    fn test_binary_name_unsupported_os() {
+        let os = Info::with_type(Type::Unknown);
+        assert!(binary_name(&os).is_err());
+    }
 }
