@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.4](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.3...v0.9.4) (2024-06-16)
+
+
+### Bug Fixes
+
+* adding proper os to be part of updating routine (no win yet) ([a767727](https://github.com/BentBr/rusty_dev_tool/commit/a767727f3dd44b7562f5108da7853bf815b28b3c))
+* fixing update routine for self-update ([315d8c1](https://github.com/BentBr/rusty_dev_tool/commit/315d8c15a609c66cf55f44a63100e4040615b7e2))
+
 ## [0.9.3](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.2...v0.9.3) (2024-06-15)
 
 
