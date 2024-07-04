@@ -173,16 +173,16 @@ Then, you can run the tests with coverage: `rdt test-coverage`
 
 ## Official todos on the roadmap (the next ones)
 - Adding support for environments (shelling into remote k8s setups)
-- Removing the command list hashmap (as it doubles the registry). Add command descriptions to Executors
 - Adding support for windows... (maybe). Dunno what works atm and what not ;) \
   Known things that will break:
   - Colours in terminal
   - fetching the correct console (so no exec works)
   - auto-complete generation
-- Update the logic and fields for custom commands:
-  - command alias in toml node
-  - command as is
-  - description additional (refactor with the registry)
+- ~~Update the logic and fields for custom commands:~~ ✅
+  - ~~command alias in toml node~~
+  - ~~command as is~~
+  - ~~description additional (refactor with the registry)~~
+- ~~Removing the command list hashmap (as it doubles the registry). Add command descriptions to Executors~~ ✅
 - ~~Adding more and basic tests (WIP)~~ ✅
   - ~~Tests for non-system functions... otherwise mocking should be done extensively~~
 - ~~Adding a check to run via current terminal and not always sh(sh, bash, zsh, fish, PowerShell, cmd)~~ ✅
