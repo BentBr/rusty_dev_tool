@@ -1,6 +1,5 @@
 use crate::commands::command::run;
 use crate::commands::command::Command;
-use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::{Config, PathOptions};
 use crate::error::command::Error as CommandError;
 use crate::error::environment::Error as EnvironmentError;
@@ -22,12 +21,12 @@ impl Command for Build {
         run(command)
     }
 
-    fn name(&self) -> String {
-        COMMAND_LIST
-            .get_key_value("build")
-            .expect("'build' command not found in command list")
-            .0
-            .to_string()
+    fn alias(&self) -> String {
+        "build".to_string()
+    }
+
+    fn description(&self) -> String {
+        "Building the local image again via docker buildx".to_string()
     }
 }
 

@@ -10,12 +10,14 @@ no_docker_compose = false
 [commands]
     # All commands must have a command and an alias but are optional in general
     [commands.first]
-        command = "command1"
+        execution = "command1"
         alias = "alias1"
+        description = "description1"
 
     [commands.second]
-        command = "command2"
+        execution = "command2"
         alias = "alias2"
+        description = "description2"
 
 # Mandatory node
 [environments]

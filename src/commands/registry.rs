@@ -25,12 +25,13 @@ impl Registry {
             commands: HashMap::new(),
         };
 
+        // Add all commands which are predefined and for general use
+        registry.register(Box::new(Build));
+        registry.register(Box::new(Chown));
+        registry.register(Box::new(Db));
+        registry.register(Box::new(Shell));
         registry.register(Box::new(Start));
         registry.register(Box::new(Stop));
-        registry.register(Box::new(Shell));
-        registry.register(Box::new(Chown));
-        registry.register(Box::new(Build));
-        registry.register(Box::new(Db));
 
         registry.register_custom_commands(config.commands.clone());
 
@@ -38,7 +39,7 @@ impl Registry {
     }
 
     fn register(&mut self, command: Box<dyn Command>) {
-        self.commands.insert(command.name(), command);
+        self.commands.insert(command.alias(), command);
     }
 
     fn register_custom_commands(&mut self, commands: HashMap<String, CommandConfig>) {
@@ -56,6 +57,10 @@ impl Registry {
             .map(|command| &**command)
             .ok_or(CommandError::CommandNotFound(command_name.to_string()))
     }
+
+    pub fn into_map(self) -> HashMap<String, Box<dyn Command>> {
+        self.commands
+    }
 }
 
 #[cfg(test)]
@@ -71,7 +76,8 @@ mod tests {
             "custom".to_string(),
             CommandConfig {
                 alias: "custom".to_string(),
-                command: "echo custom".to_string(),
+                execution: "echo custom".to_string(),
+                description: "custom description".to_string(),
             },
         );
 

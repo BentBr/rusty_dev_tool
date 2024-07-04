@@ -1,6 +1,5 @@
 use crate::commands::command::run;
 use crate::commands::command::Command;
-use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
 use crate::error::command::Error as CommandError;
 use colored::Colorize;
@@ -24,11 +23,11 @@ impl Command for Chown {
         run(command)
     }
 
-    fn name(&self) -> String {
-        COMMAND_LIST
-            .get_key_value("chown")
-            .expect("'Chown' command not found in command list")
-            .0
-            .to_string()
+    fn alias(&self) -> String {
+        "chown".to_string()
+    }
+
+    fn description(&self) -> String {
+        "Chowning project inside the main container and takes an additional argument as the group and user like root:root".to_string()
     }
 }

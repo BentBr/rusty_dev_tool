@@ -1,6 +1,5 @@
 use crate::commands::command::run;
 use crate::commands::command::Command;
-use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
 use crate::error::command::Error as CommandError;
 use colored::Colorize;
@@ -17,11 +16,11 @@ impl Command for Stop {
         run(command)
     }
 
-    fn name(&self) -> String {
-        COMMAND_LIST
-            .get_key_value("stop")
-            .expect("'stop' command not found in command list")
-            .0
-            .to_string()
+    fn alias(&self) -> String {
+        "stop".to_string()
+    }
+
+    fn description(&self) -> String {
+        "Generic setup stop command".to_string()
     }
 }

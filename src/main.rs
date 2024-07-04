@@ -23,6 +23,9 @@ fn main() {
     let config = init_custom_commands();
 
     let mut clap_command: ClapCommand = get_clap(&config);
+
+    // todo: error handling clap
+
     let matches: ArgMatches = clap_command.clone().get_matches();
 
     let restore: bool = matches.get_flag(CONFIG_RESTORE);

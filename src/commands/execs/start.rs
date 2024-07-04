@@ -1,6 +1,5 @@
 use crate::commands::command::run;
 use crate::commands::command::Command;
-use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
 use crate::env::enums::language::Enum as LanguageFramework;
 use crate::error::command::Error as CommandError;
@@ -33,12 +32,12 @@ impl Command for Start {
         run(command)
     }
 
-    fn name(&self) -> String {
-        COMMAND_LIST
-            .get_key_value("start")
-            .expect("'start' command not found in command list")
-            .0
-            .to_string()
+    fn alias(&self) -> String {
+        "start".to_string()
+    }
+
+    fn description(&self) -> String {
+        "Generic setup start command".to_string()
     }
 }
 

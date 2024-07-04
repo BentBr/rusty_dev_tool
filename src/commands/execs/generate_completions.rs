@@ -1,5 +1,4 @@
 use crate::commands::command::Command;
-use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
 use crate::env::enums::shell::Enum as CompletionShell;
 use crate::env::resolve::shell as resolve_shell;
@@ -20,12 +19,12 @@ impl Command for GenerateCompletions {
         Ok(())
     }
 
-    fn name(&self) -> String {
-        COMMAND_LIST
-            .get_key_value("generate-completions")
-            .expect("'generate-completions' command not found in command list")
-            .0
-            .to_string()
+    fn alias(&self) -> String {
+        "generate-completions".to_string()
+    }
+
+    fn description(&self) -> String {
+        "Generate shell completions for the current shell".to_string()
     }
 }
 

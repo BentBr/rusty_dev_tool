@@ -35,8 +35,9 @@ pub struct Config {
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Command {
-    pub command: String,
     pub alias: String,
+    pub execution: String,
+    pub description: String,
 }
 
 pub struct PathOptions {
@@ -201,8 +202,9 @@ mod tests {
         home_commands.insert(
             String::from("home_command"),
             Command {
-                command: String::from("echo Home"),
+                execution: String::from("echo Home"),
                 alias: String::from("home"),
+                description: String::from("Home command description"),
             },
         );
 
@@ -210,8 +212,9 @@ mod tests {
         local_commands.insert(
             String::from("local_command"),
             Command {
-                command: String::from("echo Local"),
+                execution: String::from("echo Local"),
                 alias: String::from("local"),
+                description: String::from("Local command description"),
             },
         );
 
@@ -228,16 +231,18 @@ mod tests {
         home_commands.insert(
             String::from("home_command"),
             Command {
-                command: String::from("echo Home"),
+                execution: String::from("echo Home"),
                 alias: String::from("home"),
+                description: String::from("Home command description"),
             },
         );
 
         home_commands.insert(
             String::from("home_command2"),
             Command {
-                command: String::from("echo Home2"),
+                execution: String::from("echo Home2"),
                 alias: String::from("home"),
+                description: String::from("Home command description"),
             },
         );
 
@@ -245,8 +250,9 @@ mod tests {
         local_commands.insert(
             String::from("home_command2"),
             Command {
-                command: String::from("overridden"),
+                execution: String::from("overridden"),
                 alias: String::from("moin"),
+                description: String::from("Home command description overridden"),
             },
         );
 
@@ -256,7 +262,7 @@ mod tests {
         assert!(merged_commands.contains_key("home_command"));
         assert!(merged_commands.contains_key("home_command2"));
         assert_eq!(
-            merged_commands.get("home_command2").unwrap().command,
+            merged_commands.get("home_command2").unwrap().execution,
             "overridden"
         );
     }

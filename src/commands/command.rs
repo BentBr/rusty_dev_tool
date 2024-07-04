@@ -7,7 +7,8 @@ use std::process::{Command as SysCommand, Stdio};
 
 pub trait Command {
     fn execute(&self, config: &Config, argument: Option<&String>) -> Result<(), CommandError>;
-    fn name(&self) -> String;
+    fn alias(&self) -> String;
+    fn description(&self) -> String;
 }
 
 fn run_command_unix_sh(cmd: &str) -> Result<(), CommandError> {
@@ -58,8 +59,12 @@ mod tests {
             Ok(())
         }
 
-        fn name(&self) -> String {
+        fn alias(&self) -> String {
             "test".to_string()
+        }
+
+        fn description(&self) -> String {
+            "Test command description".to_string()
         }
     }
 
@@ -67,19 +72,22 @@ mod tests {
     fn test_command_trait() {
         let test_command = TestCommand;
 
-        assert_eq!(test_command.name(), "test");
+        assert_eq!(test_command.alias(), "test");
         assert!(test_command.execute(&Config::default(), None).is_ok());
+        assert_eq!(test_command.description(), "Test command description");
     }
 
     #[test]
     fn test_new_from_config() {
         let config_command = ConfigCommand {
             alias: "test".to_string(),
-            command: "echo test".to_string(),
+            execution: "echo test".to_string(),
+            description: "Test command description".to_string(),
         };
         let command = new_from_config(config_command);
 
-        assert_eq!(command.name(), "test");
+        assert_eq!(command.alias(), "test");
+        assert_eq!(command.description(), "Test command description");
     }
 
     #[test]

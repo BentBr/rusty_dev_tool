@@ -1,5 +1,4 @@
 use crate::commands::command::Command;
-use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
 use crate::env::resolve::binary_name;
 use crate::error::command::Error as CommandError;
@@ -46,12 +45,12 @@ impl Command for SelfUpdate {
         Ok(())
     }
 
-    fn name(&self) -> String {
-        COMMAND_LIST
-            .get_key_value("self-update")
-            .expect("'self-update' command not found in command list")
-            .0
-            .to_string()
+    fn alias(&self) -> String {
+        "self-update".to_string()
+    }
+
+    fn description(&self) -> String {
+        "Updates this very tool to the latest version".to_string()
     }
 }
 

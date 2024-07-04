@@ -1,6 +1,5 @@
 use crate::commands::command::run;
 use crate::commands::command::Command;
-use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
 use crate::env::setup::{get_compose_file, get_string_via_regex};
 use crate::error::command::Error as CommandError;
@@ -65,12 +64,12 @@ impl Command for Db {
         run(command)
     }
 
-    fn name(&self) -> String {
-        COMMAND_LIST
-            .get_key_value("db")
-            .expect("'db' command not found in command list")
-            .0
-            .to_string()
+    fn alias(&self) -> String {
+        "db".to_string()
+    }
+
+    fn description(&self) -> String {
+        "Getting a local file (with additional argument) into your db container".to_string()
     }
 }
 

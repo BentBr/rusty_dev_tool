@@ -114,8 +114,9 @@ mod tests {
             meta_path = "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
             [commands]
                 [commands.test_command]
-                    command = "echo Hello, World!"
+                    execution = "echo Hello, World!"
                     alias = "test"
+                    description = "Test command description"
             "#
         )
         .unwrap();
@@ -129,7 +130,7 @@ mod tests {
             .commands
             .get("test_command")
             .unwrap()
-            .command
+            .execution
             .eq("echo Hello, World!"));
         assert!(config
             .commands
@@ -137,6 +138,12 @@ mod tests {
             .unwrap()
             .alias
             .eq("test"));
+        assert!(config
+            .commands
+            .get("test_command")
+            .unwrap()
+            .description
+            .eq("Test command description"));
     }
 
     #[test]

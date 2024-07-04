@@ -1,6 +1,5 @@
 use crate::commands::command::run;
 use crate::commands::command::Command;
-use crate::commands::execs::command_list::COMMAND_LIST;
 use crate::env::config::Config;
 use crate::error::command::Error as CommandError;
 
@@ -20,11 +19,11 @@ impl Command for Shell {
         run(command)
     }
 
-    fn name(&self) -> String {
-        COMMAND_LIST
-            .get_key_value("shell")
-            .expect("'shell' command not found in command list")
-            .0
-            .to_string()
+    fn alias(&self) -> String {
+        "shell".to_string()
+    }
+
+    fn description(&self) -> String {
+        "Exec'ing into the node container and takes an additional argument as the target to shell into (container name)".to_string()
     }
 }

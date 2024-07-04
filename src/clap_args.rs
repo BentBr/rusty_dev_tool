@@ -1,4 +1,7 @@
-use crate::commands::execs::command_list::COMMAND_LIST;
+use crate::commands::command::Command;
+use crate::commands::execs::generate_completions::GenerateCompletions;
+use crate::commands::execs::self_update::SelfUpdate;
+use crate::commands::registry::Registry;
 use crate::env::config::Config;
 use clap::{Arg, ArgAction, Command as ClapCommand};
 use std::collections::HashMap;
@@ -12,28 +15,12 @@ pub const OPTIONAL_ARGUMENT: &str = "optional-argument";
 pub fn get_clap(config: &Result<Config, Box<dyn Error>>) -> ClapCommand {
     let version = env!("CARGO_PKG_VERSION");
 
-    let app = ClapCommand::new("Rusty Dev Tool")
+    let mut app = ClapCommand::new("Rusty Dev Tool")
         .version(version)
         .author("Bent Brüggemann <mail@bent-brueggemann.de>")
-        .about("Docker helper command line tool for developers with docker-compose setups.")
-        .arg(
-            Arg::new(GENERATE_COMPLETIONS)
-                .long(GENERATE_COMPLETIONS)
-                .help("Generate shell completions")
-                .action(ArgAction::SetTrue),
-        )
-        .arg(
-            Arg::new(CONFIG_RESTORE)
-                .long(CONFIG_RESTORE)
-                .help("Restores the home config environment")
-                .action(ArgAction::SetTrue),
-        )
-        .arg(
-            Arg::new(SELF_UPDATE)
-                .long(SELF_UPDATE)
-                .help("Updates this very tool to the latest version")
-                .action(ArgAction::SetTrue),
-        );
+        .about("Docker helper command line tool for developers with docker-compose setups.");
+
+    app = add_flag_commands(app);
 
     register_subcommands(app, config)
 }
@@ -42,40 +29,29 @@ fn register_subcommands(
     mut app: ClapCommand,
     config: &Result<Config, Box<dyn Error>>,
 ) -> ClapCommand {
-    // Todo: we want to get rid of this list as well. In best case all data is coming from the command definitions itself
-    let official_commands_map: HashMap<String, String> = COMMAND_LIST.clone();
-    let mut custom_commands_map: HashMap<String, String> = HashMap::new();
+    let mut commands: HashMap<String, Box<dyn Command>> = HashMap::new();
 
     match &config {
         Ok(config) => {
-            for (_, command) in config.commands.clone() {
-                custom_commands_map.insert(
-                    command.alias.clone(),
-                    format!("Custom command: {}", command.command.clone()),
-                );
-            }
+            // Register the official commands
+            commands = Registry::new(config).into_map();
         }
-        Err(_) => {
-            // Todo: find config error: TomlNotReadable (or similar)
-            // We are ignoring errors on purpose here as the config is being parsed and checked
-            // in the "correct" init function later on
+        Err(err) => {
+            eprintln!("Error while parsing the config: {err}");
+            //Todo: error handling!
+            //return Err(err);
         }
     }
 
-    // Sort the official and custom commands
-    let mut official_commands: Vec<_> = official_commands_map.into_iter().collect();
-    official_commands.sort_by(|a, b| a.0.cmp(&b.0));
-
-    let mut custom_commands: Vec<_> = custom_commands_map.into_iter().collect();
-    custom_commands.sort_by(|a, b| a.0.cmp(&b.0));
-
-    // Merge the official and custom commands
-    let commands = official_commands.into_iter().chain(custom_commands);
-
     // Leak the commands to get a 'static reference
     // // Todo: This is not pretty. Is there a better solution?
-    let commands: &'static [(String, String)] =
-        Box::leak(commands.collect::<Vec<_>>().into_boxed_slice());
+    let commands: &'static [(String, String)] = Box::leak(
+        commands
+            .into_values()
+            .map(|command| (command.alias(), command.description()))
+            .collect::<Vec<_>>()
+            .into_boxed_slice(),
+    );
 
     for (name, description) in commands {
         app = app.subcommand(
@@ -91,4 +67,36 @@ fn register_subcommands(
     }
 
     app
+}
+
+fn add_flag_commands(mut app: ClapCommand) -> ClapCommand {
+    let mut commands: HashMap<String, Box<dyn Command>> = HashMap::new();
+
+    let generate_completions = GenerateCompletions;
+    commands.insert(generate_completions.alias(), Box::new(generate_completions));
+
+    let self_update = SelfUpdate;
+    commands.insert(self_update.alias(), Box::new(self_update));
+
+    let commands_vec: Vec<(String, String)> = commands
+        .into_values()
+        .map(|command| (command.alias(), command.description()))
+        .collect();
+    let flag_commands: &'static [(String, String)] = Box::leak(commands_vec.into_boxed_slice());
+
+    for (alias, description) in flag_commands {
+        app = app.arg(
+            Arg::new(alias.as_str())
+                .long(alias.as_str())
+                .help(description.as_str())
+                .action(ArgAction::SetTrue),
+        );
+    }
+
+    app.arg(
+        Arg::new(CONFIG_RESTORE)
+            .long(CONFIG_RESTORE)
+            .help("Restores the home config environment")
+            .action(ArgAction::SetTrue),
+    )
 }

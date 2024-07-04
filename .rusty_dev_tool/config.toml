@@ -8,23 +8,33 @@ no_docker_compose = true
 # Mandatory node
 [commands]
 # All commands must have a command and an alias but are optional in general
+    [commands.stop]
+        "alias" = "stop"
+        # This is being used on macOS to easy and fast build during coding
+        "execution" = "docker-compose stop"
+        "description" = "Overridden stop command"
     [commands.build]
         "alias" = "build"
         # This is being used on macOS to easy and fast build during coding
-        "command" = "cargo build --release && cp target/release/rusty_dev_tool /usr/local/bin/rdt && ls -lah /usr/local/bin/rdt && echo \"\\033[32mBuilt and copied!\\033[39m\""
+        "execution" = "cargo build --release && cp target/release/rusty_dev_tool /usr/local/bin/rdt && ls -lah /usr/local/bin/rdt && echo \"\\033[32mBuilt and copied!\\033[39m\""
+        "description" = "Builds the project and copies the binary to /usr/local/bin/rdt"
     [commands.clippy]
         "alias" = "clippy"
-        "command" = "cargo clippy -- -D clippy::all -D warnings -D clippy::pedantic -D clippy::nursery"
+        "execution" = "cargo clippy -- -D clippy::all -D warnings -D clippy::pedantic -D clippy::nursery"
+        "description" = "Runs clippy with all lints enabled"
     [commands.test]
         "alias" = "test"
-        "command" = "cargo test"
+        "execution" = "cargo test"
+        "description" = "Runs all tests"
     [commands.test-coverage]
         "alias" = "test-coverage"
-        "command" = "RUSTFLAGS=\"-C instrument-coverage\" LLVM_PROFILE_FILE=\"rusty_dev_tool-%p-%m.profraw\" cargo clean && RUSTFLAGS=\"-C instrument-coverage\" LLVM_PROFILE_FILE=\"rusty_dev_tool-%p-%m.profraw\" cargo test && grcov . --binary-path ./target/debug/ -s . -t html --ignore-not-existing --excl-start \"#\\[cfg\\(test\\)\\]\" --excl-line \"#\\[derive\\(\" --ignore \"/*\" -o ./target/debug/coverage/ && rm rusty_dev_tool*.profraw"
+        "execution" = "RUSTFLAGS=\"-C instrument-coverage\" LLVM_PROFILE_FILE=\"rusty_dev_tool-%p-%m.profraw\" cargo clean && RUSTFLAGS=\"-C instrument-coverage\" LLVM_PROFILE_FILE=\"rusty_dev_tool-%p-%m.profraw\" cargo test && grcov . --binary-path ./target/debug/ -s . -t html --ignore-not-existing --excl-start \"#\\[cfg\\(test\\)\\]\" --excl-line \"#\\[derive\\(\" --ignore \"/*\" -o ./target/debug/coverage/ && rm rusty_dev_tool*.profraw"
+        "description" = "Runs all tests with coverage via grcov"
     [commands.generate-completions]
         # Updating our completions script
         "alias" = "generate-completions"
-        "command" = "rdt --generate-completions > ~/.zsh/completions_script.sh && source ~/.zsh/completions_script.sh"
+        "execution" = "rdt --generate-completions > ~/.zsh/completions_script.sh && source ~/.zsh/completions_script.sh"
+        "description" = "Generates completions script for zsh"
 
 # Mandatory node
 [environments]
