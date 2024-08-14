@@ -26,12 +26,12 @@ meta_path = "https://api.github.com/repos/BentBr/rusty_dev_tool/releases/latest"
 
 [commands.stan]
         # Global stan example
-        execution = "docker-compose exec -T php vendor/bin/phpstan analyse -c phpstan.neon"
+        execution = "docker compose exec -T php vendor/bin/phpstan analyse -c phpstan.neon"
         alias = "stan-d"
-        description = "Runs phpstan with docker-compose"
+        description = "Runs phpstan with docker compose"
 
     [commands.stan-m]
         # Global stan example
-        execution = "mutagen-compose exec -T php vendor/bin/phpstan analyse -c phpstan.neon"
+        execution = "mutagen compose exec -T php vendor/bin/phpstan analyse -c phpstan.neon"
         alias = "stan-md"
-        description = "Runs phpstan with mutagen-compose"
+        description = "Runs phpstan with mutagen compose"

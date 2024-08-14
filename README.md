@@ -1,23 +1,23 @@
 # Rusty Dev Tool
-This is a little helper for developers using docker-compose (or mutagen-compose) for local development and kubectl for remote interaction.
+This is a little helper for developers using docker compose (or mutagen compose) for local development and kubectl for remote interaction.
 The idea is to have common and repetitive tasks simplified.
 Furthermore, it should reduce the complexity for new developers or developers that are not familiar with the setup (or are no backend developers / devops).
 
-The general expected (and suggested) tech stack is something locally with docker-compose (so no language or framework installation locally - everything via docker images) and a remote k8s cluster. \
-The crucial idea is to **NO PROJECT SPECIFIC CONFIG DONE LOCALLY**. Everything should be done via the project's docker-compose file and must be run-able after a _git checkout_.
+The general expected (and suggested) tech stack is something locally with docker compose (so no language or framework installation locally - everything via docker images) and a remote k8s cluster. \
+The crucial idea is to **NO PROJECT SPECIFIC CONFIG DONE LOCALLY**. Everything should be done via the project's docker compose file and must be run-able after a _git checkout_.
 
 ## TL;DR
 
-Run the following commands to interact with your docker-compose setup or shell into your remote kubernetes setup. 
-- `rdt start` (starting and installing docker-compose setup)
-- `rdt stop` (stopping docker-compose setup)
-- `rdt shell` (shelling into docker-compose setup)
+Run the following commands to interact with your docker compose setup or shell into your remote kubernetes setup. 
+- `rdt start` (starting and installing docker compose setup)
+- `rdt stop` (stopping docker compose setup)
+- `rdt shell` (shelling into docker compose setup)
 - `rdt db` (getting a local dump into your container)
 - `rdt chown` (chowning inside the container for debugging)
 - `rdt build` (building docker image locally)
 
 After starting, you can simply run your local web project via a proper domain: `http://my-project.docker` (if setup correctly 😜 )\
-This tool is not only for web projects but can be used for any kind of project which is using docker-compose.
+This tool is not only for web projects but can be used for any kind of project which is using docker compose.
 
 ## Installation and Setup
 ### Installation
@@ -38,12 +38,12 @@ Just remove the binary from your PATH. \
 ### Pre-Requirements for usage
 In the most basic setup you need to have the following tools installed:
 - [docker](https://www.docker.com/products/docker-desktop/) (you don't need the desktop app. [Docker engine](https://docs.docker.com/engine/install/) is enough)
-- [docker-compose](https://docs.docker.com/compose/install/)
+- [docker compose](https://docs.docker.com/compose/install/)
 - [local routing](docs/local-routing-setup.md) setup (to install a local domain to be used for your projects) \
 Strictly spoken not needed but highly recommended as web projects are often using domains, and it's very convenient for develops.
 
 The following tools are optional but recommended for further functionality:
-- [mutagen](https://mutagen.io/documentation/introduction/installation) + [mutagen-compose](https://mutagen.io/documentation/orchestration/compose) (for faster file sync on older macOS versions)
+- [mutagen](https://mutagen.io/documentation/introduction/installation) + [mutagen compose](https://mutagen.io/documentation/orchestration/compose) (for faster file sync on older macOS versions)
 - [kubectl](https://kubernetes.io/docs/reference/kubectl/) (for remote development)
 - ~~SequelAce for database access within your containers~~ Todo: Find a better solution for all OS available ?!
 
@@ -75,24 +75,24 @@ And the meta path checks for the `tag_name` in the json response.
 Please check the [release workflow](.github/workflows/release.yaml) for it.
 
 ## Available Commands
-All commands which are running _docker-compose_ do check before if x-mutagen is configured and will run _mutagen-compose_ if so.
+All commands which are running _docker compose_ do check before if x-mutagen is configured and will run _mutagen compose_ if so.
 
 ### start
-Starting the setup for local development. This will start the _docker-compose_ setup and the _mutagen-compose_ sync.
+Starting the setup for local development. This will start the _docker compose_ setup and the _mutagen compose_ sync.
 
 Under the hood it will run the following commands: \
-`docker-compose pull && docker-compose up -d --build && docker-compose exec -T php composer install`
+`docker compose pull && docker compose up -d --build && docker compose exec -T php composer install`
 
 It is checking for the environment in compose.yaml: `MAIN_SERVICE=php|node|rust` \
 (The list gets extended as needed)
 
 ### stop
 Stopping the setup for local development. \
-Directly runs `docker-compose down`
+Directly runs `docker compose down`
 
 ### shell
 For shelling into a container locally. \
-Mostly runs `docker-compose exec php|rust|node bash`
+Mostly runs `docker compose exec php|rust|node bash`
 
 An optional argument can be passed to shell into a different container. \
 `rdt shell node`

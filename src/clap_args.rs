@@ -18,7 +18,7 @@ pub fn get_clap(config: &Result<Config, Box<dyn Error>>) -> ClapCommand {
     let mut app = ClapCommand::new("Rusty Dev Tool")
         .version(version)
         .author("Bent Brüggemann <mail@bent-brueggemann.de>")
-        .about("Docker helper command line tool for developers with docker-compose setups.");
+        .about("Docker helper command line tool for developers with docker compose setups.");
 
     app = add_flag_commands(app);
 

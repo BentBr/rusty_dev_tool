@@ -11,7 +11,7 @@ no_docker_compose = true
     [commands.stop]
         "alias" = "stop"
         # This is being used on macOS to easy and fast build during coding
-        "execution" = "docker-compose stop"
+        "execution" = "docker compose stop"
         "description" = "Overridden stop command"
     [commands.build]
         "alias" = "build"
