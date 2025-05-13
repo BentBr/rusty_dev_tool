@@ -197,3 +197,4 @@ Then, you can run the tests with coverage: `rdt test-coverage`
 - ~~Adding support for custom commands~~ ✅
 - ~~Adding arguments for certain commands (such as chown)~~ ✅
 - ~~fix self-update if release is not built but tag published... -> leads to empty binary file~~ ✅
+ 
