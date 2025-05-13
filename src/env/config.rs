@@ -5,17 +5,15 @@ use crate::env::home_config::HomeConfig;
 use crate::env::local_config::{Environment, LocalConfig};
 use crate::error::file_system::Error as FileSystemError;
 use dirs::home_dir;
-use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::env;
 use std::fs::create_dir_all;
 use std::path::PathBuf;
+use std::sync::LazyLock;
 
-lazy_static! {
-    pub static ref DEFAULT_FOLDER: String = String::from(".rusty_dev_tool");
-    pub static ref DEFAULT_CONFIG_FILE: String = String::from("config.toml");
-}
+pub static DEFAULT_FOLDER: LazyLock<String> = LazyLock::new(|| String::from(".rusty_dev_tool"));
+pub static DEFAULT_CONFIG_FILE: LazyLock<String> = LazyLock::new(|| String::from("config.toml"));
 
 /**
 * Config struct that is the result of merged home and local project config
