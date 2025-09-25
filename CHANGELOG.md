@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.5](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.4...v0.9.5) (2024-08-14)
+
+
+### Bug Fixes
+
+* Changing docker-compose to docker compose ([ac684d5](https://github.com/BentBr/rusty_dev_tool/commit/ac684d5a39e323d2472bc740da5b2318652093e4))
+
 ## [0.9.4](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.3...v0.9.4) (2024-06-16)
 
 

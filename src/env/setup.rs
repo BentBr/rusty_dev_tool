@@ -26,20 +26,17 @@ pub fn init(restore: bool, update: bool, completions: bool) -> Result<Config, Bo
 
     // This is a bit nasty - but we must get the local config to know if compose will be a thing here
     // Setting those to default values
-    match &local_config {
-        Some(local_config) => {
-            if local_config.no_docker_compose {
-                compose = Compose::DefaultNotUsable;
-                language_framework = LanguageFramework::DefaultNotUsable;
-            } else {
-                compose = check_docker_compose_setup()?;
-                language_framework = check_language_framework_setup()?;
-            }
-        }
-        None => {
+    if let Some(local_config) = &local_config {
+        if local_config.no_docker_compose {
+            compose = Compose::DefaultNotUsable;
+            language_framework = LanguageFramework::DefaultNotUsable;
+        } else {
             compose = check_docker_compose_setup()?;
             language_framework = check_language_framework_setup()?;
         }
+    } else {
+        compose = check_docker_compose_setup()?;
+        language_framework = check_language_framework_setup()?;
     }
 
     Ok(merge_configs(
