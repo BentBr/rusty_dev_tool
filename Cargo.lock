@@ -1074,7 +1074,7 @@ checksum = "eded382c5f5f786b989652c49544c4877d9f015cc22e145a5ea8ea66c2921cd2"
 
 [[package]]
 name = "rusty_dev_tool"
-version = "0.9.5"
+version = "0.10.0"
 dependencies = [
  "clap",
  "clap_complete",
