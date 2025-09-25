@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.0](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.5...v0.10.0) (2025-09-25)
+
+
+### Features
+
+* just a little push to have the ci run ([7b83412](https://github.com/BentBr/rusty_dev_tool/commit/7b83412968fdab0644ecf82b8166a46e729cb213))
+* just a little push to have the ci run ([#63](https://github.com/BentBr/rusty_dev_tool/issues/63)) ([ee5e2a1](https://github.com/BentBr/rusty_dev_tool/commit/ee5e2a180c6556f3128bff466fa46a5d7dda5e5b))
+
 ## [0.9.5](https://github.com/BentBr/rusty_dev_tool/compare/v0.9.4...v0.9.5) (2024-08-14)
 
 
