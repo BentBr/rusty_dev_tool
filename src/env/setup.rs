@@ -137,10 +137,10 @@ mod tests {
     fn test_get_compose_file() {
         let dir = temp_dir().join("test1_sub");
         fs::create_dir_all(&dir).unwrap();
-        let file_path = dir.clone().as_path().join("docker-compose.yaml");
+        let file_path = dir.as_path().join("docker-compose.yaml");
         File::create(&file_path).unwrap();
 
-        let new_file_path = dir.clone().as_path().join("docker-compose.yaml");
+        let new_file_path = dir.as_path().join("docker-compose.yaml");
 
         assert_eq!(get_compose_file(dir.as_path()).unwrap(), new_file_path);
     }

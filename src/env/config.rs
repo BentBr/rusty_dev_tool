@@ -16,8 +16,8 @@ pub static DEFAULT_FOLDER: LazyLock<String> = LazyLock::new(|| String::from(".ru
 pub static DEFAULT_CONFIG_FILE: LazyLock<String> = LazyLock::new(|| String::from("config.toml"));
 
 /**
-* Config struct that is the result of merged home and local project config
-*/
+ * Config struct that is the result of merged home and local project config
+ */
 #[derive(Debug, Clone)]
 #[allow(dead_code)]
 pub struct Config {
@@ -178,8 +178,8 @@ fn merge_configs_with_local(
 }
 
 /**
-* Merge home and local commands where the local ones always override the home ones
-*/
+ * Merge home and local commands where the local ones always override the home ones
+ */
 fn merge_commands(
     home_commands: HashMap<String, Command>,
     local_commands: HashMap<String, Command>,

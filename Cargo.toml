@@ -3,6 +3,10 @@ name = "rusty_dev_tool"
 version = "0.9.5"
 edition = "2021"
 
+[[bin]]
+name = "rusty-dev-tool"
+path = "src/main.rs"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]

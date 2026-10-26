@@ -65,27 +65,21 @@ mod tests {
     fn test_command_not_found_error() {
         let error = Error::CommandNotFound("test_command".to_string());
         assert_eq!(
-            format!("{}", error),
+            format!("{error}"),
             "Command not found: 'test_command'. Maybe create a custom one in config?"
         );
     }
 
     #[test]
     fn test_execution_failed_generic_error() {
-        let error = Error::ExecutionFailedGeneric(Box::new(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            "test_error",
-        )));
-        assert_eq!(
-            format!("{}", error),
-            "Command execution failed: 'test_error'"
-        );
+        let error = Error::ExecutionFailedGeneric(Box::new(std::io::Error::other("test_error")));
+        assert_eq!(format!("{error}"), "Command execution failed: 'test_error'");
     }
 
     #[test]
     fn test_non_zero_exit_error() {
         let error = Error::NonZeroExit(3);
-        assert_eq!(format!("{}", error), "Command exited with status 3");
+        assert_eq!(format!("{error}"), "Command exited with status 3");
         assert_eq!(error.exit_code(), 3);
         assert_eq!(Error::CommandFailed("x".to_string()).exit_code(), 1);
     }
@@ -93,6 +87,6 @@ mod tests {
     #[test]
     fn test_command_failed_error() {
         let error = Error::CommandFailed("test_error".to_string());
-        assert_eq!(format!("{}", error), "Command failed: 'test_error'");
+        assert_eq!(format!("{error}"), "Command failed: 'test_error'");
     }
 }

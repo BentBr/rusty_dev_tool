@@ -55,7 +55,7 @@ impl Command for SelfUpdate {
 }
 
 fn check_update_needed(config: &Config) -> Result<Option<String>, UpdateError> {
-    let url = config.meta_path.to_string();
+    let url = config.meta_path.clone();
 
     let mut headers = HeaderMap::new();
     headers.insert(USER_AGENT, HeaderValue::from_static("RDT"));
@@ -108,7 +108,7 @@ fn fetch_update(config: &Config, tag_name: &str) -> Result<(), UpdateError> {
     if response.status().is_success() && content_length > 100 {
         let bin_path = env::temp_dir().join("rdt-update");
         let mut dest = {
-            println!("Downloading update to {}", &bin_path.to_string_lossy());
+            println!("Downloading update to {}", bin_path.to_string_lossy());
 
             fs::File::create(&bin_path)?
         };

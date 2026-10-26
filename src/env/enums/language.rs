@@ -15,9 +15,9 @@ pub enum Enum {
 impl fmt::Display for Enum {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Rust => write!(f, "rust",),
-            Self::Php => write!(f, "php",),
-            Self::Node => write!(f, "node",),
+            Self::Rust => write!(f, "rust"),
+            Self::Php => write!(f, "php"),
+            Self::Node => write!(f, "node"),
             Self::DefaultNotUsable => write!(f, "DefaultNotUsable"),
         }
     }

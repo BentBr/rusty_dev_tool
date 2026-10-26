@@ -145,7 +145,7 @@ jobs:
                      | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                      -H "Content-Type: application/octet-stream" \
-                     --data-binary @./binaries/linux/target/x86_64-unknown-linux-gnu/release/rusty_dev_tool \
+                     --data-binary @./binaries/linux/target/x86_64-unknown-linux-gnu/release/rusty-dev-tool \
                      "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-linux-x86_64-${{ github.event.inputs.tag_name }}"
 
             -   name: Upload macOS AMD64 binary
@@ -157,7 +157,7 @@ jobs:
                       | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                       -H "Content-Type: application/octet-stream" \
-                      --data-binary @./binaries/macos/amd64/target/x86_64-apple-darwin/release/rusty_dev_tool \
+                      --data-binary @./binaries/macos/amd64/target/x86_64-apple-darwin/release/rusty-dev-tool \
                       "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-macos-x86_64-${{ github.event.inputs.tag_name }}"
 
             -   name: Upload macOS ARM64 binary
@@ -169,7 +169,7 @@ jobs:
                       | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                       -H "Content-Type: application/octet-stream" \
-                      --data-binary @./binaries/macos/arm64/target/aarch64-apple-darwin/release/rusty_dev_tool \
+                      --data-binary @./binaries/macos/arm64/target/aarch64-apple-darwin/release/rusty-dev-tool \
                       "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-macos-aarch64-${{ github.event.inputs.tag_name }}"
 
             -   name: Upload Windows binary
@@ -181,5 +181,5 @@ jobs:
                       | jq -r .id)
                     curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
                       -H "Content-Type: application/octet-stream" \
-                      --data-binary @./binaries/windows/target/x86_64-pc-windows-msvc/release/rusty_dev_tool.exe \
+                      --data-binary @./binaries/windows/target/x86_64-pc-windows-msvc/release/rusty-dev-tool.exe \
                       "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=rdt-windows-x86_64-${{ github.event.inputs.tag_name }}.exe"

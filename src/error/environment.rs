@@ -90,7 +90,7 @@ mod tests {
     fn test_docker_compose_not_installed_error() {
         let error = Error::DockerComposeNotInstalled("test_dir".to_string());
         assert_eq!(
-            format!("{}", error),
+            format!("{error}"),
             "Docker compose setup not found in dir 'test_dir'"
         );
     }
@@ -98,17 +98,14 @@ mod tests {
     #[test]
     fn test_compose_file_not_readable_error() {
         let error = Error::ComposeFileNotReadable("test_file".to_string());
-        assert_eq!(
-            format!("{}", error),
-            "Compose file 'test_file' not readable"
-        );
+        assert_eq!(format!("{error}"), "Compose file 'test_file' not readable");
     }
 
     #[test]
     fn test_compose_file_not_found_error() {
         let error = Error::ComposeFileNotFound("test_dir".to_string());
         assert_eq!(
-            format!("{}", error),
+            format!("{error}"),
             "Local compose file not found in location 'test_dir'"
         );
     }
@@ -117,7 +114,7 @@ mod tests {
     fn test_local_config_dir_not_found_error() {
         let error = Error::LocalConfigDirNotFound("test_dir".to_string());
         assert_eq!(
-            format!("{}", error),
+            format!("{error}"),
             "Local config dir not found in location 'test_dir'"
         );
     }
@@ -126,7 +123,7 @@ mod tests {
     fn test_not_existing_service_config_error() {
         let error = Error::NotExistingServiceConfig("test_service".to_string());
         assert_eq!(
-            format!("{}", error),
+            format!("{error}"),
             "The main service 'test_service' definition does not exist"
         );
     }
@@ -135,7 +132,7 @@ mod tests {
     fn test_no_main_service_defined_error() {
         let error = Error::NoMainServiceDefined();
         assert_eq!(
-            format!("{}", error),
+            format!("{error}"),
             "Non of your services in compose.yaml has the environment 'MAIN_SERVICE=node|rust|php defined"
         );
     }
@@ -144,7 +141,7 @@ mod tests {
     fn test_no_compose_service_defined_error() {
         let error = Error::NoComposeServiceDefined("test_service".to_string());
         assert_eq!(
-            format!("{}", error),
+            format!("{error}"),
             "The service 'test_service' cannot be used"
         );
     }
@@ -153,19 +150,16 @@ mod tests {
     fn test_docker_file_not_found_error() {
         let error = Error::DockerFileNotFound("test_dir_diiiir".to_string());
         assert_eq!(
-            format!("{}", error),
+            format!("{error}"),
             "Dockerfile not found in location 'test_dir_diiiir'"
         );
     }
 
     #[test]
     fn test_environment_generic_error() {
-        let error = Error::EnvironmentGeneric(Box::new(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            "test_error",
-        )));
+        let error = Error::EnvironmentGeneric(Box::new(std::io::Error::other("test_error")));
         assert_eq!(
-            format!("{}", error),
+            format!("{error}"),
             "Error during environment setup or check: 'test_error'"
         );
     }
@@ -174,7 +168,7 @@ mod tests {
     fn test_home_dir_is_current_dir_error() {
         let error = Error::HomeDirIsCurrentDir("%home%/test_dir".to_string());
         assert_eq!(
-            format!("{}", error),
+            format!("{error}"),
             "Home directory is the current directory '%home%/test_dir'. RDT must not be used here as it confuses the configurations in .rusty_dev_tool/config.toml"
         );
     }
@@ -182,12 +176,12 @@ mod tests {
     #[test]
     fn test_home_dir_not_found_error() {
         let error = Error::HomeDirNotFound();
-        assert_eq!(format!("{}", error), "Home directory not found!");
+        assert_eq!(format!("{error}"), "Home directory not found!");
     }
 
     #[test]
     fn test_shell_not_supported_error() {
         let error = Error::ShellNotSupported("test_shell".to_string());
-        assert_eq!(format!("{}", error), "Shell 'test_shell' not supported");
+        assert_eq!(format!("{error}"), "Shell 'test_shell' not supported");
     }
 }

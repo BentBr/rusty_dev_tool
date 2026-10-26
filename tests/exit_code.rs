@@ -45,7 +45,7 @@ impl Sandbox {
     }
 
     fn run(&self, subcommand: &str) -> Output {
-        Command::new(env!("CARGO_BIN_EXE_rusty_dev_tool"))
+        Command::new(env!("CARGO_BIN_EXE_rusty-dev-tool"))
             .arg(subcommand)
             .current_dir(self.root.join("project"))
             .env("HOME", self.root.join("home"))

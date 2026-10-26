@@ -29,7 +29,7 @@ mod tests {
     fn test_toml_not_readable_error() {
         let error = Error::TomlNotReadable("test_dir".to_string(), "test_error".to_string());
         assert_eq!(
-            format!("{}", error),
+            format!("{error}"),
             "Could not read your toml in dir 'test_dir' with error: test_error"
         );
     }

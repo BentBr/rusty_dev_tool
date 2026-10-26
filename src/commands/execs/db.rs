@@ -129,21 +129,21 @@ mod tests {
     #[test]
     fn test_check_file_type_sql() {
         let path = Path::new("test_db4.sql");
-        let result = check_file_type(&path);
+        let result = check_file_type(path);
         assert_eq!(result.unwrap(), "sql".to_string());
     }
 
     #[test]
     fn test_check_file_type_gz() {
         let path = Path::new("test_db5.gz");
-        let result = check_file_type(&path);
+        let result = check_file_type(path);
         assert_eq!(result.unwrap(), "gz".to_string());
     }
 
     #[test]
     fn test_check_file_type_fail() {
         let path = Path::new("test_db6.bla");
-        let result = check_file_type(&path);
+        let result = check_file_type(path);
         assert!(result.is_err());
     }
 }
