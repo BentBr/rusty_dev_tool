@@ -80,15 +80,17 @@ fn main() {
             Ok(command) => {
                 let argument = sub_matches.get_one::<String>(OPTIONAL_ARGUMENT);
 
-                command.execute(&config, argument).unwrap_or_else(|err| {
+                if let Err(err) = command.execute(&config, argument) {
                     eprintln!(
                         "{}",
                         format!("Error executing {command_name} command: {err}").red(),
                     );
-                });
+                    exit(err.exit_code());
+                }
             }
             Err(err) => {
                 eprintln!("{} {}", "Error:".red(), err);
+                exit(EXIT_FAILURE);
             }
         },
         _ => exit(EXIT_SUCCESS),

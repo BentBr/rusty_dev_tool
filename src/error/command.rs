@@ -7,10 +7,21 @@ use std::fmt;
 pub enum Error {
     CommandNotFound(String),
     CommandFailed(String),
+    NonZeroExit(i32),
     ExecutionFailedGeneric(Box<dyn StdError>),
 }
 
 impl StdError for Error {}
+
+impl Error {
+    /// Process exit code to report for this error.
+    pub const fn exit_code(&self) -> i32 {
+        match self {
+            Self::NonZeroExit(code) => *code,
+            _ => 1,
+        }
+    }
+}
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -23,6 +34,7 @@ impl fmt::Display for Error {
                 write!(f, "Command execution failed: '{error}'")
             }
             Self::CommandFailed(error) => write!(f, "Command failed: '{error}'"),
+            Self::NonZeroExit(code) => write!(f, "Command exited with status {code}"),
         }
     }
 }
@@ -68,6 +80,14 @@ mod tests {
             format!("{}", error),
             "Command execution failed: 'test_error'"
         );
+    }
+
+    #[test]
+    fn test_non_zero_exit_error() {
+        let error = Error::NonZeroExit(3);
+        assert_eq!(format!("{}", error), "Command exited with status 3");
+        assert_eq!(error.exit_code(), 3);
+        assert_eq!(Error::CommandFailed("x".to_string()).exit_code(), 1);
     }
 
     #[test]

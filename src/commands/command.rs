@@ -3,7 +3,7 @@ use crate::env::config::Command as ConfigCommand;
 use crate::env::config::Config;
 use crate::env::resolve::shell as resolve_shell;
 use crate::error::command::Error as CommandError;
-use std::process::{Command as SysCommand, Stdio};
+use std::process::{Command as SysCommand, ExitStatus, Stdio};
 
 pub trait Command {
     fn execute(&self, config: &Config, argument: Option<&String>) -> Result<(), CommandError>;
@@ -14,7 +14,11 @@ pub trait Command {
 fn run_command_unix_sh(cmd: &str) -> Result<(), CommandError> {
     let shell = resolve_shell_program()?;
 
-    let _ = SysCommand::new(shell)
+    run_with_shell(&shell, cmd)
+}
+
+fn run_with_shell(shell: &str, cmd: &str) -> Result<(), CommandError> {
+    let status = SysCommand::new(shell)
         .arg("-c")
         .arg(cmd)
         .stdout(Stdio::inherit())
@@ -22,7 +26,25 @@ fn run_command_unix_sh(cmd: &str) -> Result<(), CommandError> {
         .spawn()?
         .wait()?;
 
-    Ok(())
+    if status.success() {
+        return Ok(());
+    }
+
+    Err(CommandError::NonZeroExit(exit_code(status)))
+}
+
+/// Maps a child's exit status to a process exit code, using the shell
+/// convention of 128 + signal number for signal-terminated children.
+fn exit_code(status: ExitStatus) -> i32 {
+    #[cfg(unix)]
+    {
+        use std::os::unix::process::ExitStatusExt;
+        if let Some(signal) = status.signal() {
+            return 128 + signal;
+        }
+    }
+
+    status.code().unwrap_or(1)
 }
 
 pub fn run(cmd: &str) -> Result<(), CommandError> {
@@ -88,6 +110,56 @@ mod tests {
 
         assert_eq!(command.alias(), "test");
         assert_eq!(command.description(), "Test command description");
+    }
+
+    #[test]
+    fn test_run_success() {
+        assert!(run_with_shell("sh", "true").is_ok());
+    }
+
+    #[test]
+    fn test_run_propagates_exit_code() {
+        match run_with_shell("sh", "exit 3") {
+            Err(CommandError::NonZeroExit(code)) => assert_eq!(code, 3),
+            other => panic!("expected NonZeroExit(3), got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn test_run_false_exits_one() {
+        match run_with_shell("sh", "false") {
+            Err(CommandError::NonZeroExit(code)) => assert_eq!(code, 1),
+            other => panic!("expected NonZeroExit(1), got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn test_run_propagates_max_exit_code() {
+        match run_with_shell("sh", "exit 255") {
+            Err(CommandError::NonZeroExit(code)) => assert_eq!(code, 255),
+            other => panic!("expected NonZeroExit(255), got {other:?}"),
+        }
+    }
+
+    #[cfg(unix)]
+    #[test]
+    fn test_run_maps_signal_to_128_plus_signal() {
+        // SIGKILL is 9, so the shell convention yields 137
+        match run_with_shell("sh", "kill -9 $$") {
+            Err(CommandError::NonZeroExit(code)) => assert_eq!(code, 137),
+            other => panic!("expected NonZeroExit(137), got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn test_run_spawn_failure_is_generic_error() {
+        let result = run_with_shell("/nonexistent/shell", "true");
+
+        assert!(matches!(
+            result,
+            Err(CommandError::ExecutionFailedGeneric(_))
+        ));
+        assert_eq!(result.unwrap_err().exit_code(), 1);
     }
 
     #[test]
